@@ -1,0 +1,21 @@
+package com.grails.cxf.client
+
+/**
+ * Factory used to obtain web service clients as well as dynamically changing their WSDL document URLs.
+ */
+public interface WebServiceClientFactory {
+
+    /**
+     * Get a web service client.  This should be invoked at startup to get a web service that can be injected
+     * into all classes that depend on the web service client interface.
+     *
+     * @param clientInterface The interface the web service must implement (this is what will be injected into
+     *                        other classes).
+     * @param serviceEndpointAddress    Url for the service endpoint
+     * @param secured         Indicate if the web service needs to be secured using digital certificate authentication (<code>true</code>)
+     *                        or if it is does not require the certificate usage (<code>false</code>), which is the default.
+     * @return The web service client.  The returned object will proxy the clientInterface (allowing it
+     *         to be injected into other classes as the interface).
+     */
+    Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured)
+}
