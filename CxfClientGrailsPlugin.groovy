@@ -1,8 +1,6 @@
-import com.grails.cxf.client.WebServiceClientFactoryImpl
-
 class CxfClientGrailsPlugin {
     // the plugin version
-    def version = "0.1"
+    def version = "0.11"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -28,7 +26,10 @@ Used for integrating existing cxf/jaxb services with grails projects.
     }
 
     def doWithSpring = {
-        webServiceClientFactory(com.grails.cxf.client.WebServiceClientFactoryImpl)
+        //todo: need to get this working with auto injection from the plugin
+        webServiceClientFactory(com.grails.cxf.client.WebServiceClientFactoryImpl) { bean ->
+            bean.autowire = true
+        }
     }
 
     def doWithDynamicMethods = { ctx ->

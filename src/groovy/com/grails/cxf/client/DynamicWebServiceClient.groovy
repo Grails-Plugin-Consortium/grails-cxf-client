@@ -13,6 +13,7 @@ public class DynamicWebServiceClient implements FactoryBean<Object> {
     boolean secured
     String serviceEndpointAddress
     String serviceName
+    //todo: need to get this working with auto injection from the plugin
     WebServiceClientFactory webServiceClientFactory
 
     public Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
