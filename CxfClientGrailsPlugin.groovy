@@ -1,3 +1,9 @@
+import com.grails.cxf.client.DynamicWebServiceClient
+import org.codehaus.groovy.grails.commons.ControllerArtefactHandler
+import org.codehaus.groovy.grails.commons.ServiceArtefactHandler
+import org.codehaus.groovy.grails.commons.TagLibArtefactHandler
+import org.springframework.beans.factory.FactoryBeanNotInitializedException
+
 class CxfClientGrailsPlugin {
     // the plugin version
     def version = "0.11"
@@ -12,7 +18,10 @@ class CxfClientGrailsPlugin {
 
     // TODO Fill in these fields
     def author = "Christian Oestreich"
-    def authorEmail = "acetrike@yahoo.com"
+    def authorEmail = "acetrike@gmail.com"
+    def developers = [
+            [name: "Christian Oestreich", email: "acetrike@gmail.com"],
+            [name: "Brett Borchardt", email: "bborchardt@gmail.com"]]
     def title = "Cxf Client Factory"
     def description = '''\\
 Used for integrating existing cxf/jaxb services with grails projects.
@@ -21,15 +30,48 @@ Used for integrating existing cxf/jaxb services with grails projects.
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/cxf-client"
 
+    def watchedResources = [
+            "file:${getPluginLocation()}/grails-app/services/**/*Service.groovy",
+            "file:${getPluginLocation()}/grails-app/controllers/**/*Controller.groovy",
+            "file:${getPluginLocation()}/grails-app/taglib/**/*TagLib.groovy"
+    ]
+
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before 
     }
 
     def doWithSpring = {
-        //todo: need to get this working with auto injection from the plugin
-        webServiceClientFactory(com.grails.cxf.client.WebServiceClientFactoryImpl) { bean ->
-            bean.autowire = true
+
+        webServiceClientFactory(com.grails.cxf.client.WebServiceClientFactoryImpl)
+
+        log.info "wiring up cxf-client beans"
+
+        def cxfClientConfigMap = application.config?.cxf?.client ?: [:]
+
+        cxfClientConfigMap.each { cxfClient ->
+            def cxfClientName = cxfClient.key
+            def client = application.config?.cxf?.client[cxfClientName]
+
+            log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
+
+            if(!client?.clientInterface || (client?.serviceEndpointAddress == "[:]")) {
+                String errorMessage = "Web service client $cxfClientName cannot be created before setting the clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress} properties"
+                println errorMessage
+                log.error errorMessage
+                //throw new FactoryBeanNotInitializedException(errorMessage)
+            }
+
+            "${cxfClientName}"(DynamicWebServiceClient) {
+                webServiceClientFactory = ref("webServiceClientFactory")
+                clientInterface = client.clientInterface ?: ""
+                serviceName = client?.serviceName ?: cxfClientName
+                serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
+                secured = client?.secured ?: false
+            }
         }
+
+        log.info "completed mapping cxf client beans"
+        println "completed mapping cxf client beans"
     }
 
     def doWithDynamicMethods = { ctx ->
@@ -41,13 +83,28 @@ Used for integrating existing cxf/jaxb services with grails projects.
     }
 
     def onChange = { event ->
-        // TODO Implement code that is executed when any artefact that this plugin is
-        // watching is modified and reloaded. The event contains: event.source,
-        // event.application, event.manager, event.ctx, and event.plugin.
+        if(!isBasePlugin()) {
+            if(application.isArtefactOfType(ControllerArtefactHandler.TYPE, event.source)) {
+                manager?.getGrailsPlugin("controllers")?.notifyOfEvent(event)
+            } else if(application.isArtefactOfType(ServiceArtefactHandler.TYPE, event.source)) {
+                manager?.getGrailsPlugin("services")?.notifyOfEvent(event)
+            } else if(application.isArtefactOfType(TagLibArtefactHandler.TYPE, event.source)) {
+                manager?.getGrailsPlugin("groovyPages")?.notifyOfEvent(event)
+            }
+        }
     }
 
     def onConfigChange = { event ->
         // TODO Implement code that is executed when the project configuration changes.
         // The event is the same as for 'onChange'.
+    }
+
+    ConfigObject getBuildConfig() {
+        GroovyClassLoader classLoader = new GroovyClassLoader(getClass().getClassLoader())
+        return new ConfigSlurper().parse(classLoader.loadClass('BuildConfig'))
+    }
+
+    String getPluginLocation() {
+        return getBuildConfig()?.grails?.plugin?.location?.'cxf-client'
     }
 }

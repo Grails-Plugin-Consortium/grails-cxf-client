@@ -184,6 +184,9 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
     }
 
+    /**
+     * Internal class to invoke the proxy
+     */
     private class WSClientInvocationHandler implements InvocationHandler {
 
         Object cxfProxy
@@ -194,10 +197,14 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if(!cxfProxy) {
-                throw new RuntimeException("Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize.")
+            try {
+                if(!cxfProxy) {
+                    throw new RuntimeException("Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize.")
+                }
+                method.invoke(cxfProxy, args)
+            } catch (Exception e) {
+                throw new CxfClientException("Error invoking method ${method.name} on interface $clientName. Make sure valid clientInterface and serviceEndpointAddress are set.")
             }
-            method.invoke(cxfProxy, args)
         }
     }
 }
