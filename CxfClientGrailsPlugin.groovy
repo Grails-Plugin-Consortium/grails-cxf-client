@@ -65,7 +65,10 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             "${cxfClientName}"(DynamicWebServiceClient) {
                 webServiceClientFactory = ref("webServiceClientFactory")
                 clientInterface = client.clientInterface ?: ""
-                serviceName = client?.serviceName ?: cxfClientName
+                serviceName = cxfClientName
+                if(client?.secured) {
+                    securedName = client?.securedName ?: cxfClientName
+                }
                 serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
                 secured = client?.secured ?: false
             }

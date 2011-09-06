@@ -38,19 +38,20 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private static final String URL_STRING = "url"
     private Map<String, Class<?>> interfaceMap = [:].asSynchronized()
     private Map<Class<?>, WSClientInvocationHandler> handlerMap = [:].asSynchronized()
+    private Map<String, String> securityMap = [:].asSynchronized()
 
 
     public WebServiceClientFactoryImpl() {
     }
 
-    public Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured) {
+    public Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String securedName="") {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
         // is used only in secure mode to extract the username/password
         if(serviceEndpointAddress) {
             try {
                 if(log.isDebugEnabled()) log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured")
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, securedName,  handler)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException("Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
                 if(log.isErrorEnabled()) log.error(cxfClientException.message, cxfClientException)
@@ -66,6 +67,7 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(log.isDebugEnabled()) log.debug("Created service $serviceName, caching reference to allow changing url later.")
         interfaceMap.put(serviceName, clientInterface)
         handlerMap.put(clientInterface, handler)
+        securityMap.put(serviceName, securedName)
 
         return clientProxy
     }
@@ -78,11 +80,12 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         Class<?> clientInterface = interfaceMap.get(serviceName)
+        String securedName = securityMap.get(serviceName)
         if(clientInterface) {
             WSClientInvocationHandler handler = handlerMap.get(clientInterface)
             // is used only in secure mode to extract the username/password
             try {
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, securedName, handler)
             } catch (Exception exception) {
                 handler.cxfProxy = null
                 throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
@@ -92,13 +95,13 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(log.isDebugEnabled()) log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
     }
 
-    private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, WSClientInvocationHandler handler) {
+    private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, String securedName, WSClientInvocationHandler handler) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.getDefaultBus())
         Object cxfProxy = clientProxyFactory.create()
         if(secured) {
-            secureClient(cxfProxy, serviceName)
+            secureClient(cxfProxy, securedName)
         }
         addInterceptors(cxfProxy)
         handler.cxfProxy = cxfProxy
@@ -111,14 +114,14 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         client.outInterceptors.add(new LoggingOutInterceptor())
     }
 
-    private void secureClient(Object cxfProxy, String serviceName) {
+    private void secureClient(Object cxfProxy, String securedName) {
         /* String wsClientAlias = WebServiceClientConstants.WS_CLIENT_ALIAS
         if (wsClientAlias == null) {
             throw new RuntimeException("Both System properties " + WebServiceClientConstants.WS_CLIENT_ALIAS_PROP_NAME + " and " + WebServiceClientConstants.WS_CLIENT_PWD_PROP_NAME + " must be defined")
         }
         */
-        final String username = getSystemValue(serviceName, USER_NAME_SUFFIX)
-        final String password = getSystemValue(serviceName, PASSWORD_SUFFIX)
+        final String username = getSystemValue(securedName, USER_NAME_SUFFIX)
+        final String password = getSystemValue(securedName, PASSWORD_SUFFIX)
         if(username?.trim()?.length() < 1 || password?.length() < 1) {
             throw new RuntimeException("Username and password are not configured for calling secure web services")
         }
