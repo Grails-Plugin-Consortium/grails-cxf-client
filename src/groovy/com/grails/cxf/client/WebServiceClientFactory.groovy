@@ -17,5 +17,5 @@ public interface WebServiceClientFactory {
      * @return The web service client.  The returned object will proxy the clientInterface (allowing it
      *         to be injected into other classes as the interface).
      */
-    Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String securedName="")
+    Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String securedName)
 }

@@ -86,13 +86,14 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             // is used only in secure mode to extract the username/password
             try {
                 createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, securedName, handler)
+                if(log.isDebugEnabled()) log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
             } catch (Exception exception) {
                 handler.cxfProxy = null
                 throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
             }
+        } else {
+            if(log.isDebugEnabled()) log.debug("Unable to find existing client proxy matching name ${serviceName}")
         }
-
-        if(log.isDebugEnabled()) log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
     }
 
     private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, String securedName, WSClientInvocationHandler handler) {

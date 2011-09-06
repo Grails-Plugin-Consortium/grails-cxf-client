@@ -89,7 +89,7 @@ This is an example of a config file
 service.simple.url = ""
 service.complex.url = ""
 
-// set per-environment serverURL stem for creating absolute links
+// set per-environment service url
 environments {
     production {
         grails.serverURL = "http://www.changeme.com"
@@ -117,7 +117,7 @@ cxf {
 
         complexServiceClient {
             clientInterface = cxf.client.demo.complex.ComplexServicePortType
-            serviceEndpointAddress = "${service.simple.url}"
+            serviceEndpointAddress = "${service.complex.url}"
         }
     }
 }
