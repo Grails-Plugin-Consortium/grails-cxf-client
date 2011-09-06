@@ -11,13 +11,9 @@ CXF CLIENT
 
 1. INTRODUCTION
 
-There are a few different plugins for consuming SOAP web services with grails, but none currently deal with the issue of caching port
-references.  The ws-client plugin works, but its limitations are in how it creates and consumes the wsdl.  It relies on realtime
-creation of proxy classes and services which can be very time consuming in a large or complex service.  We need a way to speed up service
-invocation so this plugin was born.
+There are a few different plugins for consuming SOAP web services with grails, but none currently deal with the issue of caching port references.  The ws-client plugin works, but its limitations are in how it creates and consumes the wsdl.  It relies on realtime creation of proxy classes and services which can be very time consuming in a large or complex service.  We need a way to speed up service invocation so this plugin was born.
 
-The Cxf Client plugin will allow you to use existing (or new) cxf wsdl2java generated content and cache the port reference and speed up
-your soap service end point invocations.
+The Cxf Client plugin will allow you to use existing (or new) cxf wsdl2java generated content and cache the port reference and speed up your soap service end point invocations.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -25,11 +21,9 @@ your soap service end point invocations.
 
 If you already have a wsdl2java generated object graph and client proxy you can skip this section.
 
-You must be somewhat familiar with how to run wsdl2java.  Run something like the following command to generate jaxb objects and a service proxy adapter
-Replacing the paths with the something that is applicable for you.  Run this by either having wsdl2java in your path or from the bin of the apache cxf
-project
+You must be somewhat familiar with how to run wsdl2java.  Run something like the following command to generate jaxb objects and a service proxy adapter Replacing the paths with the something that is applicable for you.  Run this by either having wsdl2java in your path or from the bin of the apache cxf project
 
-wsdl2java -compile -client -d [output path] [path to wsdl]
+    wsdl2java -compile -client -d [output path] [path to wsdl]
 
 here is my string (I have my wsdl manually saved to a wsdl file in the current working dir)
 
@@ -56,8 +50,7 @@ To wire up the plugin simple install the plugin via:
 
 or from the source code you could also package and install from a zip.
 
-Once the plugin is installed and you have your jaxb objects and cxf client port interface in your path (lib or src), you need to add the following
-to the Config.groovy of your project:
+Once the plugin is installed and you have your jaxb objects and cxf client port interface in your path (lib or src), you need to add the following to the Config.groovy of your project:
 
 cxf {
     client {
@@ -73,12 +66,8 @@ cxf {
 beanName                - This can be any name you would like, but should be unique.  This will be the name of the bean the plugin will auto wire.  Required.
 clientInterface         - Package name and object name of the wsdl2java -client generated port interface.  Required.
 serviceEndpointAddress  - Url of the service to call.  Can refer to env specific url as in belows example.  Required.
-secured                 - If true will look for system level properties named [serviceName]Username and [serviceName]Password and set
-                            the cxf client params to those values using WSS4J.
-securedName             - Name of the service.  Will default to bean name, but can be customized to be shared across service beans for global configuration
-                            of secured username and password.  eg. You might only want to set a single security username and password that is shared across
-                            services called globalServiceUsername and globalServicePassword.  You would then use "globalService" in all your service configurations
-                            and they would all refer to the same username and password configuration information.
+secured                 - If true will look for system level properties named [serviceName]Username and [serviceName]Password and set the cxf client params to those values using WSS4J.
+securedName             - Name of the service.  Will default to bean name, but can be customized to be shared across service beans for global configuration of secured username and password.  eg. You might only want to set a single security username and password that is shared across services called globalServiceUsername and globalServicePassword.  You would then use "globalService" in all your service configurations and they would all refer to the same username and password configuration information.
 
 This is an example of a config file
 
@@ -137,9 +126,7 @@ class DemoController {
     }
 }
 
-NOTE: You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods.
-By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated
-client port interface manually.
+NOTE: You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
