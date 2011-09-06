@@ -376,6 +376,14 @@
       </item>
     </group>
   </component>
+  <component name="ProjectDictionaryState">
+    <dictionary name="coestre">
+      <words>
+        <w>intellisense</w>
+        <w>jaxb</w>
+      </words>
+    </dictionary>
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cxf-client.iml" filepath="$PROJECT_DIR$/cxf-client.iml" />
