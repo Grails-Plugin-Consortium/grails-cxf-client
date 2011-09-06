@@ -6,7 +6,7 @@ import org.springframework.beans.factory.FactoryBeanNotInitializedException
 
 class CxfClientGrailsPlugin {
     // the plugin version
-    def version = "0.11"
+    def version = "0.2"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -22,9 +22,9 @@ class CxfClientGrailsPlugin {
     def developers = [
             [name: "Christian Oestreich", email: "acetrike@gmail.com"],
             [name: "Brett Borchardt", email: "bborchardt@gmail.com"]]
-    def title = "Cxf Client Factory"
+    def title = "Cxf Client - Support for CXF and JAXB Soap Clients"
     def description = '''\\
-Used for integrating existing cxf/jaxb services with grails projects.
+Used for easily integrating existing or new cxf/jaxb web service client code with soap services.
 '''
 
     // URL to the plugin's documentation
@@ -54,6 +54,7 @@ Used for integrating existing cxf/jaxb services with grails projects.
 
             log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
+            //the call to the map returns a gstring as [:] not as a map literal (fix this?)
             if(!client?.clientInterface || (client?.serviceEndpointAddress == "[:]")) {
                 String errorMessage = "Web service client $cxfClientName cannot be created before setting the clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress} properties"
                 println errorMessage

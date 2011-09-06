@@ -3,7 +3,6 @@ package com.grails.cxf.client
 import org.springframework.beans.factory.FactoryBean
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
 import org.springframework.context.MessageSource
-import java.lang.reflect.Array
 
 /**
  * Class used to provide web service clients.  Supports dynamically changing the wsdl document url
