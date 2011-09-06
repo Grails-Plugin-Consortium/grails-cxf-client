@@ -63,11 +63,11 @@ cxf {
     }
 }
 
-* beanName                - This can be any name you would like, but should be unique.  This will be the name of the bean the plugin will auto wire.  Required.
-* clientInterface         - Package name and object name of the wsdl2java -client generated port interface.  Required.
-* serviceEndpointAddress  - Url of the service to call.  Can refer to env specific url as in belows example.  Required.
-* secured                 - If true will look for system level properties named [serviceName]Username and [serviceName]Password and set the cxf client params to those values using WSS4J.
-* securedName             - Name of the service.  Will default to bean name, but can be customized to be shared across service beans for global configuration of secured username and password.  eg. You might only want to set a single security username and password that is shared across services called globalServiceUsername and globalServicePassword.  You would then use "globalService" in all your service configurations and they would all refer to the same username and password configuration information.
+* beanName                | This can be any name you would like, but should be unique.  This will be the name of the bean the plugin will auto wire.  Required.
+* clientInterface         | Package name and object name of the wsdl2java -client generated port interface.  Required.
+* serviceEndpointAddress  | Url of the service to call.  Can refer to env specific url as in belows example.  Required.
+* secured                 | If true will look for system level properties named [serviceName]Username and [serviceName]Password and set the cxf client params to those values using WSS4J.
+* securedName             | Name of the service.  Will default to bean name, but can be customized to be shared across service beans for global configuration of secured username and password.  eg. You might only want to set a single security username and password that is shared across services called globalServiceUsername and globalServicePassword.  You would then use "globalService" in all your service configurations and they would all refer to the same username and password configuration information.
 
 This is an example of a config file
 
