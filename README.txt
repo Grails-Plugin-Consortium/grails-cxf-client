@@ -50,7 +50,7 @@ Note: These could be put in the same jar since the namespace I am using is diffe
 
 3. PLUGIN CONFIGURATION
 
-To wire up the plugin sinple install the plugin via:
+To wire up the plugin simple install the plugin via:
 
     grails install-plugin cxf-client
 
