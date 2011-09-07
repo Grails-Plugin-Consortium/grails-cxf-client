@@ -72,6 +72,13 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         return clientProxy
     }
 
+    /**
+     * Method to allow updating endpoint and refreshing proxy reference
+     * @param serviceName The name of the service to update
+     * @param serviceEndpointAddress The new address to use
+     * @param secured Whether the service is secured or not
+     * @throws UpdateServiceEndpointException If endpoint can not be updated
+     */
     public void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress, boolean secured) throws UpdateServiceEndpointException {
         if(log.isDebugEnabled()) log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
 
