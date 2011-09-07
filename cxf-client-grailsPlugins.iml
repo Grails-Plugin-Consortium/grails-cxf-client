@@ -19,7 +19,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (cxf-client-grailsPlugins)">
         <CLASSES>
-          <root url="file://$USER_HOME_GRAILS$/1.3.7/projects/cxf-client/plugins/tomcat-1.3.7/lib" />
           <root url="jar://$USER_HOME$/.ivy2/cache/joda-time/joda-time/jars/joda-time-1.6.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.6.1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.opensaml/xmltooling/jars/xmltooling-1.3.1.jar!/" />
@@ -56,6 +55,7 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.bouncycastle/bcprov-jdk15/jars/bcprov-jdk15-1.43.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/xalan/xalan/jars/xalan-2.7.1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.cxf/cxf-rt-ws-security/jars/cxf-rt-ws-security-2.3.0.jar!/" />
+          <root url="file://$USER_HOME_GRAILS$/1.3.7/projects/cxf-client/plugins/tomcat-1.3.7/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
