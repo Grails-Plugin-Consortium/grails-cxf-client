@@ -214,7 +214,8 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 }
                 method.invoke(cxfProxy, args)
             } catch (Exception e) {
-                throw new CxfClientException("Error invoking method ${method.name} on interface $clientName. Make sure valid clientInterface and serviceEndpointAddress are set.")
+                println e.message
+                throw new CxfClientException("Error invoking method ${method.name} on interface $clientName. Make sure valid clientInterface and serviceEndpointAddress are set.", e)
             }
         }
     }
