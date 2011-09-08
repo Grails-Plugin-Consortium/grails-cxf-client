@@ -21,6 +21,7 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
 import org.apache.ws.security.WSPasswordCallback
 import org.apache.ws.security.handler.WSHandlerConstants
+import groovy.transform.Synchronized
 
 public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -36,15 +37,15 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private static final String PASSWORD_SUFFIX = "Password"
 
     private static final String URL_STRING = "url"
-    private Map<String, Class<?>> interfaceMap = [:].asSynchronized()
-    private Map<Class<?>, WSClientInvocationHandler> handlerMap = [:].asSynchronized()
-    private Map<String, String> securityMap = [:].asSynchronized()
+    private Map<String, Class<?>> interfaceMap = [:]
+    private Map<Class<?>, WSClientInvocationHandler> handlerMap = [:]
+    private Map<String, String> securityMap = [:]
 
 
     public WebServiceClientFactoryImpl() {
     }
 
-    public Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String securedName="") {
+    @Synchronized public Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String securedName="") {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
         // is used only in secure mode to extract the username/password
@@ -79,7 +80,7 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param secured Whether the service is secured or not
      * @throws UpdateServiceEndpointException If endpoint can not be updated
      */
-    public void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress, boolean secured) throws UpdateServiceEndpointException {
+    @Synchronized public void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress, boolean secured) throws UpdateServiceEndpointException {
         if(log.isDebugEnabled()) log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
 
         if(!serviceName || !interfaceMap.containsKey(serviceName)) {
