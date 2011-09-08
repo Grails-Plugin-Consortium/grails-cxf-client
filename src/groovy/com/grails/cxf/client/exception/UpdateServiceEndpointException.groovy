@@ -7,7 +7,7 @@ public class UpdateServiceEndpointException extends Throwable implements Seriali
     /**
      * Serialization Version ID compatibility - indication of what version may be restored.
      */
-    static final long serialVersionUID = 12244556899L
+    private static final long serialVersionUID = 12244556899L
 
     /**
      * Creates a new instance of UpdateException
