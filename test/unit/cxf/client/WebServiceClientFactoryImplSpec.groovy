@@ -13,7 +13,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, "testService")
+        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, "testUser", "testPassword")
 
         then:
         webServiceClient != null
@@ -28,7 +28,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, "testService")
+        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, "testUser", "testPassword")
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -54,7 +54,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, "testService")
+        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, "testUser", "testPassword")
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null

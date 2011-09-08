@@ -16,13 +16,14 @@ public class DynamicWebServiceClient implements FactoryBean<Object> {
     String serviceName
     WebServiceClientFactory webServiceClientFactory
     MessageSource messageSource
-    String securedName
+    String username
+    String password
 
     public Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
         if(!clientInterface || !serviceEndpointAddress) {
             throw new FactoryBeanNotInitializedException("Web service client cannot be created before setting the clientInterface=${clientInterface} and serviceEndpointAddress=${serviceEndpointAddress} properties")
         }
-        webServiceClientFactory.getWebServiceClient(clientInterface, serviceName, serviceEndpointAddress, secured, securedName)
+        webServiceClientFactory.getWebServiceClient(clientInterface, serviceName, serviceEndpointAddress, secured, username, password)
     }
 
     public Class<?> getObjectType() {

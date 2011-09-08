@@ -14,8 +14,10 @@ public interface WebServiceClientFactory {
      * @param serviceEndpointAddress    Url for the service endpoint
      * @param secured         Indicate if the web service needs to be secured using digital certificate authentication (<code>true</code>)
      *                        or if it is does not require the certificate usage (<code>false</code>), which is the default.
+     * @param username        Username to use for secured clients.  Ignored if secured is false.
+     * @param password        Password to use for secured clients.  Ignored if secured is false.
      * @return The web service client.  The returned object will proxy the clientInterface (allowing it
      *         to be injected into other classes as the interface).
      */
-    Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String securedName)
+    Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String username, String password)
 }

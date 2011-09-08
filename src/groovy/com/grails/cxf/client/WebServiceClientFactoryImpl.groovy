@@ -23,7 +23,7 @@ import org.apache.ws.security.WSPasswordCallback
 import org.apache.ws.security.handler.WSHandlerConstants
 import groovy.transform.Synchronized
 
-public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
+class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
     private static final log = LogFactory.getLog(this)
     /**
@@ -33,26 +33,21 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * The Username suffix and password suffix are used to build the key used to retrieve the username
      * and password respectively.
      */
-    private static final String USER_NAME_SUFFIX = "Username"
-    private static final String PASSWORD_SUFFIX = "Password"
-
-    private static final String URL_STRING = "url"
     private Map<String, Class<?>> interfaceMap = [:]
     private Map<Class<?>, WSClientInvocationHandler> handlerMap = [:]
-    private Map<String, String> securityMap = [:]
+    private Map<String, Map<String, String>> securityMap = [:]
 
-
-    public WebServiceClientFactoryImpl() {
+    WebServiceClientFactoryImpl() {
     }
-
-    @Synchronized public Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String securedName="") {
+    
+    @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String username, String password) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
         // is used only in secure mode to extract the username/password
         if(serviceEndpointAddress) {
             try {
                 if(log.isDebugEnabled()) log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured")
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, securedName,  handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, username, password,  handler)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException("Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
                 if(log.isErrorEnabled()) log.error(cxfClientException.message, cxfClientException)
@@ -68,7 +63,7 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(log.isDebugEnabled()) log.debug("Created service $serviceName, caching reference to allow changing url later.")
         interfaceMap.put(serviceName, clientInterface)
         handlerMap.put(clientInterface, handler)
-        securityMap.put(serviceName, securedName)
+        securityMap.put(serviceName, [username: username, password: password])
 
         return clientProxy
     }
@@ -80,7 +75,7 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param secured Whether the service is secured or not
      * @throws UpdateServiceEndpointException If endpoint can not be updated
      */
-    @Synchronized public void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress, boolean secured) throws UpdateServiceEndpointException {
+    @Synchronized void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress, boolean secured) throws UpdateServiceEndpointException {
         if(log.isDebugEnabled()) log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
 
         if(!serviceName || !interfaceMap.containsKey(serviceName)) {
@@ -88,12 +83,12 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         Class<?> clientInterface = interfaceMap.get(serviceName)
-        String securedName = securityMap.get(serviceName)
+        Map<String, String> security = securityMap.get(serviceName)
         if(clientInterface) {
             WSClientInvocationHandler handler = handlerMap.get(clientInterface)
             // is used only in secure mode to extract the username/password
             try {
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, securedName, handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, security.username, security.password, handler)
                 if(log.isDebugEnabled()) log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
             } catch (Exception exception) {
                 handler.cxfProxy = null
@@ -104,13 +99,13 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
     }
 
-    private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, String securedName, WSClientInvocationHandler handler) {
+    private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, String username, String password, WSClientInvocationHandler handler) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.getDefaultBus())
         Object cxfProxy = clientProxyFactory.create()
         if(secured) {
-            secureClient(cxfProxy, securedName)
+            secureClient(cxfProxy, username, password)
         }
         addInterceptors(cxfProxy)
         handler.cxfProxy = cxfProxy
@@ -123,14 +118,12 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         client.outInterceptors.add(new LoggingOutInterceptor())
     }
 
-    private void secureClient(Object cxfProxy, String securedName) {
+    private void secureClient(Object cxfProxy, String username, String password) {
         /* String wsClientAlias = WebServiceClientConstants.WS_CLIENT_ALIAS
         if (wsClientAlias == null) {
             throw new RuntimeException("Both System properties " + WebServiceClientConstants.WS_CLIENT_ALIAS_PROP_NAME + " and " + WebServiceClientConstants.WS_CLIENT_PWD_PROP_NAME + " must be defined")
         }
         */
-        final String username = getSystemValue(securedName, USER_NAME_SUFFIX)
-        final String password = getSystemValue(securedName, PASSWORD_SUFFIX)
         if(username?.trim()?.length() < 1 || password?.length() < 1) {
             throw new RuntimeException("Username and password are not configured for calling secure web services")
         }
@@ -146,7 +139,7 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
         outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
 
-            public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
                 WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
                 pc.password = password
             }
@@ -159,21 +152,6 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
         //        client.getOutInterceptors().add(new DOMOutputHandler())
         client.outInterceptors.add(new WSS4JOutInterceptor(outProps))
-    }
-
-    /**
-     * read the value of the username or password given the prefix and suffix.<br>
-     * System properties are looked up for the value and is returned to the user.
-     *
-     * @param prefix
-     * @param suffix
-     * @return
-     */
-    private String getSystemValue(String prefix, String suffix) {
-        if(!(prefix && suffix)) {
-            return null
-        }
-        return System.getProperty(prefix + suffix)
     }
 
     /**
@@ -204,11 +182,11 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         Object cxfProxy
         String clientName
 
-        public WSClientInvocationHandler(Class<?> clientInterface) {
+        WSClientInvocationHandler(Class<?> clientInterface) {
             this.clientName = clientInterface.name
         }
 
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             try {
                 if(!cxfProxy) {
                     throw new RuntimeException("Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize.")

@@ -55,7 +55,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
             //the call to the map returns a gstring as [:] not as a map literal (fix this?)
-            if(!client?.clientInterface || (client?.serviceEndpointAddress == "[:]")) {
+            if(!client?.clientInterface || (client.serviceEndpointAddress == "[:]")) {
                 String errorMessage = "Web service client $cxfClientName cannot be created before setting the clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress} properties"
                 println errorMessage
                 log.error errorMessage
@@ -67,7 +67,8 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
                 clientInterface = client.clientInterface ?: ""
                 serviceName = cxfClientName
                 if(client?.secured) {
-                    securedName = client?.securedName ?: cxfClientName
+                    username = client?.username ?: ""
+                    password = client?.password ?: ""
                 }
                 serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
                 secured = client?.secured ?: false
