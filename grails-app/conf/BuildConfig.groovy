@@ -32,9 +32,12 @@ grails.project.dependency.resolution = {
             excludes 'xmlbeans', 'spring-web', 'spring-core'
         }
         compile('org.apache.ws.security:wss4j:1.6.2')
-        compile('org.apache.cxf:cxf-rt-ws-security:2.3.0'){
+        compile('org.apache.cxf:cxf-rt-ws-security:2.3.0') {
             excludes 'spring-web'
         }
         // runtime 'mysql:mysql-connector-java:5.1.13'
+    }
+    plugins {
+        test ":spock:0.5-groovy-1.7"
     }
 }

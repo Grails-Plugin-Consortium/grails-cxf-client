@@ -82,7 +82,7 @@ public class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     public void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress, boolean secured) throws UpdateServiceEndpointException {
         if(log.isDebugEnabled()) log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
 
-        if(!serviceName) {
+        if(!serviceName || !interfaceMap.containsKey(serviceName)) {
             throw new UpdateServiceEndpointException("Can not update address for service.  Must provide a service name.")
         }
 
