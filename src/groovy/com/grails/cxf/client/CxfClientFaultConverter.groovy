@@ -17,7 +17,7 @@ public class CxfClientFaultConverter extends ClientFaultConverter {
 
         Fault fault = (Fault) message.getContent(Exception.class);
 
-        if(!fault?.detail) {
+        if(fault?.detail) {
             processFaultDetail(fault, message);
         }
     }
