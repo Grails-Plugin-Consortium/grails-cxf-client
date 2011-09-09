@@ -1,7 +1,4 @@
 import com.grails.cxf.client.DynamicWebServiceClient
-import org.codehaus.groovy.grails.commons.ControllerArtefactHandler
-import org.codehaus.groovy.grails.commons.ServiceArtefactHandler
-import org.codehaus.groovy.grails.commons.TagLibArtefactHandler
 
 class CxfClientGrailsPlugin {
     // the plugin version
@@ -86,7 +83,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     }
 
     def onChange = { event ->
-       
+
     }
 
     def onConfigChange = { event ->
