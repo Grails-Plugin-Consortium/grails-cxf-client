@@ -29,3 +29,9 @@ log4j = {
 
     info 'com.grails.cxf.client'
 }
+
+codenarc.reportType = 'xml'
+codenarc.reportName = 'target/codenarc.xml'
+codenarc.processTestUnit = false
+codenarc.processTestIntegration = false
+codenarc.propertiesFile = 'codenarc.properties'
