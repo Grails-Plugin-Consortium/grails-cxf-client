@@ -2,6 +2,7 @@ package com.grails.cxf.client
 
 import com.grails.cxf.client.exception.CxfClientException
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
+import groovy.transform.Synchronized
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
@@ -21,33 +22,23 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
 import org.apache.ws.security.WSPasswordCallback
 import org.apache.ws.security.handler.WSHandlerConstants
-import groovy.transform.Synchronized
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
     private static final log = LogFactory.getLog(this)
-    /**
-     * These fields are used only on secure connections.<br>
-     * eg: we have a servicename key defined as ServiceNameWS
-     * The username and password are expected to be ServiceNameWSUsername and ServiceNameWSPassword<br>
-     * The Username suffix and password suffix are used to build the key used to retrieve the username
-     * and password respectively.
-     */
     def interfaceMap = [:]
-//    private Map<Class<?>, WSClientInvocationHandler> handlerMap = [:]
-//    private Map<String, Map<String, String>> securityMap = [:]
 
     WebServiceClientFactoryImpl() {
     }
-    
+
     @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String username, String password) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
-        
+
         if(serviceEndpointAddress) {
             try {
                 if(log.isDebugEnabled()) log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured")
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, username, password,  handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, username, password, handler)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException("Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
                 if(log.isErrorEnabled()) log.error(cxfClientException.message, cxfClientException)
@@ -86,7 +77,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
             // is used only in secure mode to extract the username/password
             try {
-                createCxfProxy(clientInterface, serviceEndpointAddress, security?.secured?:false, serviceName, security.username, security.password, handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, security?.secured ?: false, serviceName, security.username, security.password, handler)
                 if(log.isDebugEnabled()) log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
             } catch (Exception exception) {
                 handler.cxfProxy = null
@@ -117,11 +108,6 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     }
 
     private void secureClient(Object cxfProxy, String username, String password) {
-        /* String wsClientAlias = WebServiceClientConstants.WS_CLIENT_ALIAS
-        if (wsClientAlias == null) {
-            throw new RuntimeException("Both System properties " + WebServiceClientConstants.WS_CLIENT_ALIAS_PROP_NAME + " and " + WebServiceClientConstants.WS_CLIENT_PWD_PROP_NAME + " must be defined")
-        }
-        */
         if(username?.trim()?.length() < 1 || password?.length() < 1) {
             throw new RuntimeException("Username and password are not configured for calling secure web services")
         }
