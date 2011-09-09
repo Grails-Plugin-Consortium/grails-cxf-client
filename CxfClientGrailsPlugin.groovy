@@ -2,7 +2,6 @@ import com.grails.cxf.client.DynamicWebServiceClient
 import org.codehaus.groovy.grails.commons.ControllerArtefactHandler
 import org.codehaus.groovy.grails.commons.ServiceArtefactHandler
 import org.codehaus.groovy.grails.commons.TagLibArtefactHandler
-import org.springframework.beans.factory.FactoryBeanNotInitializedException
 
 class CxfClientGrailsPlugin {
     // the plugin version
@@ -87,15 +86,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     }
 
     def onChange = { event ->
-        if(!isBasePlugin()) {
-            if(application.isArtefactOfType(ControllerArtefactHandler.TYPE, event.source)) {
-                manager?.getGrailsPlugin("controllers")?.notifyOfEvent(event)
-            } else if(application.isArtefactOfType(ServiceArtefactHandler.TYPE, event.source)) {
-                manager?.getGrailsPlugin("services")?.notifyOfEvent(event)
-            } else if(application.isArtefactOfType(TagLibArtefactHandler.TYPE, event.source)) {
-                manager?.getGrailsPlugin("groovyPages")?.notifyOfEvent(event)
-            }
-        }
+       
     }
 
     def onConfigChange = { event ->
