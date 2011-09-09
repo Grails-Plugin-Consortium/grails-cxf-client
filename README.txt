@@ -11,9 +11,9 @@ CXF CLIENT
 
 1. INTRODUCTION
 
-There are a few different plugins for consuming SOAP web services with grails, but none currently deal with the issue of caching port references.  The ws-client plugin works, but its limitations are in how it creates and consumes the wsdl.  It relies on real time creation of proxy classes and services which can be very time consuming in a large or complex service.  We need a way to speed up service invocation so this plugin was born.
+There are a few different plugins for consuming SOAP web services with grails, but none currently deal with the issue of caching port references.  The ws-client plugin works, but its limitations are in how it creates and consumes the wsdl.  It relies on real time creation of proxy classes and services which can be very processor and memory (time) consuming with a large or complex service contract.  We need a way to speed up service invocation so this plugin was created to facilitate that need when consuming SOAP services using cxf.
 
-The Cxf Client plugin will allow you to use existing (or new) cxf wsdl2java generated content and cache the port reference and speed up your soap service end point invocations.
+The Cxf Client plugin will allow you to use existing (or new) apache cxf wsdl2java generated content and cache the port reference to speed up your soap service end point invocations through an easy configuration driven mechanism.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -58,7 +58,8 @@ cxf {
             clientInterface = [package and name of wsdl2java -client generated port interface class]
             serviceEndpointAddress = [url for the service]
             secured = [true or false] //optional - defaults to false
-            securedName = [some name] //optional - defaults to beanName above
+            username = [username] //optional - used when secured is true - currently wss4j interceptor
+            password = [password] //optional - used when secured is true - currently wss4j interceptor
         }
     }
 }
@@ -69,12 +70,8 @@ cxf {
 * serviceEndpointAddress  - Url of the service to call.  Can refer to env specific url as in belows example. Required.
 * secured                 - If true will look for system level properties named [serviceName]Username and
                             [serviceName]Password and set the cxf client params to those values using WSS4J. Optional.
-* securedName             - Name of the service.  Will default to bean name, but can be customized to be shared
-                            across service beans for global configuration of secured username and password.
-                            eg. You might only want to set a single security username and password that is shared
-                            across services called globalServiceUsername and globalServicePassword.  You would
-                            then use "globalService" in all your service configurations and they would all refer
-                            to the same username and password configuration information. Optional.
+* username                - Username to pass along with request in wss4j interceptor when secured is true.  Optional.
+* password                - Password to pass along with request in wss4j interceptor when secured is true.  Optional.
 
 This is an example of a config file
 
@@ -141,6 +138,7 @@ NOTE: You should type the beans with the cxf port interface type so as to get in
 
 - Ability to dynamically reload endpoint url at runtime
 - More integration with soap header security
+    - Ability to configure/inject custom security interceptor
 
 
 

@@ -33,9 +33,9 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * The Username suffix and password suffix are used to build the key used to retrieve the username
      * and password respectively.
      */
-    private Map<String, Class<?>> interfaceMap = [:]
-    private Map<Class<?>, WSClientInvocationHandler> handlerMap = [:]
-    private Map<String, Map<String, String>> securityMap = [:]
+    def interfaceMap = [:]
+//    private Map<Class<?>, WSClientInvocationHandler> handlerMap = [:]
+//    private Map<String, Map<String, String>> securityMap = [:]
 
     WebServiceClientFactoryImpl() {
     }
@@ -43,7 +43,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String username, String password) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
-        // is used only in secure mode to extract the username/password
+        
         if(serviceEndpointAddress) {
             try {
                 if(log.isDebugEnabled()) log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured")
@@ -61,9 +61,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         if(log.isDebugEnabled()) log.debug("Created service $serviceName, caching reference to allow changing url later.")
-        interfaceMap.put(serviceName, clientInterface)
-        handlerMap.put(clientInterface, handler)
-        securityMap.put(serviceName, [username: username, password: password])
+        def serviceMap = [clientInterface: clientInterface, handler: handler, security: [secured: secured, username: username, password: password]]
+        interfaceMap.put(serviceName, serviceMap)
 
         return clientProxy
     }
@@ -72,23 +71,22 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * Method to allow updating endpoint and refreshing proxy reference
      * @param serviceName The name of the service to update
      * @param serviceEndpointAddress The new address to use
-     * @param secured Whether the service is secured or not
      * @throws UpdateServiceEndpointException If endpoint can not be updated
      */
-    @Synchronized void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress, boolean secured) throws UpdateServiceEndpointException {
+    @Synchronized void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress) throws UpdateServiceEndpointException {
         if(log.isDebugEnabled()) log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
 
         if(!serviceName || !interfaceMap.containsKey(serviceName)) {
             throw new UpdateServiceEndpointException("Can not update address for service.  Must provide a service name.")
         }
 
-        Class<?> clientInterface = interfaceMap.get(serviceName)
-        Map<String, String> security = securityMap.get(serviceName)
+        Class<?> clientInterface = interfaceMap.get(serviceName).clientInterface
+        def security = interfaceMap.get(serviceName).security
         if(clientInterface) {
-            WSClientInvocationHandler handler = handlerMap.get(clientInterface)
+            WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
             // is used only in secure mode to extract the username/password
             try {
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, security.username, security.password, handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, security?.secured?:false, serviceName, security.username, security.password, handler)
                 if(log.isDebugEnabled()) log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
             } catch (Exception exception) {
                 handler.cxfProxy = null

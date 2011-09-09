@@ -27,9 +27,11 @@ class DynamicWebServiceClientSpec extends Specification {
         then:
         object != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService") == cxf.client.mock.SimpleServicePortType
-        factory.securityMap.containsKey("testService")
-        factory.handlerMap.containsKey(cxf.client.mock.SimpleServicePortType)
+        factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
+        !factory.interfaceMap.get("testService").security.secured
+        factory.interfaceMap.get("testService").security.username == "testUser"
+        factory.interfaceMap.get("testService").security.password == "testPassword"
+        factory.interfaceMap.get("testService").handler != null
     }
 
      def "get a web service client with invalid endpoint address"() {
@@ -52,8 +54,6 @@ class DynamicWebServiceClientSpec extends Specification {
          FactoryBeanNotInitializedException exception = thrown()
          exception.message.contains("cannot be created")
         !factory.interfaceMap.containsKey("testService")
-        !factory.securityMap.containsKey("testService")
-        !factory.handlerMap.containsKey(cxf.client.mock.SimpleServicePortType)
     }
 
     def "get a web service client with invalid client interface name"() {
@@ -75,7 +75,5 @@ class DynamicWebServiceClientSpec extends Specification {
          FactoryBeanNotInitializedException exception = thrown()
          exception.message.contains("cannot be created")
         !factory.interfaceMap.containsKey("testService")
-        !factory.securityMap.containsKey("testService")
-        !factory.handlerMap.containsKey(cxf.client.mock.SimpleServicePortType)
     }
 }
