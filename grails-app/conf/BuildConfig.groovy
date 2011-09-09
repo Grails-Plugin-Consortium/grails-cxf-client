@@ -44,6 +44,11 @@ grails.project.dependency.resolution = {
     }
 }
 
+coverage {
+	xml = true
+    exclusions = ["**/*Tests*"]
+}
+
 codenarc.ruleSetFiles = [
         'rulesets/basic.xml',
         'rulesets/braces.xml',
