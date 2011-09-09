@@ -31,6 +31,16 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     WebServiceClientFactoryImpl() {
     }
 
+    /**
+     * create and cache the reference to the web service client proxy object
+     * @param serviceInterface cxf generated port interface to use for service contract
+     * @param serviceName the name of the service for using in cache key
+     * @param serviceEndpointAddress url to use when invoking service
+     * @param secured whether service is secured with username and password
+     * @param username username when using secured=true
+     * @param password password when using secured=true
+     * @return
+     */
     @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String username, String password) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
@@ -88,6 +98,16 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
     }
 
+    /**
+     * Create the actual cxf client proxy
+     * @param serviceInterface cxf generated port interface to use for service contract
+     * @param serviceEndpointAddress url to use when invoking service
+     * @param secured whether service is secured with username and password
+     * @param serviceName the name of the service for using in cache key
+     * @param username username when using secured=true
+     * @param password password when using secured=true
+     * @param handler ws client invocation handler for the proxy
+     */
     private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, String username, String password, WSClientInvocationHandler handler) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
@@ -100,6 +120,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         handler.cxfProxy = cxfProxy
     }
 
+    /**
+     * Add default interceptors to the client proxy
+     * @param cxfProxy proxy class you wish to intercept
+     */
     private void addInterceptors(Object cxfProxy) {
         Client client = ClientProxy.getClient(cxfProxy)
         client.getOutFaultInterceptors().add(new CxfClientFaultConverter())
@@ -107,6 +131,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         client.outInterceptors.add(new LoggingOutInterceptor())
     }
 
+    /**
+     * Method used to secure client using wss4j.  
+     * @param cxfProxy proxy class you wish to secure
+     * @param username username to use
+     * @param password password to use
+     * @see "http://cxf.apache.org/docs/ws-security.html"
+     */
     private void secureClient(Object cxfProxy, String username, String password) {
         if(username?.trim()?.length() < 1 || password?.length() < 1) {
             throw new RuntimeException("Username and password are not configured for calling secure web services")
@@ -128,7 +159,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 pc.password = password
             }
         })
-        // This callback is used to specify passwomrd for given user for keystore
+        // This callback is used to specify password for given user for keystore
         //outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, PasswordHandler.class.getName())
         // Configuration for accessing private key in keystore
         //outProps.put(WSHandlerConstants.SIG_PROP_FILE, "resources/SecurityOut.properties")
