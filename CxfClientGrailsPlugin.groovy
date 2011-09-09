@@ -75,8 +75,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             }
         }
 
-        log.info "completed mapping cxf client beans"
-        println "completed mapping cxf client beans"
+        log.info "completed mapping cxf-client beans"
     }
 
     def doWithDynamicMethods = { ctx ->
