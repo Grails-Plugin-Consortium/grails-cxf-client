@@ -3,9 +3,10 @@ CXF CLIENT
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Introduction
-2. Wsdl2java
-3. Plugin Configuration
-4. Future Revisions
+2. Wsdl2java Script
+3. Wsdl2java Manually
+4. Plugin Configuration
+5. Future Revisions
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -17,7 +18,50 @@ The Cxf Client plugin will allow you to use existing (or new) apache cxf wsdl2ja
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2. WSDL2JAVA
+2. WSDL2JAVA SCRIPT
+
+This plugin provides a convenient way to run wsdl2java as a grails run target in your project.  You must have apache cxf installed on your machine somewhere for this to work correctly.
+
+I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir] config setting to my configuration node to tell the script where to get grab the cxf classes to put on the classpath.
+
+cxf {
+    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
+    client {
+        ...
+    }
+}
+
+After I have done that I need to point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
+
+cxf {
+    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
+    client {
+        simpleServiceClient {
+            wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
+            clientInterface = cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress = "${service.simple.url}"
+        }
+
+        //Another example real service to use against wsd2java script
+        stockQuoteClient {
+            wsdl = "http://www.webservicex.net/stockquote.asmx?WSDL"
+            clientInterface = net.webservicex.StockQuoteSoap
+            serviceEndpointAddress = "http://www.webservicex.net/stockquote.asmx"
+        }
+    }
+}
+
+Note: The [installDir] and [wsdl] nodes are only used by the wsdl2java target and are not used in wiring the beans at runtime.
+
+After adding both [installDir] and [wsdl] nodes I can now run the following grails command to generate the cxf/jaxb classes into the src/java directory of the project:
+
+    grails wsdl2java
+
+Thanks to Stefan Armbruster for providing the starting script for this.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+3. WSDL2JAVA MANUALLY
 
 If you already have a wsdl2java generated object graph and client proxy you can skip this section.
 
@@ -42,7 +86,7 @@ Note: These could be put in the same jar since the namespace I am using is diffe
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3. PLUGIN CONFIGURATION
+4. PLUGIN CONFIGURATION
 
 To wire up the plugin simple install the plugin via:
 
@@ -53,6 +97,7 @@ or from the source code you could also package and install from a zip.
 Once the plugin is installed and you have your jaxb objects and cxf client port interface in your path (lib or src), you need to add the following to the Config.groovy of your project:
 
 cxf {
+    installDir = [install dir for apache cxf]
     client {
         [beanName] {
             clientInterface = [package and name of wsdl2java -client generated port interface class]
@@ -60,6 +105,7 @@ cxf {
             secured = [true or false] //optional - defaults to false
             username = [username] //optional - used when secured is true - currently wss4j interceptor
             password = [password] //optional - used when secured is true - currently wss4j interceptor
+            wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
         }
     }
 }
@@ -134,7 +180,7 @@ NOTE: You should type the beans with the cxf port interface type so as to get in
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-4. FUTURE REVISIONS
+5. FUTURE REVISIONS
 
 - Ability to dynamically reload endpoint url at runtime
 - More integration with soap header security

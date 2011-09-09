@@ -9,23 +9,23 @@ This target needs to be run only upon changes in the upstream API, since it's ar
 
     depends(compile, createConfig, parseArguments)
 
-    if(!config.cxf.home){
-        echo "ERROR: You must set the config property for cxf.home to the root dir of your apache cxf install"
-        echo "eg: cxf { home = \"c:/apache-cxf-2.4.2\" } }"
-        echo "Please set this and try again"
+    if(!config?.cxf?.installDir){
+        echo "ERROR: You must set the config property for cxf.installDir to the root dir of your apache cxf install"
+        echo "eg: cxf { installDir = \"c:/apache-cxf-2.4.2\" } }"
+        echo "Please correct this and try again"
         return
     }
 
     echo "starting wsdl2java"
     def wsdls = []
-    def cxflib = "${config.cxf.home}/lib"
+    def cxflib = "${config.cxf.installDir}/lib"
     config.cxf.client.each {
         wsdls << it?.value?.wsdl
     }
 
     if(!new File(cxflib).exists()){
-        echo "ERROR: You must set the config property for cxf.home to the root dir of your apache cxf install"
-        echo "eg: cxf { home = \"c:/apache-cxf-2.4.2\" } }"
+        echo "ERROR: You must set the config property for cxf.installDir to the root dir of your apache cxf install"
+        echo "eg: cxf { installDir = \"c:/apache-cxf-2.4.2\" } }"
         echo "Your dir ${cxflib} does not appear to exist"
         echo "Please correct this and try again"
         return

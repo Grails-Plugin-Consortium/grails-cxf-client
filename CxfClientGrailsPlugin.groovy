@@ -2,7 +2,7 @@ import com.grails.cxf.client.DynamicWebServiceClient
 
 class CxfClientGrailsPlugin {
     // the plugin version
-    def version = "0.2"
+    def version = "0.3"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.6 > *"
     // the other plugins this plugin depends on
@@ -20,7 +20,7 @@ class CxfClientGrailsPlugin {
             [name: "Brett Borchardt", email: "bborchardt@gmail.com"]]
     def title = "Cxf Client - Support for CXF and JAXB Soap Clients"
     def description = '''\\
-Used for easily integrating existing or new cxf/jaxb web service client code with soap services.
+Used for easily integrating existing or new cxf/jaxb web service client code with soap services.  Also provides wsdl2java grails target to easily generate code into srv/java from configured cxf clients.
 '''
 
     // URL to the plugin's documentation
