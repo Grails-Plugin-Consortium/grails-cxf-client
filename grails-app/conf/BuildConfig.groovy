@@ -40,5 +40,25 @@ grails.project.dependency.resolution = {
     plugins {
         test ":spock:0.5-groovy-1.7"
         test ":code-coverage:1.2.2"
+        test ":codenarc:0.12"
     }
 }
+
+codenarc.ruleSetFiles = [
+        'rulesets/basic.xml',
+        'rulesets/braces.xml',
+        'rulesets/concurrency.xml',
+        'rulesets/design.xml',
+        'rulesets/exceptions.xml',
+        'rulesets/formatting.xml',
+        'rulesets/grails.xml',
+        'rulesets/imports.xml',
+        'rulesets/jdbc.xml',
+        'rulesets/junit.xml',
+        'rulesets/logging.xml',
+        'rulesets/naming.xml',
+        'rulesets/security.xml',
+        'rulesets/serialization.xml',
+        'rulesets/size.xml',
+        'rulesets/unnecessary.xml',
+        'rulesets/unused.xml'].join(',').toString()
