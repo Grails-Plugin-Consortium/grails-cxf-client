@@ -22,12 +22,14 @@ This plugin provides a convenient way to run wsdl2java as a grails run target in
 
 I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir] config setting to my configuration node to tell the script where to find the apache cxf classes to put on the classpath.
 
-    cxf {
-        installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
-        client {
-            ...
-        }
+```java
+cxf {
+    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
+    client {
+        ...
     }
+}
+```
 
 After I have done that I need to point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
 
@@ -94,19 +96,21 @@ or from the source code you could also package and install from a zip.
 
 Once the plugin is installed and you have your jaxb objects and cxf client port interface in your path (lib or src), you need to add the following to the Config.groovy of your project:
 
-    cxf {
-        installDir = [install dir for apache cxf]
-        client {
-            [beanName] {
-                clientInterface = [package and name of wsdl2java -client generated port interface class]
-                serviceEndpointAddress = [url for the service]
-                secured = [true or false] //optional - defaults to false
-                username = [username] //optional - used when secured is true - currently wss4j interceptor
-                password = [password] //optional - used when secured is true - currently wss4j interceptor
-                wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
-            }
+```java
+cxf {
+    installDir = [install dir for apache cxf]
+    client {
+        [beanName] {
+            clientInterface = [package and name of wsdl2java -client generated port interface class]
+            serviceEndpointAddress = [url for the service]
+            secured = [true or false] //optional - defaults to false
+            username = [username] //optional - used when secured is true - currently wss4j interceptor
+            password = [password] //optional - used when secured is true - currently wss4j interceptor
+            wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
         }
     }
+}
+```
 
 <table>
 <tr><td>Property</td><td>Description</td><td>Required</td></tr>
