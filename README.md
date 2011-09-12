@@ -183,18 +183,19 @@ NOTE: You should type the beans with the cxf port interface type so as to get in
 
 
 5. DEMO PROJECT
+---------------
 
 A demo project that includes both a sample service and usage of the cxf-client plugin can be found at
 
     https://www.github.com/ctoestreich/cxf-client-demo
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 6. FUTURE REVISIONS
+---------------
 
-- Ability to dynamically reload endpoint url at runtime
-- More integration with soap header security
-    - Ability to configure/inject custom security interceptor
+* Ability to dynamically reload endpoint url at runtime
+* More integration with soap header security
+    * Ability to configure/inject custom security interceptor
 
 
 
