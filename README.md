@@ -96,21 +96,19 @@ or from the source code you could also package and install from a zip.
 
 Once the plugin is installed and you have your jaxb objects and cxf client port interface in your path (lib or src), you need to add the following to the Config.groovy of your project:
 
-```java
-cxf {
-    installDir = [install dir for apache cxf]
-    client {
-        [beanName] {
-            clientInterface = [package and name of wsdl2java -client generated port interface class]
-            serviceEndpointAddress = [url for the service]
-            secured = [true or false] //optional - defaults to false
-            username = [username] //optional - used when secured is true - currently wss4j interceptor
-            password = [password] //optional - used when secured is true - currently wss4j interceptor
-            wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
+    cxf {
+        installDir = [install dir for apache cxf]
+        client {
+            [beanName] {
+                clientInterface = [package and name of wsdl2java -client generated port interface class]
+                serviceEndpointAddress = [url for the service]
+                secured = [true or false] //optional - defaults to false
+                username = [username] //optional - used when secured is true - currently wss4j interceptor
+                password = [password] //optional - used when secured is true - currently wss4j interceptor
+                wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
+            }
         }
     }
-}
-```
 
 <table>
 <tr><td>Property</td><td>Description</td><td>Required</td></tr>
@@ -124,46 +122,48 @@ cxf {
 
 This is an example of a config file
 
-    //**********************************************************************************************
-    // IMPORTANT - these must be set externally to env if you want to refer to them later for use
-    // via cxf.  You can also simply hard code the url in the cxf section and NOT refer to a variable
-    // as well.
-    service.simple.url = ""
-    service.complex.url = ""
+```java
+//**********************************************************************************************
+// IMPORTANT - these must be set externally to env if you want to refer to them later for use
+// via cxf.  You can also simply hard code the url in the cxf section and NOT refer to a variable
+// as well.
+service.simple.url = ""
+service.complex.url = ""
 
-    // set per-environment service url
-    environments {
-        production {
-            grails.serverURL = "http://www.changeme.com"
-            service.simple.url = "${grails.serverURL}/services/simple"
-            service.complex.url = "${grails.serverURL}/services/complex"
+// set per-environment service url
+environments {
+    production {
+        grails.serverURL = "http://www.changeme.com"
+        service.simple.url = "${grails.serverURL}/services/simple"
+        service.complex.url = "${grails.serverURL}/services/complex"
+    }
+    development {
+        grails.serverURL = "http://localhost:8080/${appName}"
+        service.simple.url = "${grails.serverURL}/services/simple"
+        service.complex.url = "${grails.serverURL}/services/complex"
+    }
+    test {
+        grails.serverURL = "http://localhost:8080/${appName}"
+        service.simple.url = "${grails.serverURL}/services/simple"
+        service.complex.url = "${grails.serverURL}/services/complex"
+    }
+}
+
+cxf {
+    client {
+        simpleServiceClient {
+            clientInterface = cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress = "${service.simple.url}"
         }
-        development {
-            grails.serverURL = "http://localhost:8080/${appName}"
-            service.simple.url = "${grails.serverURL}/services/simple"
-            service.complex.url = "${grails.serverURL}/services/complex"
-        }
-        test {
-            grails.serverURL = "http://localhost:8080/${appName}"
-            service.simple.url = "${grails.serverURL}/services/simple"
-            service.complex.url = "${grails.serverURL}/services/complex"
+
+        complexServiceClient {
+            clientInterface = cxf.client.demo.complex.ComplexServicePortType
+            serviceEndpointAddress = "${service.complex.url}"
         }
     }
-
-    cxf {
-        client {
-            simpleServiceClient {
-                clientInterface = cxf.client.demo.simple.SimpleServicePortType
-                serviceEndpointAddress = "${service.simple.url}"
-            }
-
-            complexServiceClient {
-                clientInterface = cxf.client.demo.complex.ComplexServicePortType
-                serviceEndpointAddress = "${service.complex.url}"
-            }
-        }
-    }
-    //**********************************************************************************************
+}
+//**********************************************************************************************
+```
 
 You them refer to your services from a controller/service/taglib like the following:
 
