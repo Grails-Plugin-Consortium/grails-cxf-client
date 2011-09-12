@@ -106,14 +106,15 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
         }
     }
 
-- beanName                - This can be any name you would like, but should be unique.
-                            This will be the name of the bean the plugin will auto wire. Required.
-- clientInterface         - Package name and object name of the wsdl2java -client generated port interface. Required.
-- serviceEndpointAddress  - Url of the service to call.  Can refer to env specific url as in belows example. Required.
-- secured                 - If true will look for system level properties named [serviceName]Username and
-                            [serviceName]Password and set the cxf client params to those values using WSS4J. Optional.
-- username                - Username to pass along with request in wss4j interceptor when secured is true.  Optional.
-- password                - Password to pass along with request in wss4j interceptor when secured is true.  Optional.
+<table>
+<tr><td>Property</td><td>Description</td><td>Required</td></tr>
+<tr><td>beanName</td><td>This can be any name you would like, but should be unique.  This will be the name of the bean the plugin will auto wire</td><td>Yes</td></tr>
+<tr><td>clientInterface</td><td>Package name and object name of the wsdl2java generated port interface.</td><td>Yes</td></tr>
+<tr><td>serviceEndpointAddress</td><td>Url of the service to call.  Can refer to env specific url as in belows example.</td><td>Yes</td></tr>
+<tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J.</td><td>No</td></tr>
+<tr><td>username</td><td>Username to pass along with request in wss4j interceptor when secured is true.</td><td>No</td></tr>
+<tr><td>password</td><td>Password to pass along with request in wss4j interceptor when secured is true.</td><td>No</td></tr>
+</table>
 
 This is an example of a config file
 
@@ -181,8 +182,7 @@ DEMO PROJECT
 
 A demo project that includes both a sample service and usage of the cxf-client plugin can be found at
 
-    https://www.github.com/ctoestreich/cxf-client-demo
-
+<https://www.github.com/ctoestreich/cxf-client-demo>
 
 FUTURE REVISIONS
 ---------------
