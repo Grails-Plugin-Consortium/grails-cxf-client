@@ -113,11 +113,11 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
 <table>
 <tr><td><b>Property</b></td><td><b>Description</b></td><td>Required</b></td></tr>
 <tr><td>beanName</td><td>This can be any name you would like, but should be unique.  This will be the name of the bean the plugin will auto wire and that you will refer to the bean from your service/controller/etc.</td><td><b>Yes</b></td></tr>
-<tr><td>clientInterface</td><td>Package name and object name of the wsdl2java generated port interface.</td><td>Yes</td></tr>
-<tr><td>serviceEndpointAddress</td><td>Url of the service to call.  Can refer to env specific url as in belows example.</td><td>Yes</td></tr>
-<tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J.</td><td>No</td></tr>
-<tr><td>username</td><td>Username to pass along with request in wss4j interceptor when secured is true.</td><td>No</td></tr>
-<tr><td>password</td><td>Password to pass along with request in wss4j interceptor when secured is true.</td><td>No</td></tr>
+<tr><td>clientInterface</td><td>Package name and object name of the wsdl2java generated port interface.</td><td><b>Yes</b></td></tr>
+<tr><td>serviceEndpointAddress</td><td>Url of the service to call.  Can refer to env specific url as in belows example.</td><td><b>Yes</b></td></tr>
+<tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
+<tr><td>username</td><td>Username to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
+<tr><td>password</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
 </table>
 
 This is an example of a config file
