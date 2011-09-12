@@ -20,7 +20,7 @@ WSDL2JAVA SCRIPT
 
 This plugin provides a convenient way to run wsdl2java as a grails run target in your project.  You must have apache cxf installed on your machine somewhere for this to work correctly.
 
-I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir] config setting to my configuration node to tell the script where to get grab the cxf classes to put on the classpath.
+I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir] config setting to my configuration node to tell the script where to find the apache cxf classes to put on the classpath.
 
     cxf {
         installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
@@ -31,23 +31,25 @@ I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir]
 
 After I have done that I need to point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
 
-    cxf {
-        installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
-        client {
-            simpleServiceClient {
-                wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
-                clientInterface = cxf.client.demo.simple.SimpleServicePortType
-                serviceEndpointAddress = "${service.simple.url}"
-            }
+```java
+cxf {
+    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
+    client {
+        simpleServiceClient {
+            wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
+            clientInterface = cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress = "${service.simple.url}"
+        }
 
-            //Another example real service to use against wsd2java script
-            stockQuoteClient {
-                wsdl = "http://www.webservicex.net/stockquote.asmx?WSDL"
-                clientInterface = net.webservicex.StockQuoteSoap
-                serviceEndpointAddress = "http://www.webservicex.net/stockquote.asmx"
-            }
+        //Another example real service to use against wsd2java script
+        stockQuoteClient {
+            wsdl = "http://www.webservicex.net/stockquote.asmx?WSDL"
+            clientInterface = net.webservicex.StockQuoteSoap
+            serviceEndpointAddress = "http://www.webservicex.net/stockquote.asmx"
         }
     }
+}
+```
 
 Note: The [installDir] and [wsdl] nodes are only used by the wsdl2java target and are not used in wiring the beans at runtime.
 
