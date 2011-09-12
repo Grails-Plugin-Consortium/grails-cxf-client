@@ -6,7 +6,8 @@ CXF CLIENT
 2. Wsdl2java Script
 3. Wsdl2java Manually
 4. Plugin Configuration
-5. Future Revisions
+5. Demo Project
+6. Future Revisions
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -180,7 +181,15 @@ NOTE: You should type the beans with the cxf port interface type so as to get in
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-5. FUTURE REVISIONS
+5. DEMO PROJECT
+
+A demo project that includes both a sample service and usage of the cxf-client plugin can be found at
+
+    https://www.github.com/ctoestreich/cxf-client-demo
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+6. FUTURE REVISIONS
 
 - Ability to dynamically reload endpoint url at runtime
 - More integration with soap header security
