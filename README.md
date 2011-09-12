@@ -1,23 +1,21 @@
 CXF CLIENT
 ======
 
-1. Introduction
-2. Wsdl2java Script
-3. Wsdl2java Manually
-4. Plugin Configuration
-5. Demo Project
-6. Future Revisions
+* Introduction
+* Wsdl2java Script
+* Wsdl2java Manually
+* Plugin Configuration
+* Demo Project
+* Future Revisions
 
-
-1. INTRODUCTION
+INTRODUCTION
 ---------------
 
 There are a few different plugins for consuming SOAP web services with grails, but none currently deal with the issue of caching port references.  The ws-client plugin works, but its limitations are in how it creates and consumes the wsdl.  It relies on real time creation of proxy classes and services which can be very processor and memory (time) consuming with a large or complex service contract.  We need a way to speed up service invocation so this plugin was created to facilitate that need when consuming SOAP services using cxf.
 
 The Cxf Client plugin will allow you to use existing (or new) apache cxf wsdl2java generated content and cache the port reference to speed up your soap service end point invocations through an easy configuration driven mechanism.
 
-
-2. WSDL2JAVA SCRIPT
+WSDL2JAVA SCRIPT
 ---------------
 
 This plugin provides a convenient way to run wsdl2java as a grails run target in your project.  You must have apache cxf installed on your machine somewhere for this to work correctly.
@@ -32,7 +30,6 @@ I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir]
     }
 
 After I have done that I need to point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
-
 
     cxf {
         installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
@@ -60,8 +57,7 @@ After adding both [installDir] and [wsdl] nodes I can now run the following grai
 
 Thanks to Stefan Armbruster for providing the starting script for this.
 
-
-3. WSDL2JAVA MANUALLY
+WSDL2JAVA MANUALLY
 ----------------
 
 If you already have a wsdl2java generated object graph and client proxy you can skip this section.
@@ -85,8 +81,7 @@ Put the jar into your project's lib dir (and generate any more jars you need).  
 
 Note: These could be put in the same jar since the namespace I am using is different cxf.client.demo.complex and cxf.client.demo.simple.
 
-
-4. PLUGIN CONFIGURATION
+PLUGIN CONFIGURATION
 ----------------
 
 To wire up the plugin simple install the plugin via:
@@ -181,8 +176,7 @@ class DemoController {
 
 NOTE: You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually.
 
-
-5. DEMO PROJECT
+DEMO PROJECT
 ---------------
 
 A demo project that includes both a sample service and usage of the cxf-client plugin can be found at
@@ -190,12 +184,9 @@ A demo project that includes both a sample service and usage of the cxf-client p
     https://www.github.com/ctoestreich/cxf-client-demo
 
 
-6. FUTURE REVISIONS
+FUTURE REVISIONS
 ---------------
 
 * Ability to dynamically reload endpoint url at runtime
 * More integration with soap header security
     * Ability to configure/inject custom security interceptor
-
-
-
