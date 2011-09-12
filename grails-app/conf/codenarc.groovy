@@ -1,6 +1,6 @@
 ruleset {
 
-    description 'Gradle plugins CodeNarc RuleSet'
+    description 'CodeNarc RuleSet'
 
     ruleset( "http://codenarc.sourceforge.net/StarterRuleSet-AllRulesByCategory.groovy.txt" ) {
 
