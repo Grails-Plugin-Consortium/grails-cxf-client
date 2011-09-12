@@ -16,7 +16,7 @@ class CxfClientFaultConverter extends ClientFaultConverter {
     @Override
     void handleMessage(Message message) {
 
-        Fault fault = (Fault) message.getContent(Exception.class)
+        Fault fault = (Fault) message.getContent(Exception)
 
         if(fault?.detail) {
             processFaultDetail(fault, message)

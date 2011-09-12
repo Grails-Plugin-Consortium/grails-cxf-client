@@ -49,6 +49,8 @@ coverage {
     exclusions = ["**/*Tests*"]
 }
 
+codenarc.ruleSetFiles="file:grails-app/conf/codenarc.groovy"
+
 codenarc.reports = {
     CxfClientReport('xml') {                    // The report name "MyXmlReport" is user-defined; Report type is 'xml'
         outputFile = 'target/codenarc.xml'  // Set the 'outputFile' property of the (XML) Report
@@ -60,23 +62,24 @@ codenarc.processTestUnit = false
 codenarc.processTestIntegration  = false
 codenarc.propertiesFile = 'codenarc.properties'
 
-codenarc.ruleSetFiles = [
-        'rulesets/basic.xml',
-        'rulesets/braces.xml',
-        'rulesets/concurrency.xml',
-        'rulesets/design.xml',
-        'rulesets/dry.xml',
-        'rulesets/exceptions.xml',
-        'rulesets/formatting.xml',
-        'rulesets/generic.xml',
-        'rulesets/grails.xml',
-        'rulesets/imports.xml',
-        'rulesets/jdbc.xml',
-        'rulesets/junit.xml',
-        'rulesets/logging.xml',
-        'rulesets/naming.xml',
-        'rulesets/security.xml',
-        'rulesets/serialization.xml',
-        'rulesets/size.xml',
-        'rulesets/unnecessary.xml',
-        'rulesets/unused.xml'].join(',').toString()
+
+//codenarc.ruleSetFiles = [
+//        'rulesets/basic.xml',
+//        'rulesets/braces.xml',
+//        'rulesets/concurrency.xml',
+//        'rulesets/design.xml',
+//        'rulesets/dry.xml',
+//        'rulesets/exceptions.xml',
+//        'rulesets/formatting.xml',
+//        'rulesets/generic.xml',
+//        'rulesets/grails.xml',
+//        'rulesets/imports.xml',
+//        'rulesets/jdbc.xml',
+//        'rulesets/junit.xml',
+//        'rulesets/logging.xml',
+//        'rulesets/naming.xml',
+//        'rulesets/security.xml',
+//        'rulesets/serialization.xml',
+//        'rulesets/size.xml',
+//        'rulesets/unnecessary.xml',
+//        'rulesets/unused.xml'].join(',').toString()

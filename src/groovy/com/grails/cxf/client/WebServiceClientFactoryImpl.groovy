@@ -48,7 +48,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             try {
                 if(log.isDebugEnabled()) { log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
                 createCxfProxy(clientInterface, serviceEndpointAddress, secured,
-                               serviceName, username, password, handler)
+                               username, password, handler)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException("Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
                 if(log.isErrorEnabled()) { log.error(cxfClientException.message, cxfClientException) }
@@ -93,7 +93,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             // is used only in secure mode to extract the username/password
             try {
                 createCxfProxy(clientInterface, serviceEndpointAddress,
-                               security?.secured ?: false, serviceName,
+                               security?.secured ?: false,
                                security.username, security.password, handler)
                 if(log.isDebugEnabled()) { log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
             } catch (Exception exception) {
@@ -112,13 +112,12 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param serviceInterface cxf generated port interface to use for service contract
      * @param serviceEndpointAddress url to use when invoking service
      * @param secured whether service is secured with username and password
-     * @param serviceName the name of the service for using in cache key
      * @param username username when using secured=true
      * @param password password when using secured=true
      * @param handler ws client invocation handler for the proxy
      */
     private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress,
-                                boolean secured, String serviceName, String username,
+                                boolean secured, String username,
                                 String password, WSClientInvocationHandler handler) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
