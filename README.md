@@ -106,14 +106,14 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
         }
     }
 
-    - beanName                - This can be any name you would like, but should be unique.
-                                This will be the name of the bean the plugin will auto wire. Required.
-    - clientInterface         - Package name and object name of the wsdl2java -client generated port interface. Required.
-    - serviceEndpointAddress  - Url of the service to call.  Can refer to env specific url as in belows example. Required.
-    - secured                 - If true will look for system level properties named [serviceName]Username and
-                                [serviceName]Password and set the cxf client params to those values using WSS4J. Optional.
-    - username                - Username to pass along with request in wss4j interceptor when secured is true.  Optional.
-    - password                - Password to pass along with request in wss4j interceptor when secured is true.  Optional.
+- beanName                - This can be any name you would like, but should be unique.
+                            This will be the name of the bean the plugin will auto wire. Required.
+- clientInterface         - Package name and object name of the wsdl2java -client generated port interface. Required.
+- serviceEndpointAddress  - Url of the service to call.  Can refer to env specific url as in belows example. Required.
+- secured                 - If true will look for system level properties named [serviceName]Username and
+                            [serviceName]Password and set the cxf client params to those values using WSS4J. Optional.
+- username                - Username to pass along with request in wss4j interceptor when secured is true.  Optional.
+- password                - Password to pass along with request in wss4j interceptor when secured is true.  Optional.
 
 This is an example of a config file
 
