@@ -38,40 +38,36 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param password password when using secured=true
      * @return
      */
-    @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress,
-                                             boolean secured, String username, String password) {
+    @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName,
+                                             String serviceEndpointAddress, boolean secured,
+                                             String username, String password) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
 
         if(serviceEndpointAddress) {
             try {
-                if(log.isDebugEnabled()) {
-                    log.debug("""Creating endpoint for service $serviceName using endpoint
-address $serviceEndpointAddress is secured $secured""")
-                }
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, username, password, handler)
+                if(log.isDebugEnabled()) { log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
+                createCxfProxy(clientInterface, serviceEndpointAddress, secured,
+                               serviceName, username, password, handler)
             } catch (Exception exception) {
-                CxfClientException cxfClientException = new CxfClientException("""Could not create web service client
-for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and
-is accessible.""", exception)
+                CxfClientException cxfClientException = new CxfClientException("Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
                 if(log.isErrorEnabled()) { log.error(cxfClientException.message, cxfClientException) }
                 throw cxfClientException
             }
 
         } else {
-            CxfClientException cxfClientException = new CxfClientException("""Web service client failed to
-initialize with url: $serviceEndpointAddress using secured: $secured""")
+            CxfClientException cxfClientException = new CxfClientException("Web service client failed to initialize with url: $serviceEndpointAddress using secured: $secured")
             if(log.isErrorEnabled()) { log.error(cxfClientException.message, cxfClientException) }
             throw cxfClientException
         }
 
-        if(log.isDebugEnabled()) log.debug("Created service $serviceName, caching reference to allow changing url later.")
+        if(log.isDebugEnabled()) { log.debug("Created service $serviceName, caching reference to allow changing url later.") }
         def serviceMap = [clientInterface: clientInterface,
                 handler: handler,
                 security: [secured: secured, username: username, password: password]]
         interfaceMap.put(serviceName, serviceMap)
 
-        return clientProxy
+        clientProxy
     }
 
     /**
@@ -80,11 +76,14 @@ initialize with url: $serviceEndpointAddress using secured: $secured""")
      * @param serviceEndpointAddress The new address to use
      * @throws UpdateServiceEndpointException If endpoint can not be updated
      */
-    @Synchronized void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress) throws UpdateServiceEndpointException {
-        if(log.isDebugEnabled()) log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
+    @Synchronized void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress)
+    throws UpdateServiceEndpointException {
+        if(log.isDebugEnabled()) {
+            log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
+        }
 
         if(!serviceName || !interfaceMap.containsKey(serviceName)) {
-            throw new UpdateServiceEndpointException("Can not update address for service.  Must provide a service name.")
+            throw new UpdateServiceEndpointException('Can not update address for service. Must provide a service name.')
         }
 
         Class<?> clientInterface = interfaceMap.get(serviceName).clientInterface
@@ -93,14 +92,18 @@ initialize with url: $serviceEndpointAddress using secured: $secured""")
             WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
             // is used only in secure mode to extract the username/password
             try {
-                createCxfProxy(clientInterface, serviceEndpointAddress, security?.secured ?: false, serviceName, security.username, security.password, handler)
-                if(log.isDebugEnabled()) log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
+                createCxfProxy(clientInterface, serviceEndpointAddress,
+                               security?.secured ?: false, serviceName,
+                               security.username, security.password, handler)
+                if(log.isDebugEnabled()) { log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
             } catch (Exception exception) {
                 handler.cxfProxy = null
                 throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
             }
         } else {
-            if(log.isDebugEnabled()) { log.debug("Unable to find existing client proxy matching name ${serviceName}") }
+            if(log.isDebugEnabled()) {
+                log.debug("Unable to find existing client proxy matching name ${serviceName}")
+            }
         }
     }
 
@@ -114,7 +117,9 @@ initialize with url: $serviceEndpointAddress using secured: $secured""")
      * @param password password when using secured=true
      * @param handler ws client invocation handler for the proxy
      */
-    private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, String username, String password, WSClientInvocationHandler handler) {
+    private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress,
+                                boolean secured, String serviceName, String username,
+                                String password, WSClientInvocationHandler handler) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
@@ -210,7 +215,7 @@ initialize with url: $serviceEndpointAddress using secured: $secured""")
         Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if(!cxfProxy) {
                 String message = "Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize."
-                if(log.isErrorEnabled()){ log.error message }
+                if(log.isErrorEnabled()) { log.error message }
                 throw new CxfClientException(message)
 
             }
@@ -218,9 +223,8 @@ initialize with url: $serviceEndpointAddress using secured: $secured""")
             try {
                 method.invoke(cxfProxy, args)
             } catch (Exception e) {
-                if(log.isErrorEnabled()){ log.error e.message }
-                throw new CxfClientException("""Error invoking method ${method.name} on interface $clientName. Make
-sure valid clientInterface and serviceEndpointAddress are set.""", e)
+                if(log.isErrorEnabled()) { log.error e.message }
+                throw new CxfClientException("Error invoking method ${method.name} on interface $clientName. Make sure valid clientInterface and serviceEndpointAddress are set.", e)
             }
         }
     }
