@@ -40,7 +40,7 @@ grails.project.dependency.resolution = {
     plugins {
         test ":spock:0.5-groovy-1.7"
         test ":code-coverage:1.2.2"
-        test ":codenarc:0.12"
+        test ":codenarc:0.15"
     }
 }
 
@@ -48,6 +48,17 @@ coverage {
 	xml = true
     exclusions = ["**/*Tests*"]
 }
+
+codenarc.reports = {
+    CxfClientReport('xml') {                    // The report name "MyXmlReport" is user-defined; Report type is 'xml'
+        outputFile = 'target/codenarc.xml'  // Set the 'outputFile' property of the (XML) Report
+        title = 'CXF Client Plugin'             // Set the 'title' property of the (XML) Report
+    }
+}
+
+codenarc.processTestUnit = false
+codenarc.processTestIntegration  = false
+codenarc.propertiesFile = 'codenarc.properties'
 
 codenarc.ruleSetFiles = [
         'rulesets/basic.xml',
