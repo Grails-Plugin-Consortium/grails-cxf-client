@@ -11,6 +11,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     <resource>Config</resource>
     <resource>DataSource</resource>
     <resource>UrlMappings</resource>
+    <resource>codenarc</resource>
   </resources>
   <dependencies />
   <behavior />
