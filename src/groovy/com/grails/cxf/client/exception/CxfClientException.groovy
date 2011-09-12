@@ -12,20 +12,20 @@ class CxfClientException extends Throwable implements Serializable {
     /**
      * Creates a new instance of UpdateException
      */
-    public CxfClientException() {
+    CxfClientException() {
         super()
     }
 
-    public CxfClientException(String message, Throwable cause) {
+    CxfClientException(String message, Throwable cause) {
         super(message, cause)
     }
 
-    public CxfClientException(Throwable cause) {
+    CxfClientException(Throwable cause) {
         super(cause)
     }
 
 
-    public CxfClientException(String msg) {
+    CxfClientException(String msg) {
         super(msg)
     }
 }

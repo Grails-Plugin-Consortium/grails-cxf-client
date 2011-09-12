@@ -28,9 +28,6 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private static final log = LogFactory.getLog(this)
     def interfaceMap = [:]
 
-    WebServiceClientFactoryImpl() {
-    }
-
     /**
      * create and cache the reference to the web service client proxy object
      * @param serviceInterface cxf generated port interface to use for service contract
@@ -41,28 +38,37 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param password password when using secured=true
      * @return
      */
-    @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress, boolean secured, String username, String password) {
+    @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress,
+                                             boolean secured, String username, String password) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
 
         if(serviceEndpointAddress) {
             try {
-                if(log.isDebugEnabled()) log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured")
+                if(log.isDebugEnabled()) {
+                    log.debug("""Creating endpoint for service $serviceName using endpoint
+address $serviceEndpointAddress is secured $secured""")
+                }
                 createCxfProxy(clientInterface, serviceEndpointAddress, secured, serviceName, username, password, handler)
             } catch (Exception exception) {
-                CxfClientException cxfClientException = new CxfClientException("Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
-                if(log.isErrorEnabled()) log.error(cxfClientException.message, cxfClientException)
+                CxfClientException cxfClientException = new CxfClientException("""Could not create web service client
+for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and
+is accessible.""", exception)
+                if(log.isErrorEnabled()) { log.error(cxfClientException.message, cxfClientException) }
                 throw cxfClientException
             }
 
         } else {
-            CxfClientException cxfClientException = new CxfClientException("Web service client failed to initialize with url: $serviceEndpointAddress using secured: $secured")
-            if(log.isErrorEnabled()) log.error(cxfClientException.message, cxfClientException)
+            CxfClientException cxfClientException = new CxfClientException("""Web service client failed to
+initialize with url: $serviceEndpointAddress using secured: $secured""")
+            if(log.isErrorEnabled()) { log.error(cxfClientException.message, cxfClientException) }
             throw cxfClientException
         }
 
         if(log.isDebugEnabled()) log.debug("Created service $serviceName, caching reference to allow changing url later.")
-        def serviceMap = [clientInterface: clientInterface, handler: handler, security: [secured: secured, username: username, password: password]]
+        def serviceMap = [clientInterface: clientInterface,
+                handler: handler,
+                security: [secured: secured, username: username, password: password]]
         interfaceMap.put(serviceName, serviceMap)
 
         return clientProxy
@@ -94,7 +100,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
             }
         } else {
-            if(log.isDebugEnabled()) log.debug("Unable to find existing client proxy matching name ${serviceName}")
+            if(log.isDebugEnabled()) { log.debug("Unable to find existing client proxy matching name ${serviceName}") }
         }
     }
 
@@ -111,7 +117,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress, boolean secured, String serviceName, String username, String password, WSClientInvocationHandler handler) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
-                                                                             bus: BusFactory.getDefaultBus())
+                                                                             bus: BusFactory.defaultBus)
         Object cxfProxy = clientProxyFactory.create()
         if(secured) {
             secureClient(cxfProxy, username, password)
@@ -126,7 +132,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      */
     private void addInterceptors(Object cxfProxy) {
         Client client = ClientProxy.getClient(cxfProxy)
-        client.getOutFaultInterceptors().add(new CxfClientFaultConverter())
+        client.outFaultInterceptors.add(new CxfClientFaultConverter())
         client.inInterceptors.add(new LoggingInInterceptor())
         client.outInterceptors.add(new LoggingOutInterceptor())
     }
@@ -140,7 +146,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      */
     private void secureClient(Object cxfProxy, String username, String password) {
         if(username?.trim()?.length() < 1 || password?.length() < 1) {
-            throw new RuntimeException("Username and password are not configured for calling secure web services")
+            throw new CxfClientException('Username and password are not configured for calling secure web services')
         }
 
         Client client = ClientProxy.getClient(cxfProxy)
@@ -175,11 +181,11 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * Conduit handles both the Http and Https protocols. <br>
      * Policies apply to the Conduit. Chunking is applied on the policy to control the mode of transmission.
      * In non-chunking mode, the message is expected to be sent as a single block. In chunking mode, the message
-     * can be sent to the server while its being constructed. The server and client are expected to work in parallel during
-     * message transmission. <br>CXF by default runs in chunking mode. In addition, chunking mode is not supported by some web services.
-     * Thus, Chunking was disabled on the Client policy.
+     * can be sent to the server while its being constructed. The server and client are expected to work in
+     * parallel during message transmission. <br>CXF by default runs in chunking mode. In addition,
+     * chunking mode is not supported by some web services. Thus, Chunking was disabled on the Client policy.
      *
-     * @param client
+     * @param client the client object
      */
     private void configurePolicy(Client client) {
         Conduit c = client.conduit
@@ -202,14 +208,19 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if(!cxfProxy) {
+                String message = "Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize."
+                if(log.isErrorEnabled()){ log.error message }
+                throw new CxfClientException(message)
+
+            }
+
             try {
-                if(!cxfProxy) {
-                    throw new RuntimeException("Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize.")
-                }
                 method.invoke(cxfProxy, args)
             } catch (Exception e) {
-                println e.message
-                throw new CxfClientException("Error invoking method ${method.name} on interface $clientName. Make sure valid clientInterface and serviceEndpointAddress are set.", e)
+                if(log.isErrorEnabled()){ log.error e.message }
+                throw new CxfClientException("""Error invoking method ${method.name} on interface $clientName. Make
+sure valid clientInterface and serviceEndpointAddress are set.""", e)
             }
         }
     }
