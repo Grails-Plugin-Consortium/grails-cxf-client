@@ -196,3 +196,4 @@ FUTURE REVISIONS
 * Ability to dynamically reload endpoint url at runtime
 * More integration with soap header security
     * Ability to configure/inject custom security interceptor
+* Add catalog and binding support for wsdl2java script
