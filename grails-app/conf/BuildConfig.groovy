@@ -56,7 +56,7 @@ codenarc {
     ruleSetFiles = "file:grails-app/conf/codenarc.groovy"
     reports = {
         CxfClientReport('xml') {                    // The report name "MyXmlReport" is user-defined; Report type is 'xml'
-            outputFile = 'target/codenarc.xml'  // Set the 'outputFile' property of the (XML) Report
+            outputFile = 'target/codenarc.xml'      // Set the 'outputFile' property of the (XML) Report
             title = 'CXF Client Plugin'             // Set the 'title' property of the (XML) Report
         }
     }
