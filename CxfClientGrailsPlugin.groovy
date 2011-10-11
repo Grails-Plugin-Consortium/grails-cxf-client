@@ -24,7 +24,8 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
 '''
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/cxf-client"
+    def documentation = "https://github.com/ctoestreich/cxf-client"
+    def scm = [ url: "https://github.com/ctoestreich/cxf-client" ]
 
     def watchedResources = [
             "file:${getPluginLocation()}/grails-app/services/**/*Service.groovy",
