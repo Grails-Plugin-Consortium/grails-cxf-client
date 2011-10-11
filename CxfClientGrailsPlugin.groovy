@@ -2,9 +2,9 @@ import com.grails.cxf.client.DynamicWebServiceClient
 
 class CxfClientGrailsPlugin {
     // the plugin version
-    def version = "0.3"
+    def version = "1.0"
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "1.3.6 > *"
+    def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
     def dependsOn = [:]
     // resources that are excluded from plugin packaging
@@ -12,7 +12,7 @@ class CxfClientGrailsPlugin {
             "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
+    def license = "APACHE"
     def author = "Christian Oestreich"
     def authorEmail = "acetrike@gmail.com"
     def developers = [
