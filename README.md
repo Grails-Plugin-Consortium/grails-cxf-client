@@ -198,7 +198,7 @@ FUTURE REVISIONS
     * Ability to configure/inject custom security interceptor
 * Add catalog and binding support for wsdl2java script
 
-FUTURE REVISIONS
+LICENSE
 ---------------
 
 Copyright 2011 Christian Oestreich
