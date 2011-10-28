@@ -41,7 +41,7 @@ cxf {
         simpleServiceClient {
             //used in wsdl2java
             wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
-            namespace = "com.hello.world"
+            namespace = "cxf.client.demo.simple"
             client = false //defaults to false
             binding = "grails-app/conf/bindings.xml"
             outputDir = "src/java"
