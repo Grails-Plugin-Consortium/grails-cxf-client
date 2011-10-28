@@ -6,6 +6,7 @@ CXF CLIENT
 * Wsdl2java Manually
 * Plugin Configuration
 * Demo Project
+* Issues
 * Future Revisions
 
 INTRODUCTION
@@ -122,7 +123,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
 
 This is an example of a config file
 
-```java
+```groovy
 //**********************************************************************************************
 // IMPORTANT - these must be set externally to env if you want to refer to them later for use
 // via cxf.  You can also simply hard code the url in the cxf section and NOT refer to a variable
@@ -167,7 +168,7 @@ cxf {
 
 You them refer to your services from a controller/service/taglib like the following:
 
-```java
+```groovy
 class DemoController {
     SimpleServicePortType simpleServiceClient
     ComplexServicePortType complexServiceClient
@@ -189,6 +190,18 @@ DEMO PROJECT
 A demo project that includes both a sample service and usage of the cxf-client plugin can be found at
 
 <https://www.github.com/ctoestreich/cxf-client-demo>
+
+ISSUES
+---------------
+
+Currently there is an issue with pointing to a secure endpoint and running the wsdl2java script.  If you get an error message like
+
+    PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+
+You may need to put a cert into your [jdkhome]\jre\lib\security directory.  I will be working on getting this working working by adding the cert to the service end point configuration in an upcoming release.
+
+Another solution is to get the wsdl from the web and copy into a local file.wsdl and change the config to point to a local file instead of the https endpoint for generation.
+
 
 FUTURE REVISIONS
 ---------------
