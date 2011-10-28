@@ -23,7 +23,7 @@ This plugin provides a convenient way to run wsdl2java as a grails run target in
 
 I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir] config setting to my configuration node to tell the script where to find the apache cxf classes to put on the classpath.
 
-```java
+```groovy
 cxf {
     installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
     client {
@@ -34,12 +34,19 @@ cxf {
 
 After I have done that I need to point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
 
-```java
+```groovy
 cxf {
     installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
     client {
         simpleServiceClient {
+            //used in wsdl2java
             wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
+            namespace = "com.hello.world"
+            client = false //defaults to false
+            binding = "grails-app/conf/bindings.xml"
+            outputDir = "src/java"
+
+            //used for invoking service
             clientInterface = cxf.client.demo.simple.SimpleServicePortType
             serviceEndpointAddress = "${service.simple.url}"
         }
@@ -47,6 +54,7 @@ cxf {
         //Another example real service to use against wsd2java script
         stockQuoteClient {
             wsdl = "http://www.webservicex.net/stockquote.asmx?WSDL"
+
             clientInterface = net.webservicex.StockQuoteSoap
             serviceEndpointAddress = "http://www.webservicex.net/stockquote.asmx"
         }
@@ -107,9 +115,15 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 username = [username] //optional - used when secured is true - currently wss4j interceptor
                 password = [password] //optional - used when secured is true - currently wss4j interceptor
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
+                namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
+                client = [true or false] //optional - used to tell wsdl2java to output sample clients, usually not needed - defaults to false
+                binding = [Specifies JAXWS or JAXB binding files or XMLBeans context files] //optional
+                outputDir = [location to output generated files] //optional - defaults to src/java
             }
         }
     }
+
+Config used at runtime to invoke service.
 
 <table>
 <tr><td><b>Property</b></td><td><b>Description</b></td><td>Required</b></td></tr>
@@ -119,6 +133,17 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
 <tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>username</td><td>Username to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
 <tr><td>password</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
+</table>
+
+Config items used by wsdl2java.
+
+<table>
+<tr><td><b>Property</b></td><td><b>Description</b></td><td>Required</b></td></tr>
+<tr><td>wsdl</td><td>Location of the wsdl either locally relative to project home dir or a url. (default: "")</td><td>No</td></tr>
+<tr><td>namespace</td><td>Specifies package names to use for the generated code. (default: "use wsdl provided schema")</td><td>No</td></tr>
+<tr><td>client</td><td>Used to tell wsdl2java to output sample clients, usually not needed. (default: false)</td><td>No</td></tr>
+<tr><td>binding</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
+<tr><td>outputDir</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "src/java")</td><td>No</td></tr>
 </table>
 
 This is an example of a config file
