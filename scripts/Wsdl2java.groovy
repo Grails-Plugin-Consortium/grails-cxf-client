@@ -17,7 +17,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     }
 
     echo "starting wsdl2java"
-    def wsdls = [:]
+    def wsdls = [[:]]
     def cxflib = "${config.cxf.installDir}/lib"
     config.cxf.client.each {
         wsdls << [wsdl: it?.value?.wsdl, namespace: it?.value?.namespace, client: it?.value?.client?:false, binding: it?.value?.binding, outputDir: it?.value?.outputDir?:"src/java"]
@@ -36,7 +36,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     }
 
     wsdls.each { config ->
-        echo "generating java stubs from $wsdl"
+        echo "generating java stubs from ${config?.wsdl}"
 
         if(config?.wsdl) {
             java(fork: true, classpathref: "classpath", classname: "org.apache.cxf.tools.wsdlto.WSDLToJava") {
