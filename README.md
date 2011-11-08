@@ -5,6 +5,7 @@ CXF CLIENT
 * Wsdl2java Script
 * Wsdl2java Manually
 * Plugin Configuration
+* Custom Security Interceptors
 * Demo Project
 * Issues
 * Future Revisions
@@ -114,6 +115,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 secured = [true or false] //optional - defaults to false
                 username = [username] //optional - used when secured is true - currently wss4j interceptor
                 password = [password] //optional - used when secured is true - currently wss4j interceptor
+                securityInterceptor = [text name of custom bean to use] //optional - defaults to wss4j interceptor
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
                 namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
                 client = [true or false] //optional - used to tell wsdl2java to output sample clients, usually not needed - defaults to false
@@ -133,6 +135,7 @@ Config used at runtime to invoke service.
 <tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>username</td><td>Username to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
 <tr><td>password</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
+<tr><td>securityInterceptor</td><td>Provide a bean name as a string to wire in as an out interceptor for apache cxf.  If you provide a name for an interceptor, it will be implied that secured=true.  If you require the default wss4j interceptor you will not need to set this property, simply set the secured=true and the username and password properties.  If you set this to a value then the username and password fields will be ignored as it is expected that you will configure any required property injection in your resources.groovy file.  See below for examples (default: "")</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -209,6 +212,74 @@ class DemoController {
 
 NOTE: You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually.
 
+CUSTOM SECURITY INTERCEPTORS
+---------------
+
+This is rather complex exercise, but one that you can do as of version 1.2 of the plugin.
+
+As a convenience to the user I created an interface to inherit from that allows you to customize the specifics of the interceptor without having to inherit all the contract methods for the cxf interceptors.  You simply have to inherit from SecurityInterceptor in the com.grails.cxf.client.security package.  Here is the custom interceptor I created for the demo project.
+
+```groovy
+package com.cxf.demo.security
+
+import com.grails.cxf.client.security.SecurityInterceptor
+import javax.security.auth.callback.Callback
+import javax.security.auth.callback.CallbackHandler
+import javax.security.auth.callback.UnsupportedCallbackException
+import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
+import org.apache.ws.security.WSPasswordCallback
+import org.apache.ws.security.handler.WSHandlerConstants
+
+class CustomSecurityInterceptor implements SecurityInterceptor {
+
+    def pass
+    def user
+
+    WSS4JOutInterceptor create() {
+        Map<String, Object> outProps = [:]
+        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
+        outProps.put(WSHandlerConstants.USER, user)
+        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
+        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
+
+            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
+                pc.password = pass
+            }
+        })
+
+        new WSS4JOutInterceptor(outProps)
+    }
+}
+```
+
+You have to make sure your create method returns an object that already inherits from the appropriate classes such as an WSS4JOutInterceptor as I used here.  It is technically possible for your interceptor to extend something like SoapHeaderInterceptor, you will just be responsible for overriding all the appropriate methods.  You can see the <a href="http://www.technipelago.se/content/technipelago/blog/basic-authentication-grails-cxf">following example</a> on how to define a basic auth interceptor on the server side.
+More specifically refer to <a href="http://chrisdail.com/download/BasicAuthAuthorizationInterceptor.java">this file</a> for sample code on create your own interceptor. Perhaps the <B>best documentation</b> on writing a complex interceptor can be found at the <a href="http://cxf.apache.org/docs/interceptors.html">Apache CXF</a> site.
+
+In the case of the above CustomSecurityInterceptor, you would then place the following in your projects resources.groovy.
+
+```groovy
+beans = {
+    myCustomInterceptor(com.cxf.demo.security.CustomSecurityInterceptor){
+        user = "wsuser"
+        pass = "secret"
+    }
+}
+```
+
+The last step to hooking up the custom interceptor is to define the securityInterceptor for the client.  The myCustomInterceptor bean can be hooked up by adding the line in the config below.
+
+```groovy
+customSecureServiceClient {
+    wsdl = "docs/SecureService.wsdl" //only used for wsdl2java script target
+    namespace = "cxf.client.demo.secure"
+    clientInterface = cxf.client.demo.secure.SecureServicePortType
+    //secured = true //implied when you define a value for securityInterceptor
+    securityInterceptor = 'myCustomInterceptor'
+    serviceEndpointAddress = "${service.secure.url}"
+}
+```
+
 DEMO PROJECT
 ---------------
 
@@ -232,9 +303,9 @@ FUTURE REVISIONS
 ---------------
 
 * Ability to dynamically reload endpoint url at runtime
-* More integration with soap header security
-    * Ability to configure/inject custom security interceptor
-* Add catalog and binding support for wsdl2java script
+* <strike>More integration with soap header security v1.2</strike>
+    * <strike>Ability to configure/inject custom security interceptor v1.2</strike>
+* <strike>Add catalog and binding support for wsdl2java script v1.2</strike>
 
 LICENSE
 ---------------

@@ -31,7 +31,7 @@ grails.project.dependency.resolution = {
         compile('org.apache.cxf:cxf-rt-frontend-jaxrs:2.3.0') {
             excludes 'xmlbeans', 'spring-web', 'spring-core'
         }
-        compile('org.apache.ws.security:wss4j:1.6.2')
+        compile('org.apache.ws.security:wss4j:1.5.9')
         compile('org.apache.cxf:cxf-rt-ws-security:2.3.0') {
             excludes 'spring-web'
         }

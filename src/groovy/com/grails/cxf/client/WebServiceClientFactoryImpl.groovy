@@ -6,9 +6,6 @@ import groovy.transform.Synchronized
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
-import javax.security.auth.callback.Callback
-import javax.security.auth.callback.CallbackHandler
-import javax.security.auth.callback.UnsupportedCallbackException
 import org.apache.commons.logging.LogFactory
 import org.apache.cxf.BusFactory
 import org.apache.cxf.endpoint.Client
@@ -19,9 +16,7 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean
 import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
-import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
-import org.apache.ws.security.WSPasswordCallback
-import org.apache.ws.security.handler.WSHandlerConstants
+import com.grails.cxf.client.security.SecurityInterceptor
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -33,26 +28,21 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param serviceInterface cxf generated port interface to use for service contract
      * @param serviceName the name of the service for using in cache key
      * @param serviceEndpointAddress url to use when invoking service
-     * @param secured whether service is secured with username and password
-     * @param username username when using secured=true
-     * @param password password when using secured=true
+     * @param secured whether service is secured
      * @return
      */
     @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName,
-                                             String serviceEndpointAddress, boolean secured,
-                                             String username, String password) {
+                                             String serviceEndpointAddress, boolean secured, Object securityInterceptor) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
 
         if(serviceEndpointAddress) {
             try {
                 if(logger.isDebugEnabled()) { logger.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured,
-                               username, password, handler)
+                createCxfProxy(clientInterface, serviceEndpointAddress, secured, handler, securityInterceptor)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
-                        "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible."
-                        , exception)
+                        "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
                 if(logger.isErrorEnabled()) { logger.error(cxfClientException.message, cxfClientException) }
                 throw cxfClientException
             }
@@ -66,7 +56,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(logger.isDebugEnabled()) { logger.debug("Created service $serviceName, caching reference to allow changing url later.") }
         def serviceMap = [clientInterface: clientInterface,
                 handler: handler,
-                security: [secured: secured, username: username, password: password]]
+                security: [secured: secured]]
         interfaceMap.put(serviceName, serviceMap)
 
         clientProxy
@@ -92,11 +82,9 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         def security = interfaceMap.get(serviceName).security
         if(clientInterface) {
             WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
-            // is used only in secure mode to extract the username/password
             try {
                 createCxfProxy(clientInterface, serviceEndpointAddress,
-                               security?.secured ?: false,
-                               security.username, security.password, handler)
+                               security?.secured ?: false, handler, null)
                 if(logger.isDebugEnabled()) { logger.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
             } catch (Exception exception) {
                 handler.cxfProxy = null
@@ -113,20 +101,17 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * Create the actual cxf client proxy
      * @param serviceInterface cxf generated port interface to use for service contract
      * @param serviceEndpointAddress url to use when invoking service
-     * @param secured whether service is secured with username and password
-     * @param username username when using secured=true
-     * @param password password when using secured=true
+     * @param secured whether service is secured
      * @param handler ws client invocation handler for the proxy
      */
     private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress,
-                                boolean secured, String username,
-                                String password, WSClientInvocationHandler handler) {
+                                boolean secured, WSClientInvocationHandler handler, Object securityInterceptor) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
         Object cxfProxy = clientProxyFactory.create()
         if(secured) {
-            secureClient(cxfProxy, username, password)
+            secureClient(cxfProxy, securityInterceptor)
         }
         addInterceptors(cxfProxy)
         handler.cxfProxy = cxfProxy
@@ -150,35 +135,57 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param password password to use
      * @see "http://cxf.apache.org/docs/ws-security.html"
      */
-    private void secureClient(Object cxfProxy, String username, String password) {
-        if(username?.trim()?.length() < 1 || password?.length() < 1) {
-            throw new CxfClientException('Username and password are not configured for calling secure web services')
-        }
-
+    private void secureClient(Object cxfProxy, Object securityInterceptor) {
+//        if(username?.trim()?.length() < 1 || password?.length() < 1) {
+        //            throw new CxfClientException('Username and password are not configured for calling secure web services')
+        //        }
+        //
         Client client = ClientProxy.getClient(cxfProxy)
-        // applies the policy to the request
+//        // applies the policy to the request
         configurePolicy(client)
 
-        Map<String, Object> outProps = [:]
-        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
-        // User in keystore
-        outProps.put(WSHandlerConstants.USER, username)
-        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
-        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
+//        Map<String, Object> outProps = [:]
+        //        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
+        //        // User in keystore
+        //        outProps.put(WSHandlerConstants.USER, username)
+        //        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
+        //        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
+        //            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+        //                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
+        //                pc.password = password
+        //            }
+        //        })
+        //        // This callback is used to specify password for given user for keystore
+        //        //outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, PasswordHandler.class.getName())
+        //        // Configuration for accessing private key in keystore
+        //        //outProps.put(WSHandlerConstants.SIG_PROP_FILE, "resources/SecurityOut.properties")
+        //        //outProps.put(WSHandlerConstants.SIG_KEY_ID, "DirectReference")
+        //
+        //        //        client.getOutInterceptors().add(new DOMOutputHandler())
+        //        if(username?.trim()?.length() < 1 || password?.length() < 1) {
+        //            throw new CxfClientException('Username and password are not configured for calling secure web services')
+        //        }
 
-            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
-                pc.password = password
+        //        Map<String, Object> outProps = [:]
+        //        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
+        //        outProps.put(WSHandlerConstants.USER, "wsuser")
+        //        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
+        //        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
+        //
+        //            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+        //                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
+        //                pc.password = "secret"
+        //            }
+        //        })
+        //        client.outInterceptors.add(new WSS4JOutInterceptor(outProps))
+        //        println "secInt: ${securityInterceptor}"
+        if(securityInterceptor) {
+            if(securityInterceptor instanceof SecurityInterceptor) {
+                client.outInterceptors.add(securityInterceptor.create())
+            } else {
+                client.outInterceptors.add(securityInterceptor)
             }
-        })
-        // This callback is used to specify password for given user for keystore
-        //outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, PasswordHandler.class.getName())
-        // Configuration for accessing private key in keystore
-        //outProps.put(WSHandlerConstants.SIG_PROP_FILE, "resources/SecurityOut.properties")
-        //outProps.put(WSHandlerConstants.SIG_KEY_ID, "DirectReference")
-
-        //        client.getOutInterceptors().add(new DOMOutputHandler())
-        client.outInterceptors.add(new WSS4JOutInterceptor(outProps))
+        }
     }
 
     /**

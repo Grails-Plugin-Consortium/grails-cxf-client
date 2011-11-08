@@ -21,5 +21,5 @@ interface WebServiceClientFactory {
      *         to be injected into other classes as the interface).
      */
     Object getWebServiceClient(Class<?> clientInterface, String serviceName, String serviceEndpointAddress,
-                               boolean secured, String username, String password)
+                               boolean secured, Object securityInterceptor)
 }

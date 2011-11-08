@@ -36,9 +36,8 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     }
 
     wsdls.each { config ->
-        echo "generating java stubs from ${config?.wsdl}"
-
         if(config?.wsdl) {
+            echo "generating java stubs from ${config?.wsdl}"
             java(fork: true, classpathref: "classpath", classname: "org.apache.cxf.tools.wsdlto.WSDLToJava") {
                 arg(value: "-verbose")
                 if(config?.client) arg(value: "-client")

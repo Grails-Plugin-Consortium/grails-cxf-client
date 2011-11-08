@@ -25,7 +25,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
 
     // URL to the plugin's documentation
     def documentation = "https://github.com/ctoestreich/cxf-client"
-    def scm = [ url: "https://github.com/ctoestreich/cxf-client" ]
+    def scm = [url: "https://github.com/ctoestreich/cxf-client"]
 
     def watchedResources = [
             "file:${getPluginLocation()}/grails-app/services/**/*Service.groovy",
@@ -59,16 +59,26 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
                 //throw new FactoryBeanNotInitializedException(errorMessage)
             }
 
-            "${cxfClientName}"(DynamicWebServiceClient) {
-                webServiceClientFactory = ref("webServiceClientFactory")
-                clientInterface = client.clientInterface ?: ""
-                serviceName = cxfClientName
-                if(client?.secured) {
+            if(client?.secured && !client?.securityInterceptor) {
+                "securityInterceptor${cxfClientName}"(com.grails.cxf.client.security.DefaultSecurityOutInterceptor) {
                     username = client?.username ?: ""
                     password = client?.password ?: ""
                 }
+            }
+
+            "${cxfClientName}"(DynamicWebServiceClient) {
+                webServiceClientFactory = ref("webServiceClientFactory")
+                if(client?.secured || client?.securityInterceptor) {
+                    if(client?.securityInterceptor) {
+                        securityInterceptor = ref("${client.securityInterceptor}")
+                    } else {
+                        securityInterceptor = ref("securityInterceptor${cxfClientName}")
+                    }
+                }
+                clientInterface = client.clientInterface ?: ""
+                serviceName = cxfClientName
                 serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
-                secured = client?.secured ?: false
+                secured = (client?.secured || client?.securityInterceptor) ?: false
             }
         }
 
