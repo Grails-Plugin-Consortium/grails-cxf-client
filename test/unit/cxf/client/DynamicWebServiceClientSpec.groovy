@@ -17,8 +17,6 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
-                username: "testUser",
-                password: "testPassword",
                 webServiceClientFactory: factory)
 
         when:
@@ -29,8 +27,6 @@ class DynamicWebServiceClientSpec extends Specification {
         factory.interfaceMap.containsKey("testService")
         factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
         !factory.interfaceMap.get("testService").security.secured
-        factory.interfaceMap.get("testService").security.username == "testUser"
-        factory.interfaceMap.get("testService").security.password == "testPassword"
         factory.interfaceMap.get("testService").handler != null
     }
 
@@ -42,8 +38,6 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "",
                 secured: false,
-                username: "testUser",
-                password: "testPassword",
                 webServiceClientFactory: factory)
 
         when:
@@ -63,8 +57,6 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
-                username: "testUser",
-                password: "testPassword",
                 webServiceClientFactory: factory)
 
         when:

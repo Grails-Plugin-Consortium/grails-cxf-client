@@ -55,6 +55,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
         if(logger.isDebugEnabled()) { logger.debug("Created service $serviceName, caching reference to allow changing url later.") }
         def serviceMap = [clientInterface: clientInterface,
+                securityInterceptor: securityInterceptor,
                 handler: handler,
                 security: [secured: secured]]
         interfaceMap.put(serviceName, serviceMap)
@@ -82,9 +83,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         def security = interfaceMap.get(serviceName).security
         if(clientInterface) {
             WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
+            Object securityInterceptor = interfaceMap.get(serviceName).securityInterceptor
             try {
                 createCxfProxy(clientInterface, serviceEndpointAddress,
-                               security?.secured ?: false, handler, null)
+                               security?.secured ?: false, handler, securityInterceptor)
                 if(logger.isDebugEnabled()) { logger.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
             } catch (Exception exception) {
                 handler.cxfProxy = null
