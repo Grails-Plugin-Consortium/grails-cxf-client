@@ -49,8 +49,6 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
         factory.interfaceMap.get("testService").securityInterceptor instanceof DefaultSecurityOutInterceptor
         !factory.interfaceMap.get("testService").security.secured
-        factory.interfaceMap.get("testService").security.username == "testUser"
-        factory.interfaceMap.get("testService").security.password == "testPassword"
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/new"
     }
