@@ -31,6 +31,6 @@ class DefaultSecurityOutInterceptor implements SecurityInterceptor {
                 pc.password = password
             }
         })
-        return new WSS4JOutInterceptor(outProps)
+        new WSS4JOutInterceptor(outProps)
     }
 }
