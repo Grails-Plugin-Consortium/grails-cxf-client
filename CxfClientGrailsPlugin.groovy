@@ -56,7 +56,6 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
                 String errorMessage = "Web service client $cxfClientName cannot be created before setting the clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress} properties"
                 println errorMessage
                 log.error errorMessage
-                //throw new FactoryBeanNotInitializedException(errorMessage)
             }
 
             if(client?.secured && !client?.securityInterceptor) {
