@@ -253,8 +253,8 @@ class CustomSecurityInterceptor implements SecurityInterceptor {
 }
 ```
 
-You have to make sure your create method returns an object that already inherits from the appropriate classes such as an WSS4JOutInterceptor as I used here.  It is technically possible for your interceptor to extend something like SoapHeaderInterceptor, you will just be responsible for overriding all the appropriate methods.  You can see the <a href="http://www.technipelago.se/content/technipelago/blog/basic-authentication-grails-cxf">following example</a> on how to define a basic auth interceptor on the server side.
-More specifically refer to <a href="http://chrisdail.com/download/BasicAuthAuthorizationInterceptor.java">this file</a> for sample code on create your own interceptor. Perhaps the <B>best documentation</b> on writing a complex interceptor can be found at the <a href="http://cxf.apache.org/docs/interceptors.html">Apache CXF</a> site.
+You have to make sure your create method returns an object that already inherits from the appropriate classes such as an WSS4JOutInterceptor as I used here.  It is technically possible for your interceptor to extend something like SoapHeaderInterceptor, you will just be responsible for overriding all the appropriate methods yourself.  You can see the <a href="http://www.technipelago.se/content/technipelago/blog/basic-authentication-grails-cxf">following example</a> on how to define a basic auth interceptor on the server side.
+More specifically refer to <a href="http://chrisdail.com/download/BasicAuthAuthorizationInterceptor.java">this file</a> for sample code on create your own interceptor or to the <a href="https://github.com/ctoestreich/cxf-client-demo/blob/master/grails-app/conf/BootStrap.groovy">demo project file</a> that injects a server side interceptor. Perhaps the <B>best documentation</b> on writing a complex interceptor can be found at the <a href="http://cxf.apache.org/docs/interceptors.html">Apache CXF</a> site.
 
 In the case of the above CustomSecurityInterceptor, you would then place the following in your projects resources.groovy.
 
@@ -267,16 +267,20 @@ beans = {
 }
 ```
 
-The last step to hooking up the custom interceptor is to define the securityInterceptor for the client.  The myCustomInterceptor bean can be hooked up by adding the line in the config below.
+The last step to hooking up the custom interceptor is to define the securityInterceptor for the client config block.  The myCustomInterceptor bean can be hooked up by adding the line in the config below.
 
 ```groovy
-customSecureServiceClient {
-    wsdl = "docs/SecureService.wsdl" //only used for wsdl2java script target
-    namespace = "cxf.client.demo.secure"
-    clientInterface = cxf.client.demo.secure.SecureServicePortType
-    //secured = true //implied when you define a value for securityInterceptor
-    securityInterceptor = 'myCustomInterceptor'
-    serviceEndpointAddress = "${service.secure.url}"
+cxf {
+    client {
+        customSecureServiceClient {
+            wsdl = "docs/SecureService.wsdl" //only used for wsdl2java script target
+            namespace = "cxf.client.demo.secure"
+            clientInterface = cxf.client.demo.secure.SecureServicePortType
+            //secured = true //implied when you define a value for securityInterceptor
+            securityInterceptor = 'myCustomInterceptor'
+            serviceEndpointAddress = "${service.secure.url}"
+        }
+    }
 }
 ```
 
@@ -286,6 +290,8 @@ DEMO PROJECT
 A demo project that includes both a sample service and usage of the cxf-client plugin can be found at
 
 <https://www.github.com/ctoestreich/cxf-client-demo>
+
+I have also included the full code on how to inject a custom security interceptor in the demo project.
 
 ISSUES
 ---------------
