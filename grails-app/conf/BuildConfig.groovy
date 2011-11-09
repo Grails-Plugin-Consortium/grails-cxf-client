@@ -61,25 +61,3 @@ codenarc {
         }
     }
 }
-
-//
-//codenarc.ruleSetFiles = [
-//        'rulesets/basic.xml',
-//        'rulesets/braces.xml',
-//        'rulesets/concurrency.xml',
-//        'rulesets/design.xml',
-//        'rulesets/dry.xml',
-//        'rulesets/exceptions.xml',
-//        'rulesets/formatting.xml',
-//        'rulesets/generic.xml',
-//        'rulesets/grails.xml',
-//        'rulesets/imports.xml',
-//        'rulesets/jdbc.xml',
-//        'rulesets/junit.xml',
-//        'rulesets/logging.xml',
-//        'rulesets/naming.xml',
-//        'rulesets/security.xml',
-//        'rulesets/serialization.xml',
-//        'rulesets/size.xml',
-//        'rulesets/unnecessary.xml',
-//        'rulesets/unused.xml'].join(',').toString()
