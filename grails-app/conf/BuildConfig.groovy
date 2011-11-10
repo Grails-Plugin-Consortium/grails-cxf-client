@@ -37,11 +37,6 @@ grails.project.dependency.resolution = {
         }
         // runtime 'mysql:mysql-connector-java:5.1.13'
     }
-    plugins {
-        test ":spock:0.5-groovy-1.7"
-        test ":code-coverage:1.2.2"
-        test ":codenarc:0.15"
-    }
 }
 
 coverage {

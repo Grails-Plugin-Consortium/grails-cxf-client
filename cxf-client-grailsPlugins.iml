@@ -3,20 +3,13 @@
   <component name="FacetManager">
     <facet type="web" name="GrailsWeb">
       <configuration>
-        <webroots>
-          <root url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/code-coverage-1.2.2/web-app" relative="/" />
-        </webroots>
+        <webroots />
         <sourceRoots />
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/code-coverage-1.2.2">
-      <excludeFolder url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/code-coverage-1.2.2/target/classes" />
-      <excludeFolder url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/code-coverage-1.2.2/target/test-classes" />
-      <excludeFolder url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/code-coverage-1.2.2/web-app/plugins" />
-    </content>
     <content url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/codenarc-0.15">
       <excludeFolder url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/codenarc-0.15/target/classes" />
       <excludeFolder url="file://$USER_HOME$/.grails/1.3.7/projects/cxf-client/plugins/codenarc-0.15/target/test-classes" />
