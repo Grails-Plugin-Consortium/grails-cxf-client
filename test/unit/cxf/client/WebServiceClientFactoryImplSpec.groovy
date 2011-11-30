@@ -17,7 +17,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then:
         webServiceClient != null
@@ -38,7 +38,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -76,7 +76,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
