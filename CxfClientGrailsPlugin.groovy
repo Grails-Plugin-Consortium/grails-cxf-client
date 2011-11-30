@@ -97,7 +97,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             serviceName = cxfClientName
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
             secured = (client?.secured || client?.securityInterceptor) ?: false
-            enableDefaultLoggingInterceptors = client?.enableDefaultLoggingInterceptors ?: true
+            enableDefaultLoggingInterceptors = client?.enableDefaultLoggingInterceptors ? true : false
         }
     }
 
