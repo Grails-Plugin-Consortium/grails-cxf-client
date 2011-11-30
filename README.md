@@ -299,14 +299,126 @@ cxf {
 CUSTOM IN INTERCEPTORS
 ---------------
 
+You can wire in your own custom in interceptors by adding the property inInterceptors to the configured client.  In this example I have chosen to wire in my own in logging interceptors and have disabled the default logging interceptors by setting enableDefaultLoggingInterceptors = false.
+
+```groovy
+simpleServiceInterceptorClient {
+    wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
+    clientInterface = cxf.client.demo.simple.SimpleServicePortType
+    serviceEndpointAddress = "${service.simple.url}"
+    inInterceptors = ['customLoggingInInterceptor', 'verboseLoggingInInterceptor'] //can use comma separated list or groovy list
+    enableDefaultLoggingInterceptors = false
+    namespace = "cxf.client.demo.simple"
+}
+```
+
+Here is the code for my customLoggingInInterceptor (verboseLoggingInInterceptor is almost identical)
+
+```groovy
+package com.cxf.demo.logging
+
+import org.apache.cxf.common.injection.NoJSR250Annotations
+import org.apache.cxf.interceptor.AbstractLoggingInterceptor
+import org.apache.cxf.interceptor.Fault
+import org.apache.cxf.interceptor.LoggingInInterceptor
+import org.apache.cxf.message.Message
+import org.apache.cxf.phase.Phase
+
+@NoJSR250Annotations
+public class CustomLoggingInInterceptor extends AbstractLoggingInterceptor {
+
+    def name
+
+    public CustomLoggingInInterceptor() {
+        super(Phase.RECEIVE);
+        log "Creating the custom interceptor bean"
+    }
+
+    public void handleMessage(Message message) throws Fault {
+        log "$name :: I AM IN CUSTOM IN LOGGER!!!!!!!"
+    }
+}
+```
+
+**Note:** In your constructor you will need to be mindful what Phase you set your interceptor for.  Please see the docs at <http://cxf.apache.org/docs/interceptors.html>
+
+You will need to set the logging level in the log4j config section to enable the logging
+
+```groovy
+info 'com.grails.cxf.client'
+info 'org.apache.cxf.interceptor'
+info 'blah.blah.blah' //whatever package your custom interceptors are in
+//debug 'org.apache.cxf.interceptor' //choose appropriate level
+```
+
 CUSTOM OUT INTERCEPTORS
 ---------------
+You can wire in your own custom out interceptors by adding the property outInterceptors to the configured client.  In this example I have chosen to wire in my own out logging interceptors.
 
+```groovy
+simpleServiceInterceptorClient {
+    wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
+    clientInterface = cxf.client.demo.simple.SimpleServicePortType
+    serviceEndpointAddress = "${service.simple.url}"
+    outInterceptors = 'customLoggingOutInterceptor' //can use comma separated list or groovy list
+    namespace = "cxf.client.demo.simple"
+}
+```
+
+Here is the code for my customLoggingOutInterceptor
+
+```groovy
+package com.cxf.demo.logging
+
+import org.apache.cxf.common.injection.NoJSR250Annotations
+import org.apache.cxf.interceptor.AbstractLoggingInterceptor
+import org.apache.cxf.interceptor.Fault
+import org.apache.cxf.interceptor.LoggingInInterceptor
+import org.apache.cxf.message.Message
+import org.apache.cxf.phase.Phase
+
+@NoJSR250Annotations
+public class CustomLoggingOutInterceptor extends AbstractLoggingInterceptor {
+
+    def name
+
+    public CustomLoggingOutInterceptor() {
+        super(Phase.WRITE);
+        log "Creating the custom interceptor bean"
+    }
+
+    public void handleMessage(Message message) throws Fault {
+        log "$name :: I AM IN CUSTOM OUT LOGGER!!!!!!!"
+    }
+}
+```
+
+**Note:** Since the out interceptor is in PRE_STREAM phase (but PRE_STREAM phase is removed in MESSAGE mode), you have to configure out interceptors to be run at write phase.
+
+**Note:** In your constructor you will need to be mindful what Phase you set your interceptor for.  Please see the docs at <http://cxf.apache.org/docs/interceptors.html>
+
+You will need to set the logging level in the log4j config section to enable the logging
+
+```groovy
+info 'com.grails.cxf.client'
+info 'org.apache.cxf.interceptor'
+info 'blah.blah.blah' //whatever package your custom interceptors are in
+//debug 'org.apache.cxf.interceptor' //choose appropriate level
+```
 
 CUSTOM OUT FAULT INTERCEPTORS
 ---------------
 
+You can wire in your own custom out fault interceptors by adding the property outFaultInterceptors to the configured client.  Example coming soon, but should be similar to the earlier two examples.
 
+You will need to set the logging level in the log4j config section to enable the logging
+
+```groovy
+info 'com.grails.cxf.client'
+info 'org.apache.cxf.interceptor'
+info 'blah.blah.blah' //whatever package your custom interceptors are in
+//debug 'org.apache.cxf.interceptor' //choose appropriate level
+```
 
 DEMO PROJECT
 ---------------
