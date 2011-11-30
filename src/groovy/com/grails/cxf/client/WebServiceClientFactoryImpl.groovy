@@ -136,9 +136,15 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             configurePolicy(client)
         }
 
-        client.outFaultInterceptors.add(new CxfClientFaultConverter())
-        client.inInterceptors.add(new LoggingInInterceptor())
-        client.outInterceptors.add(new LoggingOutInterceptor())
+        //Only provide the default interceptors when no others are defined
+        if(!outFaultInterceptors)
+            client.outFaultInterceptors.add(new CxfClientFaultConverter())
+
+        if(!inInterceptors)
+            client.inInterceptors.add(new LoggingInInterceptor())
+
+        if(!outInterceptors)
+            client.outInterceptors.add(new LoggingOutInterceptor())
 
         //add custom interceptors here
         addInterceptors(client, client.outFaultInterceptors, outFaultInterceptors)
@@ -161,53 +167,53 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @see "http://cxf.apache.org/docs/ws-security.html"
      */
 //    private void secureClient(Object cxfProxy, Object securityInterceptor) {
-////        if(username?.trim()?.length() < 1 || password?.length() < 1) {
-//        //            throw new CxfClientException('Username and password are not configured for calling secure web services')
-//        //        }
-//        //
-//        Client client = ClientProxy.getClient(cxfProxy)
-////        // applies the policy to the request
-//        configurePolicy(client)
-//
-////        Map<String, Object> outProps = [:]
-//        //        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
-//        //        // User in keystore
-//        //        outProps.put(WSHandlerConstants.USER, username)
-//        //        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
-//        //        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
-//        //            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-//        //                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
-//        //                pc.password = password
-//        //            }
-//        //        })
-//        //        // This callback is used to specify password for given user for keystore
-//        //        //outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, PasswordHandler.class.getName())
-//        //        // Configuration for accessing private key in keystore
-//        //        //outProps.put(WSHandlerConstants.SIG_PROP_FILE, "resources/SecurityOut.properties")
-//        //        //outProps.put(WSHandlerConstants.SIG_KEY_ID, "DirectReference")
-//        //
-//        //        //        client.getOutInterceptors().add(new DOMOutputHandler())
-//        //        if(username?.trim()?.length() < 1 || password?.length() < 1) {
-//        //            throw new CxfClientException('Username and password are not configured for calling secure web services')
-//        //        }
-//
-//        //        Map<String, Object> outProps = [:]
-//        //        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
-//        //        outProps.put(WSHandlerConstants.USER, "wsuser")
-//        //        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
-//        //        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
-//        //
-//        //            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-//        //                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
-//        //                pc.password = "secret"
-//        //            }
-//        //        })
-//        //        client.outInterceptors.add(new WSS4JOutInterceptor(outProps))
-//        //        println "secInt: ${securityInterceptor}"
-//        if(securityInterceptor) {
-//
-//        }
-//    }
+    ////        if(username?.trim()?.length() < 1 || password?.length() < 1) {
+    //        //            throw new CxfClientException('Username and password are not configured for calling secure web services')
+    //        //        }
+    //        //
+    //        Client client = ClientProxy.getClient(cxfProxy)
+    ////        // applies the policy to the request
+    //        configurePolicy(client)
+    //
+    ////        Map<String, Object> outProps = [:]
+    //        //        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
+    //        //        // User in keystore
+    //        //        outProps.put(WSHandlerConstants.USER, username)
+    //        //        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
+    //        //        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
+    //        //            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+    //        //                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
+    //        //                pc.password = password
+    //        //            }
+    //        //        })
+    //        //        // This callback is used to specify password for given user for keystore
+    //        //        //outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, PasswordHandler.class.getName())
+    //        //        // Configuration for accessing private key in keystore
+    //        //        //outProps.put(WSHandlerConstants.SIG_PROP_FILE, "resources/SecurityOut.properties")
+    //        //        //outProps.put(WSHandlerConstants.SIG_KEY_ID, "DirectReference")
+    //        //
+    //        //        //        client.getOutInterceptors().add(new DOMOutputHandler())
+    //        //        if(username?.trim()?.length() < 1 || password?.length() < 1) {
+    //        //            throw new CxfClientException('Username and password are not configured for calling secure web services')
+    //        //        }
+    //
+    //        //        Map<String, Object> outProps = [:]
+    //        //        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
+    //        //        outProps.put(WSHandlerConstants.USER, "wsuser")
+    //        //        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
+    //        //        outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
+    //        //
+    //        //            void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+    //        //                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
+    //        //                pc.password = "secret"
+    //        //            }
+    //        //        })
+    //        //        client.outInterceptors.add(new WSS4JOutInterceptor(outProps))
+    //        //        println "secInt: ${securityInterceptor}"
+    //        if(securityInterceptor) {
+    //
+    //        }
+    //    }
 
     /**
      * Applies the Client policy on the Http Conduit.

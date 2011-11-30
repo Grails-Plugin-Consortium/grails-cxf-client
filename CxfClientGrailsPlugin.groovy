@@ -91,12 +91,12 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             }
             if(client?.outInterceptors) {
                 client.outInterceptors.split(',').each {
-                    outInterceptorList << ref(it)
+                    outInterceptorList << ref(it.trim())
                 }
             }
             if(client?.outFaultInterceptors) {
                 client.outFaultInterceptors.split(',').each {
-                    outFaultInterceptorList << ref(it)
+                    outFaultInterceptorList << ref(it.trim())
                 }
             }
             inInterceptors = inInterceptorList
