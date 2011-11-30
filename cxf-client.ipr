@@ -396,7 +396,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cxf-client.iml" filepath="$PROJECT_DIR$/cxf-client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cxf-client-grailsPlugins.iml" filepath="$PROJECT_DIR$/cxf-client-grailsPlugins.iml" />
     </modules>
   </component>
   <component name="ProjectResources">
