@@ -1,5 +1,6 @@
 package com.grails.cxf.client.security
 
+import com.grails.cxf.client.CxfClientInterceptor
 import com.grails.cxf.client.exception.CxfClientException
 import javax.security.auth.callback.Callback
 import javax.security.auth.callback.CallbackHandler
@@ -10,7 +11,7 @@ import org.apache.ws.security.handler.WSHandlerConstants
 
 /**
  */
-class DefaultSecurityOutInterceptor implements SecurityInterceptor {
+class DefaultSecurityOutInterceptor implements CxfClientInterceptor {
 
     def password
     def username

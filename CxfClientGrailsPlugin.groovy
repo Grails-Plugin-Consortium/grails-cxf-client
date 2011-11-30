@@ -2,7 +2,7 @@ import com.grails.cxf.client.DynamicWebServiceClient
 
 class CxfClientGrailsPlugin {
     // the plugin version
-    def version = "1.2.2"
+    def version = "1.2.3"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -49,6 +49,9 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         cxfClientConfigMap.each { cxfClient ->
             def cxfClientName = cxfClient.key
             def client = application.config?.cxf?.client[cxfClientName]
+            def inInterceptors = []
+            def outInterceptors = []
+            def outFaultInterceptors = []
 
             log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
@@ -70,9 +73,24 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
                 webServiceClientFactory = ref("webServiceClientFactory")
                 if(client?.secured || client?.securityInterceptor) {
                     if(client?.securityInterceptor) {
-                        securityInterceptor = ref("${client.securityInterceptor}")
+                        outInterceptors << ref("${client.securityInterceptor}")
                     } else {
-                        securityInterceptor = ref("securityInterceptor${cxfClientName}")
+                        outInterceptors << ref("securityInterceptor${cxfClientName}")
+                    }
+                }
+                if(client?.inInterceptors) {
+                    client.inInterceptors.split(',').each {
+                        inInterceptors << ref(it)
+                    }
+                }
+                if(client?.outInterceptors) {
+                    client.outInterceptors.split(',').each {
+                        outInterceptors << ref(it)
+                    }
+                }
+                if(client?.outFaultInterceptors) {
+                    client.outFaultInterceptors.split(',').each {
+                        outFaultInterceptors << ref(it)
                     }
                 }
                 clientInterface = client.clientInterface ?: ""

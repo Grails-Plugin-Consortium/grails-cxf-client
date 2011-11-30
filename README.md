@@ -222,7 +222,7 @@ As a convenience to the user I created an interface to inherit from that allows 
 ```groovy
 package com.cxf.demo.security
 
-import com.grails.cxf.client.security.SecurityInterceptor
+import com.grails.cxf.client.CxfClientInterceptor
 import javax.security.auth.callback.Callback
 import javax.security.auth.callback.CallbackHandler
 import javax.security.auth.callback.UnsupportedCallbackException

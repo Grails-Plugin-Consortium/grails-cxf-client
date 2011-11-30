@@ -16,7 +16,9 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     String serviceName
     WebServiceClientFactory webServiceClientFactory
     MessageSource messageSource
-    def securityInterceptor
+    def outInterceptors = []
+    def inInterceptors = []
+    def outFaultInterceptors = []
 
     Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
         if(!clientInterface || !serviceEndpointAddress) {
@@ -24,8 +26,13 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
 before setting the clientInterface=${clientInterface} and 
 serviceEndpointAddress=${serviceEndpointAddress} properties""")
         }
-        webServiceClientFactory.getWebServiceClient(clientInterface, serviceName,
-                                                    serviceEndpointAddress, secured, securityInterceptor)
+        webServiceClientFactory.getWebServiceClient(clientInterface,
+                                                    serviceName,
+                                                    serviceEndpointAddress,
+                                                    secured,
+                                                    outInterceptors, 
+                                                    inInterceptors,
+                                                    outFaultInterceptors)
     }
 
     Class<?> getObjectType() {
