@@ -137,13 +137,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         //Only provide the default interceptors when no others are defined
-        if(!outFaultInterceptors)
+        if(outFaultInterceptors?.size() ?: 0 == 0)
             client.outFaultInterceptors.add(new CxfClientFaultConverter())
 
-        if(!inInterceptors)
+        if(inInterceptors?.size() ?: 0 == 0)
             client.inInterceptors.add(new LoggingInInterceptor())
 
-        if(!outInterceptors)
+        if(outInterceptors?.size() ?: 0 == 0)
             client.outInterceptors.add(new LoggingOutInterceptor())
 
         //add custom interceptors here

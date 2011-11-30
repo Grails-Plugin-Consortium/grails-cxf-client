@@ -55,6 +55,9 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     def configureCxfClientBeans = {cxfClient ->
         def cxfClientName = cxfClient.key
         def client = application.config?.cxf?.client[cxfClientName]
+        def inList = []
+        def outList = []
+        def outFaultList = []
 
         log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
@@ -72,9 +75,10 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             }
         }
 
-        def inList = addInterceptors(client?.inInterceptors)
-        def outList = addInterceptors(client?.outInterceptors)
-        def outFaultList = addInterceptors(client?.outFaultInterceptors)
+        addInterceptors.delegate = delegate
+        addInterceptors(client?.inInterceptors, inList)
+        addInterceptors(client?.outInterceptors, outList)
+        addInterceptors(client?.outFaultInterceptors, outFaultList)
 
         "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
@@ -96,8 +100,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         }
     }
 
-    private List addInterceptors(clientInterceptors) {
-        def interceptorList = []
+    def addInterceptors = {clientInterceptors, interceptorList ->
         if(clientInterceptors) {
             if(clientInterceptors instanceof List) {
                 clientInterceptors.each {
@@ -109,7 +112,6 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
                 }
             }
         }
-        interceptorList
     }
 
     def doWithDynamicMethods = { ctx ->
