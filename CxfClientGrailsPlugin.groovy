@@ -55,9 +55,6 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     def configureCxfClientBeans = {cxfClient ->
         def cxfClientName = cxfClient.key
         def client = application.config?.cxf?.client[cxfClientName]
-        def inInterceptorList = []
-        def outInterceptorList = []
-        def outFaultInterceptorList = []
 
         log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
@@ -78,35 +75,39 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
             if(client?.secured || client?.securityInterceptor) {
+                if(!client?.outInterceptors){
+                    client.outInterceptors = []
+                }
                 if(client?.securityInterceptor) {
-                    outInterceptorList << ref("${client.securityInterceptor}")
+                    client.outInterceptors << ref("${client.securityInterceptor}")
                 } else {
-                    outInterceptorList << ref("securityInterceptor${cxfClientName}")
+                    client.outInterceptors << ref("securityInterceptor${cxfClientName}")
                 }
             }
-            if(client?.inInterceptors) {
-                client.inInterceptors.split(',').each {
-                    inInterceptorList << ref(it)
-                }
-            }
-            if(client?.outInterceptors) {
-                client.outInterceptors.split(',').each {
-                    outInterceptorList << ref(it.trim())
-                }
-            }
-            if(client?.outFaultInterceptors) {
-                client.outFaultInterceptors.split(',').each {
-                    outFaultInterceptorList << ref(it.trim())
-                }
-            }
-            inInterceptors = inInterceptorList
-            outInterceptors = outInterceptorList
-            outFaultInterceptors = outFaultInterceptorList
+            inInterceptors = addInterceptors(client?.inInterceptors)
+            outInterceptors = addInterceptors(client?.outInterceptors)
+            outFaultInterceptors = addInterceptors(client?.outFaultInterceptors)
             clientInterface = client.clientInterface ?: ""
             serviceName = cxfClientName
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
             secured = (client?.secured || client?.securityInterceptor) ?: false
         }
+    }
+
+    private def addInterceptors(clientInterceptors) {
+        def interceptorList = []
+        if(clientInterceptors) {
+            if(clientInterceptors instanceof List) {
+                clientInterceptors.each {
+                    interceptorList << ref(it.trim())
+                }
+            } else {
+                clientInterceptors.split(',').each {
+                    interceptorList << ref(it.trim())
+                }
+            }
+        }
+        interceptorList
     }
 
     def doWithDynamicMethods = { ctx ->
