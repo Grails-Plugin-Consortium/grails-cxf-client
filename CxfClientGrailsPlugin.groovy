@@ -49,9 +49,9 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         cxfClientConfigMap.each { cxfClient ->
             def cxfClientName = cxfClient.key
             def client = application.config?.cxf?.client[cxfClientName]
-            def inInterceptors = []
-            def outInterceptors = []
-            def outFaultInterceptors = []
+            def inInterceptorList = []
+            def outInterceptorList = []
+            def outFaultInterceptorList = []
 
             log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
@@ -73,26 +73,29 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
                 webServiceClientFactory = ref("webServiceClientFactory")
                 if(client?.secured || client?.securityInterceptor) {
                     if(client?.securityInterceptor) {
-                        outInterceptors << ref("${client.securityInterceptor}")
+                        outInterceptorList << ref("${client.securityInterceptor}")
                     } else {
-                        outInterceptors << ref("securityInterceptor${cxfClientName}")
+                        outInterceptorList << ref("securityInterceptor${cxfClientName}")
                     }
                 }
                 if(client?.inInterceptors) {
                     client.inInterceptors.split(',').each {
-                        inInterceptors << ref(it)
+                        inInterceptorList << ref(it)
                     }
                 }
                 if(client?.outInterceptors) {
                     client.outInterceptors.split(',').each {
-                        outInterceptors << ref(it)
+                        outInterceptorList << ref(it)
                     }
                 }
                 if(client?.outFaultInterceptors) {
                     client.outFaultInterceptors.split(',').each {
-                        outFaultInterceptors << ref(it)
+                        outFaultInterceptorList << ref(it)
                     }
                 }
+                inInterceptors = inInterceptorList
+                outInterceptors = outInterceptorList
+                outFaultInterceptors = outFaultInterceptorList
                 clientInterface = client.clientInterface ?: ""
                 serviceName = cxfClientName
                 serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
