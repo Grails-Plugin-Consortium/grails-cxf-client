@@ -148,13 +148,9 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
     private def addInterceptors(Client client, List clientInterceptors, List cxfInterceptors) {
         cxfInterceptors.each {
-            if(it instanceof Interceptor)
-                addInterceptor(clientInterceptors, it)
+            if(it instanceof Interceptor || it instanceof CxfClientInterceptor)
+                clientInterceptors.add((it instanceof CxfClientInterceptor) ? it.create() : it)
         }
-    }
-
-    private void addInterceptor(def interceptors, def cxfClientInterceptor) {
-        interceptors.add((cxfClientInterceptor instanceof CxfClientInterceptor) ? cxfClientInterceptor.create() : cxfClientInterceptor)
     }
 
     /**
@@ -250,14 +246,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 String message = "Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize."
                 if(Log.isErrorEnabled()) { Log.error message }
                 throw new CxfClientException(message)
-
             }
 
             try {
                 method.invoke(cxfProxy, args)
             } catch (Exception e) {
                 if(Log.isErrorEnabled()) { Log.error e.message }
-                throw new CxfClientException("Error invoking method ${method.name} on interface $clientName. Make sure valid clientInterface and serviceEndpointAddress are set.", e)
+                throw new CxfClientException(e)
             }
         }
     }
