@@ -72,21 +72,23 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             }
         }
 
+        def inList = addInterceptors(client?.inInterceptors)
+        def outList = addInterceptors(client?.outInterceptors)
+        def outFaultList = addInterceptors(client?.outFaultInterceptors)
+
         "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
             if(client?.secured || client?.securityInterceptor) {
-                if(!client?.outInterceptors){
-                    client.outInterceptors = []
-                }
                 if(client?.securityInterceptor) {
-                    client.outInterceptors << ref("${client.securityInterceptor}")
+                    outList << ref("${client.securityInterceptor}")
                 } else {
-                    client.outInterceptors << ref("securityInterceptor${cxfClientName}")
+                    outList << ref("securityInterceptor${cxfClientName}")
                 }
             }
-            inInterceptors = addInterceptors(client?.inInterceptors)
-            outInterceptors = addInterceptors(client?.outInterceptors)
-            outFaultInterceptors = addInterceptors(client?.outFaultInterceptors)
+
+            inInterceptors = inList
+            outInterceptors = outList
+            outFaultInterceptors = outFaultList
             clientInterface = client.clientInterface ?: ""
             serviceName = cxfClientName
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
@@ -94,7 +96,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         }
     }
 
-    private def addInterceptors(clientInterceptors) {
+    private List addInterceptors(clientInterceptors) {
         def interceptorList = []
         if(clientInterceptors) {
             if(clientInterceptors instanceof List) {
