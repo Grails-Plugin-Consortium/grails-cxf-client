@@ -21,6 +21,7 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
     private static final Log = LogFactory.getLog(this)
+    private static final int ZERO = 0
     def interfaceMap = [:]
 
     /**
@@ -43,7 +44,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(serviceEndpointAddress) {
             try {
                 if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
-                createCxfProxy(clientInterface, serviceEndpointAddress, secured, enableDefaultLoggingInterceptors, handler, outInterceptors, inInterceptors, outFaultInterceptors)
+                assignCxfProxy(clientInterface, serviceEndpointAddress, secured, enableDefaultLoggingInterceptors, handler, outInterceptors, inInterceptors, outFaultInterceptors)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
                         "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
@@ -95,7 +96,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             List outFaultInterceptors = interfaceMap.get(serviceName).outFaultInterceptors
             Boolean enableDefaultLoggingInterceptors = interfaceMap.get(serviceName).enableDefaultLoggingInterceptors
             try {
-                createCxfProxy(clientInterface, serviceEndpointAddress,
+                assignCxfProxy(clientInterface, serviceEndpointAddress,
                                security?.secured ?: false, enableDefaultLoggingInterceptors,
                                handler, outInterceptors, inInterceptors, outFaultInterceptors)
                 if(Log.isDebugEnabled()) { Log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
@@ -117,7 +118,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param secured whether service is secured
      * @param handler ws client invocation handler for the proxy
      */
-    private void createCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress,
+    private void assignCxfProxy(Class<?> serviceInterface, String serviceEndpointAddress,
                                 Boolean secured, Boolean enableDefaultLoggingInterceptors,
                                 WSClientInvocationHandler handler,
                                 List outInterceptors,
@@ -143,7 +144,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         //Only provide the default interceptors when no others are defined
-        if(outFaultInterceptors?.size() ?: 0 == 0) {
+        if(outFaultInterceptors?.size() ?: ZERO == ZERO) {
             client.outFaultInterceptors.add(new CxfClientFaultConverter())
         }
 
@@ -158,10 +159,11 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         addInterceptors(client, client.outInterceptors, outInterceptors)
     }
 
-    private def addInterceptors(Client client, List clientInterceptors, List cxfInterceptors) {
+    private void addInterceptors(Client client, List clientInterceptors, List cxfInterceptors) {
         cxfInterceptors.each {
-            if(it instanceof Interceptor || it instanceof CxfClientInterceptor)
+            if(it instanceof Interceptor || it instanceof CxfClientInterceptor) {
                 clientInterceptors.add((it instanceof CxfClientInterceptor) ? it.create() : it)
+            }
         }
     }
 
