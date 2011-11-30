@@ -11,7 +11,8 @@ import org.springframework.context.MessageSource
 class DynamicWebServiceClient implements FactoryBean<Object> {
 
     Class<?> clientInterface
-    boolean secured
+    Boolean secured
+    Boolean enableDefaultLoggingInterceptors
     String serviceEndpointAddress
     String serviceName
     WebServiceClientFactory webServiceClientFactory
@@ -30,6 +31,7 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                                                     serviceName,
                                                     serviceEndpointAddress,
                                                     secured,
+                                                    enableDefaultLoggingInterceptors,
                                                     outInterceptors, 
                                                     inInterceptors,
                                                     outFaultInterceptors)

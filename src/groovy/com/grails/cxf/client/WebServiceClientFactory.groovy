@@ -23,7 +23,8 @@ interface WebServiceClientFactory {
     Object getWebServiceClient(Class<?> clientInterface,
                                String serviceName,
                                String serviceEndpointAddress,
-                               boolean secured,
+                               Boolean secured,
+                               Boolean enableDefaultLoggingInterceptors,
                                List outInterceptors,
                                List inInterceptors,
                                List outFaultInterceptors)

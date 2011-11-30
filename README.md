@@ -6,6 +6,9 @@ CXF CLIENT
 * Wsdl2java Manually
 * Plugin Configuration
 * Custom Security Interceptors
+* Custom In Interceptors
+* Custom Out Interceptors
+* Custom Out Fault Interceptors
 * Demo Project
 * Issues
 * Future Revisions
@@ -116,6 +119,10 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 username = [username] //optional - used when secured is true - currently wss4j interceptor
                 password = [password] //optional - used when secured is true - currently wss4j interceptor
                 securityInterceptor = [text name of custom bean to use] //optional - defaults to wss4j interceptor
+                inInterceptors = [list of cxf in interceptors to add to the request] //optional - defaults to []
+                outInterceptors = [list of cxf out interceptors to add to the request] //optional - defaults to []
+                outFaultInterceptors = [list of cxf out fault interceptors to add to the request] //optional - defaults to []
+                enableDefaultLoggingInterceptors = [turn on or off default in/out logging] //optional - defaults to true
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
                 namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
                 client = [true or false] //optional - used to tell wsdl2java to output sample clients, usually not needed - defaults to false
@@ -135,7 +142,12 @@ Config used at runtime to invoke service.
 <tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>username</td><td>Username to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
 <tr><td>password</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
-<tr><td>securityInterceptor</td><td>Provide a bean name as a string to wire in as an out interceptor for apache cxf.  If you provide a name for an interceptor, it will be implied that secured=true.  If you require the default wss4j interceptor you will not need to set this property, simply set the secured=true and the username and password properties.  If you set this to a value then the username and password fields will be ignored as it is expected that you will configure any required property injection in your resources.groovy file.  See below for examples (default: "")</td><td>No</td></tr>
+<tr><td>securityInterceptor</td><td>Provide a single bean name as a string to wire in as an out interceptor for apache cxf.  If you provide a name for an interceptor, it will be implied that secured=true.  If you require the default wss4j interceptor you will not need to set this property, simply set the secured=true and the username and password properties.  If you set this to a value then the username and password fields will be ignored as it is expected that you will configure any required property injection in your resources.groovy file.  You may also provide your custom security
+interceptor in the outInterceptors property as well.  You would still be required to set secured=true.  This is here as a convenience to any existing configured clients that do not wish to switch to using the newer outInterceptors property.  See below for examples (default: "")</td><td>No</td></tr>
+<tr><td>inInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an out fault interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
+<tr><td>outInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an out fault interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
+<tr><td>outFaultInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an out fault interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
+<tr><td>enableDefaultLoggingInterceptors</td><td>When set to true, default in and out logging interceptors will be added to the service.  If you require custom logging interceptors and wish to turn on the default for any reason (security, custom, etc), set this property to false and provide your own in and out logging interceptors via the inInterceptors or outInterceptors properties.  (default: true)</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -283,6 +295,18 @@ cxf {
     }
 }
 ```
+
+CUSTOM IN INTERCEPTORS
+---------------
+
+CUSTOM OUT INTERCEPTORS
+---------------
+
+
+CUSTOM OUT FAULT INTERCEPTORS
+---------------
+
+
 
 DEMO PROJECT
 ---------------
