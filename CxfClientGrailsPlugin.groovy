@@ -1,5 +1,3 @@
-import com.grails.cxf.client.DynamicWebServiceClient
-
 class CxfClientGrailsPlugin {
     // the plugin version
     def version = "1.2.3"
@@ -47,63 +45,68 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         def cxfClientConfigMap = application.config?.cxf?.client ?: [:]
 
         cxfClientConfigMap.each { cxfClient ->
-            def cxfClientName = cxfClient.key
-            def client = application.config?.cxf?.client[cxfClientName]
-            def inInterceptorList = []
-            def outInterceptorList = []
-            def outFaultInterceptorList = []
-
-            log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
-
-            //the call to the map returns a gstring as [:] not as a map literal (fix this?)
-            if(!client?.clientInterface || (client.serviceEndpointAddress == "[:]")) {
-                String errorMessage = "Web service client $cxfClientName cannot be created before setting the clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress} properties"
-                println errorMessage
-                log.error errorMessage
-            }
-
-            if(client?.secured && !client?.securityInterceptor) {
-                "securityInterceptor${cxfClientName}"(com.grails.cxf.client.security.DefaultSecurityOutInterceptor) {
-                    username = client?.username ?: ""
-                    password = client?.password ?: ""
-                }
-            }
-
-            "${cxfClientName}"(DynamicWebServiceClient) {
-                webServiceClientFactory = ref("webServiceClientFactory")
-                if(client?.secured || client?.securityInterceptor) {
-                    if(client?.securityInterceptor) {
-                        outInterceptorList << ref("${client.securityInterceptor}")
-                    } else {
-                        outInterceptorList << ref("securityInterceptor${cxfClientName}")
-                    }
-                }
-                if(client?.inInterceptors) {
-                    client.inInterceptors.split(',').each {
-                        inInterceptorList << ref(it)
-                    }
-                }
-                if(client?.outInterceptors) {
-                    client.outInterceptors.split(',').each {
-                        outInterceptorList << ref(it)
-                    }
-                }
-                if(client?.outFaultInterceptors) {
-                    client.outFaultInterceptors.split(',').each {
-                        outFaultInterceptorList << ref(it)
-                    }
-                }
-                inInterceptors = inInterceptorList
-                outInterceptors = outInterceptorList
-                outFaultInterceptors = outFaultInterceptorList
-                clientInterface = client.clientInterface ?: ""
-                serviceName = cxfClientName
-                serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
-                secured = (client?.secured || client?.securityInterceptor) ?: false
-            }
+            configureCxfClientBeans.delegate = delegate
+            configureCxfClientBeans(cxfClient)
         }
 
         log.info "completed mapping cxf-client beans"
+    }
+
+    def configureCxfClientBeans = {cxfClient ->
+        def cxfClientName = cxfClient.key
+        def client = application.config?.cxf?.client[cxfClientName]
+        def inInterceptorList = []
+        def outInterceptorList = []
+        def outFaultInterceptorList = []
+
+        log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
+
+        //the call to the map returns a gstring as [:] not as a map literal (fix this?)
+        if(!client?.clientInterface || (client.serviceEndpointAddress == "[:]")) {
+            String errorMessage = "Web service client $cxfClientName cannot be created before setting the clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress} properties"
+            println errorMessage
+            log.error errorMessage
+        }
+
+        if(client?.secured && !client?.securityInterceptor) {
+            "securityInterceptor${cxfClientName}"(com.grails.cxf.client.security.DefaultSecurityOutInterceptor) {
+                username = client?.username ?: ""
+                password = client?.password ?: ""
+            }
+        }
+
+        "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
+            webServiceClientFactory = ref("webServiceClientFactory")
+            if(client?.secured || client?.securityInterceptor) {
+                if(client?.securityInterceptor) {
+                    outInterceptorList << ref("${client.securityInterceptor}")
+                } else {
+                    outInterceptorList << ref("securityInterceptor${cxfClientName}")
+                }
+            }
+            if(client?.inInterceptors) {
+                client.inInterceptors.split(',').each {
+                    inInterceptorList << ref(it)
+                }
+            }
+            if(client?.outInterceptors) {
+                client.outInterceptors.split(',').each {
+                    outInterceptorList << ref(it)
+                }
+            }
+            if(client?.outFaultInterceptors) {
+                client.outFaultInterceptors.split(',').each {
+                    outFaultInterceptorList << ref(it)
+                }
+            }
+            inInterceptors = inInterceptorList
+            outInterceptors = outInterceptorList
+            outFaultInterceptors = outFaultInterceptorList
+            clientInterface = client.clientInterface ?: ""
+            serviceName = cxfClientName
+            serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
+            secured = (client?.secured || client?.securityInterceptor) ?: false
+        }
     }
 
     def doWithDynamicMethods = { ctx ->
