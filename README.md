@@ -301,6 +301,24 @@ CUSTOM IN INTERCEPTORS
 
 You can wire in your own custom in interceptors by adding the property inInterceptors to the configured client.  In this example I have chosen to wire in my own in logging interceptors and have disabled the default logging interceptors by setting enableDefaultLoggingInterceptors = false.
 
+In the resources.groovy define our bean wiring.
+
+```groovy
+customLoggingInInterceptor(CustomLoggingInInterceptor) {
+    name = "customLoggingInInterceptor"
+}
+
+verboseLoggingInInterceptor(VerboseCustomLoggingInInterceptor) {
+    name = "verboseLoggingInInterceptor"
+}
+
+ customLoggingOutInterceptor(CustomLoggingOutInterceptor) {
+    name = "customLoggingOutInterceptor"
+}
+```
+
+In the Config.groovy cxf { client { ... } } block define a webservice client and provide the interceptor bean name(s).
+
 ```groovy
 simpleServiceInterceptorClient {
     wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
