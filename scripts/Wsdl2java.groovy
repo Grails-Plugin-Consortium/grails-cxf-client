@@ -9,7 +9,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
 
     depends(compile, createConfig, parseArguments)
 
-    if(!config?.cxf?.installDir){
+    if(!config?.cxf?.installDir) {
         echo "ERROR: You must set the config property for cxf.installDir to the root dir of your apache cxf install"
         echo "eg: cxf { installDir = \"c:/apache-cxf-2.4.2\" } }"
         echo "Please correct this and try again"
@@ -20,10 +20,10 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     def wsdls = [[:]]
     def cxflib = "${config.cxf.installDir}/lib"
     config.cxf.client.each {
-        wsdls << [wsdl: it?.value?.wsdl, wsdlArgs: it?.value?.wsdlArgs, namespace: it?.value?.namespace, client: it?.value?.client?:false, binding: it?.value?.binding, outputDir: it?.value?.outputDir?:"src/java"]
+        wsdls << [wsdl: it?.value?.wsdl, wsdlArgs: it?.value?.wsdlArgs, namespace: it?.value?.namespace, client: it?.value?.client ?: false, binding: it?.value?.binding, outputDir: it?.value?.outputDir ?: "src/java"]
     }
 
-    if(!new File(cxflib).exists()){
+    if(!new File(cxflib).exists()) {
         echo "ERROR: You must set the config property for cxf.installDir to the root dir of your apache cxf install"
         echo "eg: cxf { installDir = \"c:/apache-cxf-2.4.2\" } }"
         echo "Your dir ${cxflib} does not appear to exist"
@@ -45,14 +45,21 @@ This target needs to be run only upon changes in the upstream API, since it's ar
                     arg(value: "-p")
                     arg(value: "${config.namespace}")
                 }
-                if(config?.binding){
+                if(config?.binding) {
                     arg(value: "-b")
                     arg(value: "${config.binding}")
                 }
                 arg(value: "-d")
                 arg(value: "${config?.outputDir}")
-                config?.wsdlArgs?.split(" ")?.each {
-                    arg(value: "${it}")
+                //can handle a list of a string of single items
+                if(config?.wsdlArgs) {
+                    if(config.wsdlArgs instanceof List) {
+                        config?.wsdlArgs?.each {
+                            arg(value: "${it}")
+                        }
+                    } else {
+                        arg(value: "${config.wsdlArgs}")
+                    }
                 }
                 //arg(value: "src/java/META-INF/jax-ws-catalog.xml")
                 arg(value: config.wsdl)

@@ -66,6 +66,30 @@ cxf {
 }
 ```
 
+Starting with version 1.2.4, you have the ability to provide wsdl2java custom args.  This is done through the wsdlArgs param.  You may provide this in list format or for a single param in string format.
+
+```groovy
+cxf {
+    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
+    client {
+        simpleServiceClient {
+            //used in wsdl2java
+            wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
+            wsdlArgs = ['-autoNameResolution', '-validate']
+            //wsdlArgs = '-autoNameResolution' //single param style
+            namespace = "cxf.client.demo.simple"
+            client = false //defaults to false
+            binding = "grails-app/conf/bindings.xml"
+            outputDir = "src/java"
+
+            //used for invoking service
+            clientInterface = cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress = "${service.simple.url}"
+        }
+    }
+}
+```
+
 Note: The [installDir] and [wsdl] nodes are only used by the wsdl2java target and are not used in wiring the beans at runtime.
 
 After adding both [installDir] and [wsdl] nodes I can now run the following grails command to generate the cxf/jaxb classes into the src/java directory of the project:
@@ -124,6 +148,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 outFaultInterceptors = [list of cxf out fault interceptors to add to the request] //optional - defaults to []
                 enableDefaultLoggingInterceptors = [turn on or off default in/out logging] //optional - defaults to true
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
+                wsdlArgs = [custom list of args to pass in seperated by space such as ["-autoNameResolution", "-validate"]] //optional - only used by wsdl2java script
                 namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
                 client = [true or false] //optional - used to tell wsdl2java to output sample clients, usually not needed - defaults to false
                 binding = [Specifies JAXWS or JAXB binding files or XMLBeans context files] //optional
@@ -155,9 +180,10 @@ Config items used by wsdl2java.
 <table>
 <tr><td><b>Property</b></td><td><b>Description</b></td><td>Required</b></td></tr>
 <tr><td>wsdl</td><td>Location of the wsdl either locally relative to project home dir or a url. (default: "")</td><td>No</td></tr>
+<tr><td>wsdlArgs</td><td>A custom list of args to pass in seperated by space such as ["-autoNameResolution","-validate"].  This can also be a single string value such as "-autoNameResolution", but when using multiple custom params you must specify each in a list ["-one val","-two","-three val"] due to limitations with ant. (default: "")</td><td>No</td></tr>
 <tr><td>namespace</td><td>Specifies package names to use for the generated code. (default: "use wsdl provided schema")</td><td>No</td></tr>
 <tr><td>client</td><td>Used to tell wsdl2java to output sample clients, usually not needed. (default: false)</td><td>No</td></tr>
-<tr><td>binding</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
+<tr><td>binding</td><td>Path of binding file to pass to wsdl2java. (default: "")</td><td>No</td></tr>
 <tr><td>outputDir</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "src/java")</td><td>No</td></tr>
 </table>
 
