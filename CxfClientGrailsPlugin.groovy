@@ -1,6 +1,6 @@
 class CxfClientGrailsPlugin {
     // the plugin version
-    def version = "1.2.3"
+    def version = "1.2.4"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -29,7 +29,8 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     def watchedResources = [
             "file:${getPluginLocation()}/grails-app/services/**/*Service.groovy",
             "file:${getPluginLocation()}/grails-app/controllers/**/*Controller.groovy",
-            "file:${getPluginLocation()}/grails-app/taglib/**/*TagLib.groovy"
+            "file:${getPluginLocation()}/grails-app/taglib/**/*TagLib.groovy",
+            "file:${getPluginLocation()}/grails-app/taglib/**/*Job.groovy"
     ]
 
     def doWithWebDescriptor = { xml ->

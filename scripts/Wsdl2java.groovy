@@ -20,7 +20,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     def wsdls = [[:]]
     def cxflib = "${config.cxf.installDir}/lib"
     config.cxf.client.each {
-        wsdls << [wsdl: it?.value?.wsdl, namespace: it?.value?.namespace, client: it?.value?.client?:false, binding: it?.value?.binding, outputDir: it?.value?.outputDir?:"src/java"]
+        wsdls << [wsdl: it?.value?.wsdl, wsdlArgs: it?.value?.wsdlArgs, namespace: it?.value?.namespace, client: it?.value?.client?:false, binding: it?.value?.binding, outputDir: it?.value?.outputDir?:"src/java"]
     }
 
     if(!new File(cxflib).exists()){
@@ -43,7 +43,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
                 if(config?.client) arg(value: "-client")
                 if(config?.namespace) {
                     arg(value: "-p")
-                    arg(value: "${config?.namespace}")
+                    arg(value: "${config.namespace}")
                 }
                 if(config?.binding){
                     arg(value: "-b")
@@ -51,7 +51,9 @@ This target needs to be run only upon changes in the upstream API, since it's ar
                 }
                 arg(value: "-d")
                 arg(value: "${config?.outputDir}")
-                //arg(value: "-catalog")
+                config?.wsdlArgs?.split(" ")?.each {
+                    arg(value: "${it}")
+                }
                 //arg(value: "src/java/META-INF/jax-ws-catalog.xml")
                 arg(value: config.wsdl)
             }
