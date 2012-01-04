@@ -47,7 +47,7 @@ cxf {
             wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
             namespace = "cxf.client.demo.simple"
             client = false //defaults to false
-            binding = "grails-app/conf/bindings.xml"
+            bindingFile = "grails-app/conf/bindings.xml"
             outputDir = "src/java"
 
             //used for invoking service
@@ -79,7 +79,7 @@ cxf {
             //wsdlArgs = '-autoNameResolution' //single param style
             namespace = "cxf.client.demo.simple"
             client = false //defaults to false
-            binding = "grails-app/conf/bindings.xml"
+            bindingFile = "grails-app/conf/bindings.xml"
             outputDir = "src/java"
 
             //used for invoking service
@@ -151,7 +151,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 wsdlArgs = [custom list of args to pass in seperated by space such as ["-autoNameResolution", "-validate"]] //optional - only used by wsdl2java script
                 namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
                 client = [true or false] //optional - used to tell wsdl2java to output sample clients, usually not needed - defaults to false
-                binding = [Specifies JAXWS or JAXB binding files or XMLBeans context files] //optional
+                bindingFile = [Specifies JAXWS or JAXB binding file or XMLBeans context file] //optional
                 outputDir = [location to output generated files] //optional - defaults to src/java
             }
         }
@@ -183,7 +183,7 @@ Config items used by wsdl2java.
 <tr><td>wsdlArgs</td><td>A custom list of args to pass in seperated by space such as ["-autoNameResolution","-validate"].  This can also be a single string value such as "-autoNameResolution", but when using multiple custom params you must specify each in a list ["-one val","-two","-three val"] due to limitations with ant. (default: "")</td><td>No</td></tr>
 <tr><td>namespace</td><td>Specifies package names to use for the generated code. (default: "use wsdl provided schema")</td><td>No</td></tr>
 <tr><td>client</td><td>Used to tell wsdl2java to output sample clients, usually not needed. (default: false)</td><td>No</td></tr>
-<tr><td>binding</td><td>Path of binding file to pass to wsdl2java. (default: "")</td><td>No</td></tr>
+<tr><td>bindingFile</td><td>Path of binding file to pass to wsdl2java. (default: "")</td><td>No</td></tr>
 <tr><td>outputDir</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "src/java")</td><td>No</td></tr>
 </table>
 
