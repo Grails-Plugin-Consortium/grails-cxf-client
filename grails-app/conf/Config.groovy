@@ -28,4 +28,5 @@ log4j = {
     warn 'org.mortbay.log'
 
     info 'com.grails.cxf.client'
-}
+}grails.views.default.codec="none" // none, html, base64
+grails.views.gsp.encoding="UTF-8"

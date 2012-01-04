@@ -20,7 +20,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     def wsdls = [[:]]
     def cxflib = "${config.cxf.installDir}/lib"
     config.cxf.client.each {
-        wsdls << [wsdl: it?.value?.wsdl, wsdlArgs: it?.value?.wsdlArgs, namespace: it?.value?.namespace, client: it?.value?.client ?: false, binding: it?.value?.binding, outputDir: it?.value?.outputDir ?: "src/java"]
+        wsdls << [wsdl: it?.value?.wsdl, wsdlArgs: it?.value?.wsdlArgs, namespace: it?.value?.namespace, client: it?.value?.client ?: false, bindingFile: it?.value?.bindingFile, outputDir: it?.value?.outputDir ?: "src/java"]
     }
 
     if(!new File(cxflib).exists()) {
@@ -45,9 +45,9 @@ This target needs to be run only upon changes in the upstream API, since it's ar
                     arg(value: "-p")
                     arg(value: "${config.namespace}")
                 }
-                if(config?.binding) {
+                if(config?.bindingFile) {
                     arg(value: "-b")
-                    arg(value: "${config.binding}")
+                    arg(value: "${config.bindingFile}")
                 }
                 arg(value: "-d")
                 arg(value: "${config?.outputDir}")
