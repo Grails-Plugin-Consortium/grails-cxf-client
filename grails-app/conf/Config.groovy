@@ -5,7 +5,7 @@ log4j = {
     // appender:
     //
     appenders {
-        console name: 'stdout', layout: pattern(conversionPattern: '%d{HH:mm:ss} [%5p] %-30.30c{2} %m%n')
+        console name: 'stdout'
     }
 
     root {
@@ -28,5 +28,7 @@ log4j = {
     warn 'org.mortbay.log'
 
     info 'com.grails.cxf.client'
-}grails.views.default.codec="none" // none, html, base64
-grails.views.gsp.encoding="UTF-8"
+}
+
+grails.views.default.codec = "none" // none, html, base64
+grails.views.gsp.encoding = "UTF-8"
