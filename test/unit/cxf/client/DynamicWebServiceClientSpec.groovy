@@ -5,6 +5,8 @@ import com.grails.cxf.client.WebServiceClientFactoryImpl
 import spock.lang.Specification
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
 
+import grails.test.mixin.TestFor
+
 /**
  */
 class DynamicWebServiceClientSpec extends Specification {
@@ -13,7 +15,7 @@ class DynamicWebServiceClientSpec extends Specification {
         given:
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
         DynamicWebServiceClient client = new DynamicWebServiceClient(
-                clientInterface: cxf.client.mock.SimpleServicePortType,
+                clientInterface: test.mock.SimpleServicePortType,
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
@@ -25,7 +27,7 @@ class DynamicWebServiceClientSpec extends Specification {
         then:
         object != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
     }
@@ -34,7 +36,7 @@ class DynamicWebServiceClientSpec extends Specification {
         given:
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
         DynamicWebServiceClient client = new DynamicWebServiceClient(
-                clientInterface: cxf.client.mock.SimpleServicePortType,
+                clientInterface: test.mock.SimpleServicePortType,
                 serviceName: "testService",
                 serviceEndpointAddress: "",
                 secured: false,

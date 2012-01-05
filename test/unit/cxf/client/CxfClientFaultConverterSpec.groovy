@@ -4,6 +4,7 @@ import spock.lang.Specification
 import com.grails.cxf.client.CxfClientFaultConverter
 import org.apache.cxf.message.Message
 import org.apache.cxf.message.MessageImpl
+import grails.test.mixin.Mock
 
 /**
  */

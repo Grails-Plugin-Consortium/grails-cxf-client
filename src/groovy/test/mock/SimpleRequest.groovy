@@ -1,4 +1,4 @@
-package cxf.client.mock
+package test.mock
 
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType

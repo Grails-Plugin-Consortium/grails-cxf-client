@@ -1,4 +1,4 @@
-package cxf.client.mock
+package test.mock
 
 import javax.jws.WebMethod
 import javax.jws.WebParam
@@ -13,9 +13,9 @@ import javax.xml.ws.ResponseWrapper
 public interface SimpleServicePortType {
 
     @WebResult(name = "return", targetNamespace = "")
-    @RequestWrapper(localName = "simpleMethod2", targetNamespace = "http://mock.client.cxf/", className = "cxf.client.mock.SimpleMethod2")
+    @RequestWrapper(localName = "simpleMethod2", targetNamespace = "http://mock.client.cxf/", className = "test.mock.SimpleMethod2")
     @WebMethod
-    @ResponseWrapper(localName = "simpleMethod2Response", targetNamespace = "http://mock.client.cxf/", className = "cxf.client.mock.SimpleMethod2Response")
+    @ResponseWrapper(localName = "simpleMethod2Response", targetNamespace = "http://mock.client.cxf/", className = "test.mock.SimpleMethod2Response")
     public SimpleResponse simpleMethod2(
             @WebParam(name = "request", targetNamespace = "")
             SimpleRequest request
@@ -24,9 +24,9 @@ public interface SimpleServicePortType {
 
 
     @WebResult(name = "return", targetNamespace = "")
-    @RequestWrapper(localName = "simpleMethod1", targetNamespace = "http://mock.client.cxf/", className = "cxf.client.mock.SimpleMethod1")
+    @RequestWrapper(localName = "simpleMethod1", targetNamespace = "http://mock.client.cxf/", className = "test.mock.SimpleMethod1")
     @WebMethod
-    @ResponseWrapper(localName = "simpleMethod1Response", targetNamespace = "http://mock.client.cxf/", className = "cxf.client.mock.SimpleMethod1Response")
+    @ResponseWrapper(localName = "simpleMethod1Response", targetNamespace = "http://mock.client.cxf/", className = "test.mock.SimpleMethod1Response")
     public SimpleResponse simpleMethod1(
             @WebParam(name = "request", targetNamespace = "")
             SimpleRequest request

@@ -8,7 +8,8 @@ class CxfClientGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp",
-            "test/**"
+            "test/**",
+            "src/groovy/test/**"
     ]
 
     def license = "APACHE"

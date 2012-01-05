@@ -7,6 +7,8 @@ import com.grails.cxf.client.WebServiceClientFactoryImpl
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.interceptor.LoggingOutInterceptor
+import grails.test.mixin.Mock
+import com.grails.cxf.client.DynamicWebServiceClient
 
 /**
  */
@@ -17,12 +19,12 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then:
         webServiceClient != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         factory.interfaceMap.get("testService").inInterceptors instanceof List
         factory.interfaceMap.get("testService").outInterceptors instanceof List
         factory.interfaceMap.get("testService").outFaultInterceptors instanceof List
@@ -38,12 +40,12 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         factory.interfaceMap.get("testService").inInterceptors instanceof List
         factory.interfaceMap.get("testService").outInterceptors instanceof List
         factory.interfaceMap.get("testService").outFaultInterceptors instanceof List
@@ -59,7 +61,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         then: "all things should still remain in cache, but the url should have changed"
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         factory.interfaceMap.get("testService").inInterceptors instanceof List
         factory.interfaceMap.get("testService").outInterceptors instanceof List
         factory.interfaceMap.get("testService").outFaultInterceptors instanceof List
@@ -76,12 +78,12 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(cxf.client.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         factory.interfaceMap.get("testService").inInterceptors instanceof List
         factory.interfaceMap.get("testService").outInterceptors instanceof List
         factory.interfaceMap.get("testService").outFaultInterceptors instanceof List
@@ -101,7 +103,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         !factory.interfaceMap.containsKey("unknownService")
         webServiceClient != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == cxf.client.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         factory.interfaceMap.get("testService").inInterceptors instanceof List
         factory.interfaceMap.get("testService").outInterceptors instanceof List
         factory.interfaceMap.get("testService").outFaultInterceptors instanceof List
