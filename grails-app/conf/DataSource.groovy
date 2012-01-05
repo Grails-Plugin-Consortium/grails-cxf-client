@@ -29,4 +29,4 @@ environments {
             url = "jdbc:h2:prodDb"
         }
     }
-
+}
