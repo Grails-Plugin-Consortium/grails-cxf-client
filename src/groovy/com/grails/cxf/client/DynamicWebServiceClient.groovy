@@ -13,6 +13,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     Class<?> clientInterface
     Boolean secured
     Boolean enableDefaultLoggingInterceptors
+    Long receiveTimeout
     String serviceEndpointAddress
     String serviceName
     WebServiceClientFactory webServiceClientFactory
@@ -32,6 +33,7 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                                                     serviceEndpointAddress,
                                                     secured,
                                                     enableDefaultLoggingInterceptors,
+                                                    receiveTimeout,
                                                     outInterceptors, 
                                                     inInterceptors,
                                                     outFaultInterceptors)

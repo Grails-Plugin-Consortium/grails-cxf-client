@@ -9,7 +9,8 @@ class CxfClientGrailsPlugin {
     def pluginExcludes = [
             "grails-app/views/error.gsp",
             "test/**",
-            "src/groovy/test/**"
+            "src/groovy/test/**",
+            "spock-0.6-SNAPSHOT"
     ]
 
     def license = "APACHE"
@@ -17,7 +18,8 @@ class CxfClientGrailsPlugin {
     def authorEmail = "acetrike@gmail.com"
     def developers = [
             [name: "Christian Oestreich", email: "acetrike@gmail.com"],
-            [name: "Brett Borchardt", email: "bborchardt@gmail.com"]]
+            [name: "Brett Borchardt", email: "bborchardt@gmail.com"],
+            [name: "Jordan Howe", email:  "jordan.howe@gmail.com"]]
     def title = "Cxf Client - Support for CXF and JAXB Soap Clients"
     def description = '''\\
 Used for easily integrating existing or new cxf/jaxb web service client code with soap services.  Also provides wsdl2java grails target to easily generate code into srv/java from configured cxf clients.
@@ -100,6 +102,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
             secured = (client?.secured || client?.securityInterceptor) ?: false
             enableDefaultLoggingInterceptors = (client?.enableDefaultLoggingInterceptors?.toString() ?: "true") != "false"
+            receiveTimeout = client?.receiveTimeout ?: 0
         }
     }
 
