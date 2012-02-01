@@ -19,6 +19,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
+                receiveTimeout: 0,
                 webServiceClientFactory: factory)
 
         when:
@@ -40,6 +41,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "",
                 secured: false,
+                receiveTimeout: 0,
                 webServiceClientFactory: factory)
 
         when:
@@ -59,6 +61,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
+                receiveTimeout: 0,
                 webServiceClientFactory: factory)
 
         when:
