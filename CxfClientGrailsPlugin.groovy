@@ -1,3 +1,5 @@
+import com.grails.cxf.client.exception.CxfClientException
+
 class CxfClientGrailsPlugin {
     // the plugin version
     def version = "1.2.6"
@@ -84,8 +86,12 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         addInterceptors(client?.outInterceptors, outList)
         addInterceptors(client?.outFaultInterceptors, outFaultList)
 
-        if(client?.receiveTimeout < 0) { throw new RuntimeException('Configured value for receiveTimeout must be >= 0 if provided.') }
-        if(client?.connectionTimeout < 0) { throw new RuntimeException('Configured value for connectionTimeout must be >= 0 if provided.') }
+        validateTimeouts.delegate = delegate
+        validateTimeouts(cxfClientName, 'connectionTimeout', client?.connectionTimeout)
+        validateTimeouts(cxfClientName, 'receiveTimeout', client?.receiveTimeout)
+
+        def connectionTimeout = client?.connectionTimeout ?: ((client?.connectionTimeout == 0) ? client.connectionTimeout : 30000) //use the cxf defaults instead of 0
+        def receiveTimeout = client?.receiveTimeout ?: ((client?.receiveTimeout == 0) ? client.receiveTimeout : 60000) //use the cxf defaults instead of 0
 
         "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
@@ -105,8 +111,13 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
             secured = (client?.secured || client?.securityInterceptor) ?: false
             enableDefaultLoggingInterceptors = (client?.enableDefaultLoggingInterceptors?.toString() ?: "true") != "false"
-            connectionTimeout = client?.connectionTimeout ?: ((client?.connectionTimeout == 0) ? client.connectionTimeout : 30000) //use the cxf defaults instead of 0
-            receiveTimeout = client?.receiveTimeout ?: ((client?.receiveTimeout == 0) ? client.receiveTimeout : 60000) //use the cxf defaults instead of 0
+            timeouts = [connectionTimeout: connectionTimeout, receiveTimeout: receiveTimeout]
+        }
+    }
+
+    def validateTimeouts = {cxfClientName, timeoutName, timeoutValue ->
+        if(timeoutValue && timeoutValue < 0) {
+            throw new CxfClientException("Configured value for ${cxfClientName} ${timeoutName} must be >= 0 if provided. Value provided was(${timeoutValue})")
         }
     }
 
