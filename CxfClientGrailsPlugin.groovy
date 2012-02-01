@@ -1,6 +1,10 @@
 import com.grails.cxf.client.exception.CxfClientException
 
 class CxfClientGrailsPlugin {
+
+    private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
+    private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
+
     // the plugin version
     def version = "1.2.6"
     // the version or versions of Grails the plugin is designed for
@@ -86,12 +90,13 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         addInterceptors(client?.outInterceptors, outList)
         addInterceptors(client?.outFaultInterceptors, outFaultList)
 
+        def connectionTimeout = client?.connectionTimeout ?: ((client?.connectionTimeout == 0) ? client.connectionTimeout : DEFAULT_CONNECTION_TIMEOUT) //use the cxf defaults instead of 0
+        def receiveTimeout = client?.receiveTimeout ?: ((client?.receiveTimeout == 0) ? client.receiveTimeout : DEFAULT_RECEIVE_TIMEOUT) //use the cxf defaults instead of 0
+                
         validateTimeouts.delegate = delegate
-        validateTimeouts(cxfClientName, 'connectionTimeout', client?.connectionTimeout)
-        validateTimeouts(cxfClientName, 'receiveTimeout', client?.receiveTimeout)
+        validateTimeouts(cxfClientName, 'connectionTimeout', connectionTimeout)
+        validateTimeouts(cxfClientName, 'receiveTimeout', receiveTimeout)
 
-        def connectionTimeout = client?.connectionTimeout ?: ((client?.connectionTimeout == 0) ? client.connectionTimeout : 30000) //use the cxf defaults instead of 0
-        def receiveTimeout = client?.receiveTimeout ?: ((client?.receiveTimeout == 0) ? client.receiveTimeout : 60000) //use the cxf defaults instead of 0
 
         "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
