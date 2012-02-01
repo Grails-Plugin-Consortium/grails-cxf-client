@@ -19,18 +19,33 @@
     <exclude-output />
     <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/code-coverage-1.2.5">
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/code-coverage-1.2.5/grails-app/i18n" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/code-coverage-1.2.5/target/classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/code-coverage-1.2.5/target/test-classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/code-coverage-1.2.5/web-app/plugins" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/codenarc-0.16.1" />
-    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/hibernate-2.0.0" />
+    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/codenarc-0.16.1">
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/codenarc-0.16.1/target/classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/codenarc-0.16.1/target/test-classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/codenarc-0.16.1/web-app/plugins" />
+    </content>
     <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0">
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/src/java" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/src/groovy" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/target/classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/target/test-classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/web-app/plugins" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT" />
+    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT">
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT/target/classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT/target/test-classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT/web-app/plugins" />
+    </content>
     <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1">
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/src/groovy" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/target/classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/target/test-classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/web-app/plugins" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/tomcat-2.0.0" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="grails-2.0.0" level="application" />
@@ -68,7 +83,6 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/asm/asm/jars/asm-3.3.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-frontend-jaxws/jars/cxf-rt-frontend-jaxws-2.3.0.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/antlr/antlr/jars/antlr-2.7.6.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.ant/ant-launcher/jars/ant-launcher-1.7.0.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.ant/ant/jars/ant-1.7.0.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/asm/asm-tree/jars/asm-tree-3.0.jar!/" />

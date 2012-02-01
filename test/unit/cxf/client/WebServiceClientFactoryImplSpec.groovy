@@ -1,14 +1,11 @@
 package cxf.client
 
-import spock.lang.Specification
-
 import com.grails.cxf.client.CxfClientFaultConverter
 import com.grails.cxf.client.WebServiceClientFactoryImpl
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.interceptor.LoggingOutInterceptor
-import grails.test.mixin.Mock
-import com.grails.cxf.client.DynamicWebServiceClient
+import spock.lang.Specification
 
 /**
  */
@@ -19,7 +16,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, 0, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then:
         webServiceClient != null
@@ -31,6 +28,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").inInterceptors.size() > 0
         factory.interfaceMap.get("testService").outInterceptors.size() > 0
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
+        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
     }
@@ -40,7 +39,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, 0, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -52,6 +51,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").inInterceptors.size() > 0
         factory.interfaceMap.get("testService").outInterceptors.size() > 0
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
+        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
@@ -68,6 +69,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").inInterceptors.size() > 0
         factory.interfaceMap.get("testService").outInterceptors.size() > 0
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
+        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/new"
@@ -78,7 +81,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, 0, [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -90,6 +93,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").inInterceptors.size() > 0
         factory.interfaceMap.get("testService").outInterceptors.size() > 0
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
+        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
@@ -110,6 +115,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").inInterceptors.size() > 0
         factory.interfaceMap.get("testService").outInterceptors.size() > 0
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
+        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"

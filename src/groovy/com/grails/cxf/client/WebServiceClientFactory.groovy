@@ -25,7 +25,7 @@ interface WebServiceClientFactory {
                                String serviceEndpointAddress,
                                Boolean secured,
                                Boolean enableDefaultLoggingInterceptors,
-                               Long receiveTimeout,
+                               Map timeouts,
                                List outInterceptors,
                                List inInterceptors,
                                List outFaultInterceptors)

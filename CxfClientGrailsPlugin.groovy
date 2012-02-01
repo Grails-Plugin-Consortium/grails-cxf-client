@@ -1,6 +1,6 @@
 class CxfClientGrailsPlugin {
     // the plugin version
-    def version = "1.2.5"
+    def version = "1.2.6"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -19,7 +19,7 @@ class CxfClientGrailsPlugin {
     def developers = [
             [name: "Christian Oestreich", email: "acetrike@gmail.com"],
             [name: "Brett Borchardt", email: "bborchardt@gmail.com"],
-            [name: "Jordan Howe", email:  "jordan.howe@gmail.com"]]
+            [name: "Jordan Howe", email: "jordan.howe@gmail.com"]]
     def title = "Cxf Client - Support for CXF and JAXB Soap Clients"
     def description = '''\\
 Used for easily integrating existing or new cxf/jaxb web service client code with soap services.  Also provides wsdl2java grails target to easily generate code into srv/java from configured cxf clients.
@@ -84,6 +84,9 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         addInterceptors(client?.outInterceptors, outList)
         addInterceptors(client?.outFaultInterceptors, outFaultList)
 
+        if(client?.receiveTimeout < 0) { throw new RuntimeException('Configured value for receiveTimeout must be >= 0 if provided.') }
+        if(client?.connectionTimeout < 0) { throw new RuntimeException('Configured value for connectionTimeout must be >= 0 if provided.') }
+
         "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
             if(client?.secured || client?.securityInterceptor) {
@@ -102,7 +105,8 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
             secured = (client?.secured || client?.securityInterceptor) ?: false
             enableDefaultLoggingInterceptors = (client?.enableDefaultLoggingInterceptors?.toString() ?: "true") != "false"
-            receiveTimeout = client?.receiveTimeout ?: 0
+            connectionTimeout = client?.connectionTimeout ?: ((client?.connectionTimeout == 0) ? client.connectionTimeout : 30000) //use the cxf defaults instead of 0
+            receiveTimeout = client?.receiveTimeout ?: ((client?.receiveTimeout == 0) ? client.receiveTimeout : 60000) //use the cxf defaults instead of 0
         }
     }
 

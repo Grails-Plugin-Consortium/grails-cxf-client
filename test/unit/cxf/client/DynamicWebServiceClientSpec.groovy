@@ -19,7 +19,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
-                receiveTimeout: 0,
+                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
                 webServiceClientFactory: factory)
 
         when:
@@ -41,7 +41,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "",
                 secured: false,
-                receiveTimeout: 0,
+                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
                 webServiceClientFactory: factory)
 
         when:
@@ -61,7 +61,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
-                receiveTimeout: 0,
+                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
                 webServiceClientFactory: factory)
 
         when:

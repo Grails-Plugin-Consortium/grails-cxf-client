@@ -147,7 +147,8 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 outInterceptors = [list of cxf out interceptors to add to the request] //optional - defaults to []
                 outFaultInterceptors = [list of cxf out fault interceptors to add to the request] //optional - defaults to []
                 enableDefaultLoggingInterceptors = [turn on or off default in/out logging] //optional - defaults to true
-                receiveTimeout = [Number of milliseconds to wait to receive a response] //optional - Defaults to 0 (wait infinitely, no timeout set)
+                connectionTimeout = [Number of milliseconds to wait for connection] //optional - Defaults to 60000 (use 0 to wait infinitely)
+                receiveTimeout = [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
                 wsdlArgs = [custom list of args to pass in seperated by space such as ["-autoNameResolution", "-validate"]] //optional - only used by wsdl2java script
                 namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
@@ -174,7 +175,8 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>outInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an out interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
 <tr><td>outFaultInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an out fault interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
 <tr><td>enableDefaultLoggingInterceptors</td><td>When set to true, default in and out logging interceptors will be added to the service.  If you require custom logging interceptors and wish to turn off the default loggers for any reason (security, custom, etc), set this property to false and provide your own in and out logging interceptors via the inInterceptors or outInterceptors properties.  You may also simply wish to disable logging of cxf (soap messages, etc) by setting this to false without providing your own interceptors.  (default: true)</td><td>No</td></tr>
-<tr><td>receiveTimeout</td><td>Provide a number (in milliseconds) to wait to receive a response. This setting can be used to prevent slow web services from causing your application excessive delays while it waits for a response. (default: 0 = no timeout set, wait infinitely)</td><td>No</td></tr>
+<tr><td>connectionTimeout</td><td>Specifies the amount of time, in milliseconds, that the client will attempt to establish a connection before it times out. The default is 30000 (30 seconds). 0 specifies that the client will continue to attempt to open a connection indefinitely. (default: 30000)</td><td>No</td></tr>
+<tr><td>receiveTimeout</td><td>Specifies the amount of time, in milliseconds, that the client will wait for a response before it times out. The default is 60000. 0 specifies that the client will wait indefinitely. (default: 60000)</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
