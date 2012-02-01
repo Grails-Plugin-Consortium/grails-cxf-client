@@ -2,8 +2,8 @@ import com.grails.cxf.client.exception.CxfClientException
 
 class CxfClientGrailsPlugin {
 
-    private static final Long DEFAULT_CONNECTION_TIMEOUT = 30000
-    private static final Long DEFAULT_RECEIVE_TIMEOUT = 60000
+    private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
+    private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
     def version = "1.2.6"
