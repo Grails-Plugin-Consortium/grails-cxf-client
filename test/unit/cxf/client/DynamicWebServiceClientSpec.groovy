@@ -2,10 +2,9 @@ package cxf.client
 
 import com.grails.cxf.client.DynamicWebServiceClient
 import com.grails.cxf.client.WebServiceClientFactoryImpl
-import spock.lang.Specification
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
-
-import grails.test.mixin.TestFor
+import spock.lang.Specification
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
 /**
  */
@@ -19,8 +18,11 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
+                allowChunking: false,
                 timeouts: [receiveTimeout: 0, connectionTimeout: 0],
-                webServiceClientFactory: factory)
+                webServiceClientFactory: factory,
+                httpClientPolicy: new HTTPClientPolicy(allowChunking: true, connectionTimeout: 100, receiveTimeout: 200)
+        )
 
         when:
         Object object = client.getObject()
@@ -30,10 +32,48 @@ class DynamicWebServiceClientSpec extends Specification {
         factory.interfaceMap.containsKey("testService")
         factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         !factory.interfaceMap.get("testService").security.secured
+        !factory.interfaceMap.get("testService").security.allowChunking
+        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
+        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
         factory.interfaceMap.get("testService").handler != null
+        factory.interfaceMap.get("testService").httpClientPolicy != null
+        factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
+        factory.interfaceMap.get("testService").httpClientPolicy.connectionTimeout == 100
+        factory.interfaceMap.get("testService").httpClientPolicy.receiveTimeout == 200
+
     }
 
-     def "get a web service client with invalid endpoint address"() {
+    def "get a web service client with no policy"() {
+        given:
+        WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
+        DynamicWebServiceClient client = new DynamicWebServiceClient(
+                clientInterface: test.mock.SimpleServicePortType,
+                serviceName: "testService",
+                serviceEndpointAddress: "http://localhost:8080/cxf-client",
+                secured: false,
+                allowChunking: true,
+                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
+                webServiceClientFactory: factory
+        )
+
+        when:
+        Object object = client.getObject()
+
+        then:
+        object != null
+        factory.interfaceMap.containsKey("testService")
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
+        !factory.interfaceMap.get("testService").security.secured
+        factory.interfaceMap.get("testService").security.allowChunking
+        factory.interfaceMap.get("testService").handler != null
+        !factory.interfaceMap.get("testService").httpClientPolicy
+        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
+        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+
+
+    }
+
+    def "get a web service client with invalid endpoint address"() {
         given:
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
         DynamicWebServiceClient client = new DynamicWebServiceClient(
@@ -49,8 +89,8 @@ class DynamicWebServiceClientSpec extends Specification {
 
         then:
         object == null
-         FactoryBeanNotInitializedException exception = thrown()
-         exception.message.contains("cannot be created")
+        FactoryBeanNotInitializedException exception = thrown()
+        exception.message.contains("cannot be created")
         !factory.interfaceMap.containsKey("testService")
     }
 
@@ -69,8 +109,8 @@ class DynamicWebServiceClientSpec extends Specification {
 
         then:
         object == null
-         FactoryBeanNotInitializedException exception = thrown()
-         exception.message.contains("cannot be created")
+        FactoryBeanNotInitializedException exception = thrown()
+        exception.message.contains("cannot be created")
         !factory.interfaceMap.containsKey("testService")
     }
 }

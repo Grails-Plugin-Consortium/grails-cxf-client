@@ -477,7 +477,9 @@ info 'blah.blah.blah' //whatever package your custom interceptors are in
 CUSTOM HTTP CLIENT POLICY
 ---------------
 
-If you simply need to set the connectionTimeout, receiveTimeout, or allowChunking you may use the three provided params to accomplish this.  If you require more fine grained control of the HTTPClientPolicy you can create a custom bean in the resources.groovy and tell your cxf client to use it via the following:
+If you simply need to set the connectionTimeout, receiveTimeout, or allowChunking you may use the three provided params to accomplish this.  If you require more fine grained control of the HTTPClientPolicy you can create a custom bean in the resources.groovy and tell your cxf client to use it via the code below.
+
+_Note: A configured httpClientPolicy will take precedence over the connectionTimeout, receiveTimeout and allowChunking. Setting all four params in the config will cause the httpClientPolicy to be used and the others ignored._
 
 resources.groovy
 ```groovy

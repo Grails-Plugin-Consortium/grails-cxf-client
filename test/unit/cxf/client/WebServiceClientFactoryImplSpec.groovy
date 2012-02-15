@@ -16,7 +16,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null)
 
         then:
         webServiceClient != null
@@ -39,7 +39,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null)
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -81,7 +81,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()])
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, false, [receiveTimeout: 0, connectionTimeout: 0], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null)
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -96,6 +96,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
         factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
+        !factory.interfaceMap.get("testService").security.allowChunking
+        !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
 
@@ -118,6 +120,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
         factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
+        !factory.interfaceMap.get("testService").security.allowChunking
+        !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
     }
