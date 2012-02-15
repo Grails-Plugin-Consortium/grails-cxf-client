@@ -271,7 +271,7 @@ class DemoController {
 }
 ```
 
-<b><i>NOTE:</b> You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually.</i>
+_**NOTE:** You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually._
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Security"></a>
@@ -411,7 +411,7 @@ public class CustomLoggingInInterceptor extends AbstractLoggingInterceptor {
 }
 ```
 
-**Note:** In your constructor you will need to be mindful what Phase you set your interceptor for.  Please see the docs at <http://cxf.apache.org/docs/interceptors.html>
+_**NOTE:** In your constructor you will need to be mindful what Phase you set your interceptor for.  Please see the docs at <http://cxf.apache.org/docs/interceptors.html>_
 
 You will need to set the logging level in the log4j config section to enable the logging
 
