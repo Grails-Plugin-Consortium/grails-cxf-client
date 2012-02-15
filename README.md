@@ -1,7 +1,7 @@
 CXF CLIENT
 ======
 
-* Introduction
+* <a href="#intro">Introduction</a>
 * Wsdl2java Script
 * Wsdl2java Manually
 * Plugin Configuration
@@ -17,7 +17,7 @@ CXF CLIENT
 
 INTRODUCTION
 ---------------
-
+<a name="intro"></a>
 There are a few different plugins for consuming SOAP web services with grails, but none currently deal with the issue of caching port references.  The ws-client plugin works, but its limitations are in how it creates and consumes the wsdl.  It relies on real time creation of proxy classes and services which can be very processor and memory (time) consuming with a large or complex service contract.  We need a way to speed up service invocation so this plugin was created to facilitate that need when consuming SOAP services using cxf.
 
 The Cxf Client plugin will allow you to use existing (or new) apache cxf wsdl2java generated content and cache the port reference to speed up your soap service end point invocations through an easy configuration driven mechanism.
