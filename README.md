@@ -1,27 +1,30 @@
 CXF CLIENT
 ======
 
-* <a href="#intro">Introduction</a>
-* Wsdl2java Script
-* Wsdl2java Manually
-* Plugin Configuration
-* Custom Security Interceptors
-* Custom In Interceptors
-* Custom Out Interceptors
-* Custom Out Fault Interceptors
-* Custom Http Client Policy
-* Demo Project
-* Issues
-* Change Log
-* Future Revisions
+* <a href="#Introduction">Introduction</a>
+* <a href="#Script">Wsdl2java Script</a>
+* <a href="#Manually">Wsdl2java Manually</a>
+* <a href="#Plugin">Plugin Configuration</a>
+* <a href="#Security">Custom Security Interceptors</a>
+* <a href="#In">Custom In Interceptors</a>
+* <a href="#Out">Custom Out Interceptors</a>
+* <a href="#Fault">Custom Out Fault Interceptors</a>
+* <a href="#Custom">Custom Http Client Policy</a>
+* <a href="#Demo">Demo Project</a>
+* <a href="#Issues">Issues</a>
+* <a href="#Change">Change Log</a>
+* <a href="#Future">Future Revisions</a>
+* <a href="#License">License</a>
 
+<a name="Introduction"></a>
 INTRODUCTION
 ---------------
-<a name="intro"></a>
+
 There are a few different plugins for consuming SOAP web services with grails, but none currently deal with the issue of caching port references.  The ws-client plugin works, but its limitations are in how it creates and consumes the wsdl.  It relies on real time creation of proxy classes and services which can be very processor and memory (time) consuming with a large or complex service contract.  We need a way to speed up service invocation so this plugin was created to facilitate that need when consuming SOAP services using cxf.
 
 The Cxf Client plugin will allow you to use existing (or new) apache cxf wsdl2java generated content and cache the port reference to speed up your soap service end point invocations through an easy configuration driven mechanism.
 
+<a name="Script"></a>
 WSDL2JAVA SCRIPT
 ---------------
 
@@ -100,6 +103,7 @@ After adding both [installDir] and [wsdl] nodes I can now run the following grai
 
 Thanks to Stefan Armbruster for providing the starting script for this.
 
+<a name="Manually"></a>
 WSDL2JAVA MANUALLY
 ----------------
 
@@ -124,6 +128,7 @@ Put the jar into your project's lib dir (and generate any more jars you need).  
 
 Note: These could be put in the same jar since the namespace I am using is different cxf.client.demo.complex and cxf.client.demo.simple.
 
+<a name="Plugin"></a>
 PLUGIN CONFIGURATION
 ----------------
 
@@ -260,6 +265,7 @@ class DemoController {
 
 NOTE: You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually.
 
+<a name="Security"></a>
 CUSTOM SECURITY INTERCEPTORS
 ---------------
 
@@ -332,6 +338,7 @@ cxf {
 }
 ```
 
+<a name="In"></a>
 CUSTOM IN INTERCEPTORS
 ---------------
 
@@ -405,6 +412,7 @@ info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
 ```
 
+<a name="Out"></a>
 CUSTOM OUT INTERCEPTORS
 ---------------
 You can wire in your own custom out interceptors by adding the property outInterceptors to the configured client.  In this example I have chosen to wire in my own out logging interceptors.
@@ -460,6 +468,7 @@ info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
 ```
 
+<a name="Fault"></a>
 CUSTOM OUT FAULT INTERCEPTORS
 ---------------
 
@@ -474,6 +483,7 @@ info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
 ```
 
+<a name="Custom"></a>
 CUSTOM HTTP CLIENT POLICY
 ---------------
 
@@ -508,6 +518,7 @@ cxf {
 
 Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
 
+<a name="Demo"></a>
 DEMO PROJECT
 ---------------
 
@@ -517,6 +528,7 @@ A demo project that includes both a sample service and usage of the cxf-client p
 
 I have also included the full code on how to inject a custom security interceptor in the demo project.
 
+<a name="Issues"></a>
 ISSUES
 ---------------
 
@@ -530,6 +542,7 @@ You may need to put a cert into your [jdkhome]\jre\lib\security directory.  I wi
 
 Another solution is to get the wsdl from the web and copy into a local file.wsdl and change the config to point to a local file instead of the https endpoint for generation.
 
+<a name="Change"></a>
 CHANGE LOG
 ---------------
 
@@ -540,11 +553,13 @@ v1.2.7
 v1.2.6
     * Ability to set connectionTimeout and recieveTimeout for the client proxy
 
+<a name="Future"></a>
 FUTURE REVISIONS
 ---------------
 
 * Ability to dynamically reload endpoint url at runtime
 
+<a name="License"></a>
 LICENSE
 ---------------
 
