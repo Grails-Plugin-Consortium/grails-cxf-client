@@ -34,9 +34,9 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      */
     @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName,
                                              String serviceEndpointAddress,
-                                             Boolean secured, Boolean allowChunking,
+                                             Boolean secured,
                                              Boolean enableDefaultLoggingInterceptors,
-                                             Map timeouts,
+                                             Map clientPolicyMap,
                                              List outInterceptors,
                                              List inInterceptors,
                                              List outFaultInterceptors,
@@ -47,8 +47,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(serviceEndpointAddress) {
             try {
                 if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
-                assignCxfProxy(clientInterface, serviceEndpointAddress, secured, allowChunking,
-                               enableDefaultLoggingInterceptors, timeouts, handler, outInterceptors,
+                assignCxfProxy(clientInterface, serviceEndpointAddress, secured,
+                               enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, outFaultInterceptors, httpClientPolicy)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
@@ -69,10 +69,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 inInterceptors: inInterceptors,
                 outFaultInterceptors: outFaultInterceptors,
                 enableDefaultLoggingInterceptors: enableDefaultLoggingInterceptors,
-                timeouts: timeouts,
+                clientPolicyMap: clientPolicyMap,
                 handler: handler,
                 httpClientPolicy: httpClientPolicy,
-                security: [secured: secured, allowChunking: allowChunking]]
+                security: [secured: secured]]
         interfaceMap.put(serviceName, serviceMap)
 
         clientProxy
@@ -103,12 +103,12 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             List outFaultInterceptors = interfaceMap.get(serviceName).outFaultInterceptors
             Boolean enableDefaultLoggingInterceptors = interfaceMap.get(serviceName).enableDefaultLoggingInterceptors
             HTTPClientPolicy httpClientPolicy = interfaceMap.get(serviceName).httpClientPolicy
-            Map timeouts = interfaceMap.get(serviceName).timeouts
+            Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
             try {
                 assignCxfProxy(clientInterface, serviceEndpointAddress,
-                               security?.secured ?: false, security?.allowChunking ?: false,
+                               security?.secured ?: false,
                                enableDefaultLoggingInterceptors,
-                               timeouts ?: [receiveTimeout: 60000, connectionTimeout: 30000],
+                               clientPolicyMap ?: [receiveTimeout: 60000, connectionTimeout: 30000, allowChunking: true],
                                handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
                 if(Log.isDebugEnabled()) { Log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
             } catch (Exception exception) {
@@ -132,9 +132,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private void assignCxfProxy(Class<?> serviceInterface,
                                 String serviceEndpointAddress,
                                 Boolean secured,
-                                Boolean allowChunking,
                                 Boolean enableDefaultLoggingInterceptors,
-                                Map timeouts,
+                                Map clientPolicyMap,
                                 WSClientInvocationHandler handler,
                                 List outInterceptors,
                                 List inInterceptors,
@@ -144,7 +143,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
         Object cxfProxy = clientProxyFactory.create()
-        addInterceptors(cxfProxy, allowChunking, enableDefaultLoggingInterceptors, timeouts,
+        addInterceptors(cxfProxy, enableDefaultLoggingInterceptors, clientPolicyMap,
                         outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
         handler.cxfProxy = cxfProxy
     }
@@ -153,14 +152,14 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * Add default interceptors to the client proxy
      * @param cxfProxy proxy class you wish to intercept
      */
-    private void addInterceptors(Object cxfProxy, Boolean allowChunking,
+    private void addInterceptors(Object cxfProxy,
                                  Boolean enableDefaultLoggingInterceptors,
-                                 Map timeouts, List outInterceptors,
+                                 Map clientPolicyMap, List outInterceptors,
                                  List inInterceptors, List outFaultInterceptors,
                                  HTTPClientPolicy httpClientPolicy) {
         Client client = ClientProxy.getClient(cxfProxy)
 
-        configureReceiveTimeout(client, timeouts, allowChunking, httpClientPolicy)
+        configureReceiveTimeout(client, clientPolicyMap, httpClientPolicy)
 
         //Only provide the default interceptors when no others are defined
         if((outFaultInterceptors?.size() ?: ZERO) == ZERO) {
@@ -202,29 +201,27 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * chunking mode is not supported by some web services. Thus, Chunking was disabled on the Client policy.
      *
      * @param client the client object
-     * @param timeouts map of receive and connection timeout params
-     * @param allowChunking boolean for allowing chunking or not on service
+     * @param clientPolicyMap map of receive and connection timeout/chunking params
      */
-    private void configureReceiveTimeout(Client client, Map timeouts, Boolean allowChunking = false, HTTPClientPolicy httpClientPolicy = null) {
+    private void configureReceiveTimeout(Client client, Map clientPolicyMap, HTTPClientPolicy httpClientPolicy = null) {
         Conduit c = client.conduit
         if(c instanceof HTTPConduit) {
             HTTPConduit conduit = (HTTPConduit) c
-            conduit.client = getHttpClientPolicy(httpClientPolicy, timeouts, allowChunking)
+            conduit.client = getHttpClientPolicy(httpClientPolicy, clientPolicyMap)
         }
     }
 
     /**
-     * Method that will either return the configured HTTPClientPolicy from the config or it will create one using timeouts and chunking.
+     * Method that will either return the configured HTTPClientPolicy from the config or it will create one using clientPolicyMap and chunking.
      * @param httpClientPolicy An existing client policy to use
-     * @param timeouts timeout map for receive and connection
-     * @param allowChunking allow chunking in the policy
+     * @param clientPolicyMap timeout/chunking map for receive and connection
      * @return HTTPClientPolicy
      */
-    private HTTPClientPolicy getHttpClientPolicy(HTTPClientPolicy httpClientPolicy, Map timeouts, boolean allowChunking) {
+    private HTTPClientPolicy getHttpClientPolicy(HTTPClientPolicy httpClientPolicy, Map clientPolicyMap) {
         httpClientPolicy ?: new HTTPClientPolicy(
-                receiveTimeout: timeouts.receiveTimeout,
-                connectionTimeout: timeouts.connectionTimeout,
-                allowChunking: allowChunking
+                receiveTimeout: clientPolicyMap.receiveTimeout,
+                connectionTimeout: clientPolicyMap.connectionTimeout,
+                allowChunking: clientPolicyMap.allowChunking
         )
     }
 

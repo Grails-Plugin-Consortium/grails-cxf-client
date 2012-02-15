@@ -12,9 +12,8 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
 
     Class<?> clientInterface
     Boolean secured
-    Boolean allowChunking
     Boolean enableDefaultLoggingInterceptors
-    def timeouts = [:]
+    def clientPolicyMap = [:]
     String serviceEndpointAddress
     String serviceName
     WebServiceClientFactory webServiceClientFactory
@@ -34,10 +33,9 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                                                     serviceName,
                                                     serviceEndpointAddress,
                                                     secured,
-                                                    allowChunking,
                                                     enableDefaultLoggingInterceptors,
-                                                    timeouts,
-                                                    outInterceptors, 
+                                                    clientPolicyMap,
+                                                    outInterceptors,
                                                     inInterceptors,
                                                     outFaultInterceptors,
                                                     httpClientPolicy)

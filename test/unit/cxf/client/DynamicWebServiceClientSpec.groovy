@@ -2,9 +2,9 @@ package cxf.client
 
 import com.grails.cxf.client.DynamicWebServiceClient
 import com.grails.cxf.client.WebServiceClientFactoryImpl
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
 import spock.lang.Specification
-import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
 /**
  */
@@ -18,8 +18,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
-                allowChunking: false,
-                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
+                clientPolicyMap: [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false],
                 webServiceClientFactory: factory,
                 httpClientPolicy: new HTTPClientPolicy(allowChunking: true, connectionTimeout: 100, receiveTimeout: 200)
         )
@@ -32,9 +31,9 @@ class DynamicWebServiceClientSpec extends Specification {
         factory.interfaceMap.containsKey("testService")
         factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         !factory.interfaceMap.get("testService").security.secured
-        !factory.interfaceMap.get("testService").security.allowChunking
-        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
-        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+        !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
+        factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
+        factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").httpClientPolicy != null
         factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
@@ -51,8 +50,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
-                allowChunking: true,
-                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
+                clientPolicyMap: [receiveTimeout: 0, connectionTimeout: 0, allowChunking: true],
                 webServiceClientFactory: factory
         )
 
@@ -64,11 +62,11 @@ class DynamicWebServiceClientSpec extends Specification {
         factory.interfaceMap.containsKey("testService")
         factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
         !factory.interfaceMap.get("testService").security.secured
-        factory.interfaceMap.get("testService").security.allowChunking
+        factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         factory.interfaceMap.get("testService").handler != null
         !factory.interfaceMap.get("testService").httpClientPolicy
-        factory.interfaceMap.get("testService").timeouts.receiveTimeout == 0
-        factory.interfaceMap.get("testService").timeouts.connectionTimeout == 0
+        factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
+        factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
 
 
     }
@@ -81,7 +79,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "",
                 secured: false,
-                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
+                clientPolicyMap: [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false],
                 webServiceClientFactory: factory)
 
         when:
@@ -101,7 +99,7 @@ class DynamicWebServiceClientSpec extends Specification {
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 secured: false,
-                timeouts: [receiveTimeout: 0, connectionTimeout: 0],
+                clientPolicyMap: [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false],
                 webServiceClientFactory: factory)
 
         when:
