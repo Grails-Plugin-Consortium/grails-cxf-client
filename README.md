@@ -535,9 +535,7 @@ Note: If you incorrectly refer to your new beans name (spelling, etc) you will g
 DEMO PROJECT
 ---------------
 
-A demo project that includes both a sample service and usage of the cxf-client plugin can be found at
-
-<https://www.github.com/ctoestreich/cxf-client-demo>
+A demo project that includes both a sample service and usage of the cxf-client plugin can be found at <https://www.github.com/ctoestreich/cxf-client-demo>
 
 I have also included the full code on how to inject a custom security interceptor in the demo project.
 
