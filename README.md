@@ -9,8 +9,10 @@ CXF CLIENT
 * Custom In Interceptors
 * Custom Out Interceptors
 * Custom Out Fault Interceptors
+* Custom Http Client Policy
 * Demo Project
 * Issues
+* Change Log
 * Future Revisions
 
 INTRODUCTION
@@ -140,6 +142,8 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 clientInterface = [package and name of wsdl2java -client generated port interface class]
                 serviceEndpointAddress = [url for the service]
                 secured = [true or false] //optional - defaults to false
+                allowChunking = [true or false] //optional - defaults to false
+                httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
                 username = [username] //optional - used when secured is true - currently wss4j interceptor
                 password = [password] //optional - used when secured is true - currently wss4j interceptor
                 securityInterceptor = [text name of custom bean to use] //optional - defaults to wss4j interceptor
@@ -166,7 +170,6 @@ Config used at runtime to invoke service.
 <tr><td>beanName</td><td>This can be any name you would like, but should be unique.  This will be the name of the bean the plugin will auto wire and that you will refer to the bean from your service/controller/etc.</td><td><b>Yes</b></td></tr>
 <tr><td>clientInterface</td><td>Package name and object name of the wsdl2java generated port interface.</td><td><b>Yes</b></td></tr>
 <tr><td>serviceEndpointAddress</td><td>Url of the service to call.  Can refer to env specific url as in belows example.</td><td><b>Yes</b></td></tr>
-<tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>username</td><td>Username to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
 <tr><td>password</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "")</td><td>No</td></tr>
 <tr><td>securityInterceptor</td><td>Provide a single bean name as a string to wire in as an out interceptor for apache cxf.  If you provide a name for an interceptor, it will be implied that secured=true.  If you require the default wss4j interceptor you will not need to set this property, simply set the secured=true and the username and password properties.  If you set this to a value then the username and password fields will be ignored as it is expected that you will configure any required property injection in your resources.groovy file.  You may also provide your custom security
@@ -177,6 +180,9 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>enableDefaultLoggingInterceptors</td><td>When set to true, default in and out logging interceptors will be added to the service.  If you require custom logging interceptors and wish to turn off the default loggers for any reason (security, custom, etc), set this property to false and provide your own in and out logging interceptors via the inInterceptors or outInterceptors properties.  You may also simply wish to disable logging of cxf (soap messages, etc) by setting this to false without providing your own interceptors.  (default: true)</td><td>No</td></tr>
 <tr><td>connectionTimeout</td><td>Specifies the amount of time, in milliseconds, that the client will attempt to establish a connection before it times out. The default is 30000 (30 seconds). 0 specifies that the client will continue to attempt to open a connection indefinitely. (default: 30000)</td><td>No</td></tr>
 <tr><td>receiveTimeout</td><td>Specifies the amount of time, in milliseconds, that the client will wait for a response before it times out. The default is 60000. 0 specifies that the client will wait indefinitely. (default: 60000)</td><td>No</td></tr>
+<tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
+<tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
+<tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. (default: null)</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -468,6 +474,38 @@ info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
 ```
 
+CUSTOM HTTP CLIENT POLICY
+---------------
+
+If you simply need to set the connectionTimeout, receiveTimeout, or allowChunking you may use the three provided params to accomplish this.  If you require more fine grained control of the HTTPClientPolicy you can create a custom bean in the resources.groovy and tell your cxf client to use it via the following:
+
+resources.groovy
+```groovy
+beans = {
+    customHttpClientPolicy(HTTPClientPolicy){
+        connectionTimeout = 30000
+        receiveTimeout = 60000
+        allowChunking = false
+        autoRedirect = false
+    }
+}
+```
+
+Config.groovy
+```groovy
+cxf {
+    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
+    client {
+        simpleServiceClient {
+            clientInterface = cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress = "${service.simple.url}"
+            httpClientPolicy = 'customHttpClientPolicy'
+        }
+}
+```
+
+Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
+
 DEMO PROJECT
 ---------------
 
@@ -480,6 +518,8 @@ I have also included the full code on how to inject a custom security intercepto
 ISSUES
 ---------------
 
+To submit an issue please use <https://github.com/ctoestreich/cxf-client/issues>.
+
 Currently there is an issue with pointing to a secure endpoint and running the wsdl2java script.  If you get an error message like
 
     PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
@@ -488,12 +528,20 @@ You may need to put a cert into your [jdkhome]\jre\lib\security directory.  I wi
 
 Another solution is to get the wsdl from the web and copy into a local file.wsdl and change the config to point to a local file instead of the https endpoint for generation.
 
+CHANGE LOG
+---------------
+
+v1.2.7
+    * Ability to set allowChunking
+    * Ability to specify custom HTTPClientPolicy bean to use for the client (see [demo project][https://github.com/ctoestreich/cxf-client-demo/blob/master/grails-app/conf/spring/resources.groovy] for more details)
+
+v1.2.6
+    * Ability to set connectionTimeout and recieveTimeout for the client proxy
 
 FUTURE REVISIONS
 ---------------
 
 * Ability to dynamically reload endpoint url at runtime
-
 
 LICENSE
 ---------------

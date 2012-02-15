@@ -1,5 +1,7 @@
 package com.grails.cxf.client
 
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
+
 /**
  * Factory used to obtain web service clients as well as dynamically changing their WSDL document URLs.
  */
@@ -24,9 +26,11 @@ interface WebServiceClientFactory {
                                String serviceName,
                                String serviceEndpointAddress,
                                Boolean secured,
+                               Boolean allowChunking,
                                Boolean enableDefaultLoggingInterceptors,
                                Map timeouts,
                                List outInterceptors,
                                List inInterceptors,
-                               List outFaultInterceptors)
+                               List outFaultInterceptors,
+                               HTTPClientPolicy httpClientPolicy)
 }

@@ -6,7 +6,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.2.6"
+    def version = "1.2.7"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -115,8 +115,12 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             serviceName = cxfClientName
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
             secured = (client?.secured || client?.securityInterceptor) ?: false
+            allowChunking = (client?.allowChunking) ?: false
             enableDefaultLoggingInterceptors = (client?.enableDefaultLoggingInterceptors?.toString() ?: "true") != "false"
             timeouts = [connectionTimeout: connectionTimeout, receiveTimeout: receiveTimeout]
+            if(client?.httpClientPolicy){
+                httpClientPolicy = ref("${client.httpClientPolicy}")
+            }
         }
     }
 

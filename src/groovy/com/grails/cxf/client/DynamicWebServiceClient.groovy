@@ -12,6 +12,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
 
     Class<?> clientInterface
     Boolean secured
+    Boolean allowChunking
     Boolean enableDefaultLoggingInterceptors
     def timeouts = [:]
     String serviceEndpointAddress
@@ -21,6 +22,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     def outInterceptors = []
     def inInterceptors = []
     def outFaultInterceptors = []
+    def httpClientPolicy
 
     Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
         if(!clientInterface || !serviceEndpointAddress) {
@@ -32,11 +34,13 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                                                     serviceName,
                                                     serviceEndpointAddress,
                                                     secured,
+                                                    allowChunking,
                                                     enableDefaultLoggingInterceptors,
                                                     timeouts,
                                                     outInterceptors, 
                                                     inInterceptors,
-                                                    outFaultInterceptors)
+                                                    outFaultInterceptors,
+                                                    httpClientPolicy)
     }
 
     Class<?> getObjectType() {
