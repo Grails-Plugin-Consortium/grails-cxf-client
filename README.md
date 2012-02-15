@@ -271,7 +271,7 @@ class DemoController {
 }
 ```
 
-NOTE: You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually.
+<b><i>NOTE:</b> You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually.</i>
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Security"></a>
