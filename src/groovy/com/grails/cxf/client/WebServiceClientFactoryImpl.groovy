@@ -47,7 +47,9 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(serviceEndpointAddress) {
             try {
                 if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
-                assignCxfProxy(clientInterface, serviceEndpointAddress, secured, allowChunking, enableDefaultLoggingInterceptors, timeouts, handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
+                assignCxfProxy(clientInterface, serviceEndpointAddress, secured, allowChunking,
+                               enableDefaultLoggingInterceptors, timeouts, handler, outInterceptors,
+                               inInterceptors, outFaultInterceptors, httpClientPolicy)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
                         "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
@@ -142,7 +144,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
         Object cxfProxy = clientProxyFactory.create()
-        addInterceptors(cxfProxy, secured, allowChunking, enableDefaultLoggingInterceptors, timeouts, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
+        addInterceptors(cxfProxy, allowChunking, enableDefaultLoggingInterceptors, timeouts,
+                        outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
         handler.cxfProxy = cxfProxy
     }
 
@@ -150,7 +153,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * Add default interceptors to the client proxy
      * @param cxfProxy proxy class you wish to intercept
      */
-    private void addInterceptors(Object cxfProxy, Boolean secured, Boolean allowChunking,
+    private void addInterceptors(Object cxfProxy, Boolean allowChunking,
                                  Boolean enableDefaultLoggingInterceptors,
                                  Map timeouts, List outInterceptors,
                                  List inInterceptors, List outFaultInterceptors,
@@ -170,12 +173,17 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         //add custom interceptors here
-        addInterceptors(client, client.outFaultInterceptors, outFaultInterceptors)
-        addInterceptors(client, client.inInterceptors, inInterceptors)
-        addInterceptors(client, client.outInterceptors, outInterceptors)
+        addInterceptors(client.outFaultInterceptors, outFaultInterceptors)
+        addInterceptors(client.inInterceptors, inInterceptors)
+        addInterceptors(client.outInterceptors, outInterceptors)
     }
 
-    private void addInterceptors(Client client, List clientInterceptors, List cxfInterceptors) {
+    /**
+     * Takes a list of generic interceptors and applies them to the appropriate interceptor chain
+     * @param clientInterceptors interceptors attached to a Client object (in/out/etc)
+     * @param cxfInterceptors interceptors that are configured to be used
+     */
+    private void addInterceptors(List clientInterceptors, List cxfInterceptors) {
         cxfInterceptors.each {
             if(it instanceof Interceptor || it instanceof CxfClientInterceptor) {
                 clientInterceptors.add((it instanceof CxfClientInterceptor) ? it.create() : it)
@@ -201,11 +209,18 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         Conduit c = client.conduit
         if(c instanceof HTTPConduit) {
             HTTPConduit conduit = (HTTPConduit) c
-            conduit.client = createHttpClientPolicy(httpClientPolicy, timeouts, allowChunking)
+            conduit.client = getHttpClientPolicy(httpClientPolicy, timeouts, allowChunking)
         }
     }
 
-    private HTTPClientPolicy createHttpClientPolicy(HTTPClientPolicy httpClientPolicy, Map timeouts, boolean allowChunking) {
+    /**
+     * Method that will either return the configured HTTPClientPolicy from the config or it will create one using timeouts and chunking.
+     * @param httpClientPolicy An existing client policy to use
+     * @param timeouts timeout map for receive and connection
+     * @param allowChunking allow chunking in the policy
+     * @return HTTPClientPolicy
+     */
+    private HTTPClientPolicy getHttpClientPolicy(HTTPClientPolicy httpClientPolicy, Map timeouts, boolean allowChunking) {
         httpClientPolicy ?: new HTTPClientPolicy(
                 receiveTimeout: timeouts.receiveTimeout,
                 connectionTimeout: timeouts.connectionTimeout,

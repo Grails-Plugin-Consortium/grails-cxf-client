@@ -22,23 +22,23 @@
       <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/codenarc-0.16.1/target/test-classes" />
       <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/codenarc-0.16.1/web-app/plugins" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/src/java" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/src/groovy" isTestSource="false" />
-      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/target/classes" />
-      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/target/test-classes" />
-      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.0/web-app/plugins" />
+    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.1/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.1/src/groovy" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.1/target/classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.1/target/test-classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/release-1.0.1/web-app/plugins" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT">
       <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT/target/classes" />
       <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT/target/test-classes" />
       <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/spock-0.6-SNAPSHOT/web-app/plugins" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/src/groovy" isTestSource="false" />
-      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/target/classes" />
-      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/target/test-classes" />
-      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.1/web-app/plugins" />
+    <content url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.2/src/groovy" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.2/target/classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.2/target/test-classes" />
+      <excludeFolder url="file://$USER_HOME$/.grails/2.0.0/projects/cxf-client/plugins/svn-1.0.2/web-app/plugins" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
