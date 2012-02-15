@@ -562,11 +562,11 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 CHANGE LOG
 ---------------
 
-v1.2.7
+* v1.2.7
     * Ability to set allowChunking
     * Ability to specify custom HTTPClientPolicy bean to use for the client (see [demo project][https://github.com/ctoestreich/cxf-client-demo/blob/master/grails-app/conf/spring/resources.groovy] for more details)
 
-v1.2.6
+* v1.2.6
     * Ability to set connectionTimeout and recieveTimeout for the client proxy
 
 <p align="right"><a href="#Top">Top</a></p>
