@@ -152,11 +152,6 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
             [beanName] {
                 clientInterface = [package and name of wsdl2java -client generated port interface class]
                 serviceEndpointAddress = [url for the service]
-                secured = [true or false] //optional - defaults to false
-                connectionTimeout = [Number of milliseconds to wait for connection] //optional - Defaults to 60000 (use 0 to wait infinitely)
-                receiveTimeout = [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
-                allowChunking = [true or false] //optional - defaults to false
-                httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
                 username = [username] //optional - used when secured is true - currently wss4j interceptor
                 password = [password] //optional - used when secured is true - currently wss4j interceptor
                 securityInterceptor = [text name of custom bean to use] //optional - defaults to wss4j interceptor
@@ -164,6 +159,13 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 outInterceptors = [list of cxf out interceptors to add to the request] //optional - defaults to []
                 outFaultInterceptors = [list of cxf out fault interceptors to add to the request] //optional - defaults to []
                 enableDefaultLoggingInterceptors = [turn on or off default in/out logging] //optional - defaults to true
+                secured = [true or false] //optional - defaults to false
+                connectionTimeout = [Number of milliseconds to wait for connection] //optional - Defaults to 60000 (use 0 to wait infinitely)
+                receiveTimeout = [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
+                allowChunking = [true or false] //optional - defaults to false
+                httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
+
+                //wsdl config
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
                 wsdlArgs = [custom list of args to pass in seperated by space such as ["-autoNameResolution", "-validate"]] //optional - only used by wsdl2java script
                 namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
