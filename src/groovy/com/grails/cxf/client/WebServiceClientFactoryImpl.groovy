@@ -106,7 +106,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
     }
 
-    private def assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
+    private void assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
         def security = interfaceMap.get(serviceName).security
         WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
         List outInterceptors = interfaceMap.get(serviceName).outInterceptors
