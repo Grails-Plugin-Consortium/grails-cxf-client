@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType
 "name",
 "age"
 ])
-public class SimpleRequest {
+class SimpleRequest {
 
     protected String name
     protected Integer age
@@ -24,8 +24,8 @@ public class SimpleRequest {
      * {@link String}
      *
      */
-    public String getName() {
-        return name
+    String getName() {
+        name
     }
 
     /**
@@ -36,7 +36,7 @@ public class SimpleRequest {
      * {@link String}
      *
      */
-    public void setName(String value) {
+    void setName(String value) {
         this.name = value
     }
 
@@ -48,8 +48,8 @@ public class SimpleRequest {
      * {@link Integer}
      *
      */
-    public Integer getAge() {
-        return age
+    Integer getAge() {
+        age
     }
 
     /**
@@ -60,7 +60,7 @@ public class SimpleRequest {
      * {@link Integer}
      *
      */
-    public void setAge(Integer value) {
+    void setAge(Integer value) {
         this.age = value
     }
 

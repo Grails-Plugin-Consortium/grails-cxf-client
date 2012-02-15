@@ -7,11 +7,11 @@ import javax.xml.bind.annotation.XmlType
 /**
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "simpleResponse", propOrder = [
-"isOld",
-"status"
+@XmlType(name = 'simpleResponse', propOrder = [
+'isOld',
+'status'
 ])
-public class SimpleResponse {
+class SimpleResponse {
 
     protected Boolean isOld
     protected String status
@@ -24,8 +24,8 @@ public class SimpleResponse {
      * {@link Boolean}
      *
      */
-    public Boolean isIsOld() {
-        return isOld
+    Boolean isIsOld() {
+        isOld
     }
 
     /**
@@ -36,7 +36,7 @@ public class SimpleResponse {
      * {@link Boolean}
      *
      */
-    public void setIsOld(Boolean value) {
+    void setIsOld(Boolean value) {
         this.isOld = value
     }
 
@@ -48,8 +48,8 @@ public class SimpleResponse {
      * {@link String}
      *
      */
-    public String getStatus() {
-        return status
+    String getStatus() {
+        status
     }
 
     /**
@@ -60,7 +60,7 @@ public class SimpleResponse {
      * {@link String}
      *
      */
-    public void setStatus(String value) {
+    void setStatus(String value) {
         this.status = value
     }
 
