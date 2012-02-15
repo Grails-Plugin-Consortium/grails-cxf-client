@@ -22,6 +22,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
     private static final Log = LogFactory.getLog(this)
     private static final int ZERO = 0
+    private static final int RECEIVE_TIMEOUT = 60000
+    private static final int CONNECTION_TIMEOUT = 30000
     def interfaceMap = [:]
 
     /**
@@ -95,30 +97,34 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         Class<?> clientInterface = interfaceMap.get(serviceName).clientInterface
-        def security = interfaceMap.get(serviceName).security
         if(clientInterface) {
-            WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
-            List outInterceptors = interfaceMap.get(serviceName).outInterceptors
-            List inInterceptors = interfaceMap.get(serviceName).inInterceptors
-            List outFaultInterceptors = interfaceMap.get(serviceName).outFaultInterceptors
-            Boolean enableDefaultLoggingInterceptors = interfaceMap.get(serviceName).enableDefaultLoggingInterceptors
-            HTTPClientPolicy httpClientPolicy = interfaceMap.get(serviceName).httpClientPolicy
-            Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
-            try {
-                assignCxfProxy(clientInterface, serviceEndpointAddress,
-                               security?.secured ?: false,
-                               enableDefaultLoggingInterceptors,
-                               clientPolicyMap ?: [receiveTimeout: 60000, connectionTimeout: 30000, allowChunking: true],
-                               handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
-                if(Log.isDebugEnabled()) { Log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
-            } catch (Exception exception) {
-                handler.cxfProxy = null
-                throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
-            }
+            assignCxfProxyFromInterfaceMap(serviceName, clientInterface, serviceEndpointAddress)
         } else {
             if(Log.isDebugEnabled()) {
                 Log.debug("Unable to find existing client proxy matching name ${serviceName}")
             }
+        }
+    }
+
+    private def assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
+        def security = interfaceMap.get(serviceName).security
+        WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
+        List outInterceptors = interfaceMap.get(serviceName).outInterceptors
+        List inInterceptors = interfaceMap.get(serviceName).inInterceptors
+        List outFaultInterceptors = interfaceMap.get(serviceName).outFaultInterceptors
+        Boolean enableDefaultLoggingInterceptors = interfaceMap.get(serviceName).enableDefaultLoggingInterceptors
+        HTTPClientPolicy httpClientPolicy = interfaceMap.get(serviceName).httpClientPolicy
+        Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
+        try {
+            assignCxfProxy(clientInterface, serviceEndpointAddress,
+                           security?.secured ?: false,
+                           enableDefaultLoggingInterceptors,
+                           clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
+                           handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
+            if(Log.isDebugEnabled()) { Log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
+        } catch (Exception exception) {
+            handler.cxfProxy = null
+            throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
         }
     }
 
