@@ -502,6 +502,7 @@ If you simply need to set the connectionTimeout, receiveTimeout, or allowChunkin
 _Note: A configured httpClientPolicy will take precedence over the connectionTimeout, receiveTimeout and allowChunking. Setting all four params in the config will cause the httpClientPolicy to be used and the others ignored._
 
 resources.groovy
+
 ```groovy
 beans = {
     customHttpClientPolicy(HTTPClientPolicy){
@@ -514,6 +515,7 @@ beans = {
 ```
 
 Config.groovy
+
 ```groovy
 cxf {
     installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
