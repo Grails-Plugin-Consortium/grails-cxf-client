@@ -20,10 +20,10 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
   </repositories>
   <dependencies>
     <compile>
-      <dependency group='org.apache.ws.security' name='wss4j' version='1.5.9' />
+      <dependency group='org.apache.cxf' name='cxf-rt-ws-security' version='2.3.0' />
       <dependency group='org.apache.cxf' name='cxf-rt-frontend-jaxrs' version='2.3.0' />
       <dependency group='org.apache.cxf' name='cxf-rt-frontend-jaxws' version='2.3.0' />
-      <dependency group='org.apache.cxf' name='cxf-rt-ws-security' version='2.3.0' />
+      <dependency group='org.apache.ws.security' name='wss4j' version='1.5.9' />
     </compile>
   </dependencies>
   <plugins />
