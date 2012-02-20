@@ -280,7 +280,7 @@ CUSTOM SECURITY INTERCEPTORS
 
 This is rather complex exercise, but one that you can do as of version 1.2 of the plugin.
 
-As a convenience to the user I created an interface to inherit from that allows you to customize the specifics of the interceptor without having to inherit all the contract methods for the cxf interceptors.  You simply have to inherit from SecurityInterceptor in the com.grails.cxf.client.security package.  Here is the custom interceptor I created for the demo project.
+As a convenience to the user I created an interface to inherit from that allows you to customize the specifics of the interceptor without having to inherit all the contract methods for the cxf interceptors.  You simply have to inherit from CxfClientInterceptor in the com.grails.cxf.client.security package.  Here is the custom interceptor I created for the demo project.
 
 ```groovy
 package com.cxf.demo.security
@@ -293,7 +293,7 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
 import org.apache.ws.security.WSPasswordCallback
 import org.apache.ws.security.handler.WSHandlerConstants
 
-class CustomSecurityInterceptor implements SecurityInterceptor {
+class CustomSecurityInterceptor implements CxfClientInterceptor {
 
     def pass
     def user
