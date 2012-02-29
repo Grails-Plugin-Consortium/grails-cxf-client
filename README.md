@@ -12,6 +12,7 @@ CXF CLIENT
 * <a href="#Out">Custom Out Interceptors</a>
 * <a href="#Fault">Custom Out Fault Interceptors</a>
 * <a href="#Custom">Custom Http Client Policy</a>
+* <a href="#Beans">User Client Beans Anywhere</a>
 * <a href="#Demo">Demo Project</a>
 * <a href="#Issues">Issues</a>
 * <a href="#Change">Change Log</a>
@@ -532,6 +533,29 @@ cxf {
 ```
 
 Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
+
+<p align="right"><a href="#Top">Top</a></p>
+<a name="Beans"></a>
+USING CLIENT BEANS ANYWHERE
+---------------
+If you require useage of the web service clients you can access them anywhere by accessing them by name.  The name of the bean will match the name of the configured client in your Config.groovy.
+
+Here is one example that could be called from a class in src/groovy
+
+```groovy
+cxf {
+    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
+    client {
+        simpleServiceClient {
+            ...
+        }
+    }
+}
+```
+
+```groovy
+SimpleServicePortType simpleServiceClient = ApplicationHolder.application.mainContext.getBean("simpleServiceClient")
+```
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Demo"></a>
