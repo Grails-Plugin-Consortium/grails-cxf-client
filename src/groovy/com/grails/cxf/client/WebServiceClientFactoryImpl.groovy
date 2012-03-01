@@ -31,12 +31,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param serviceInterface cxf generated port interface to use for service contract
      * @param serviceName the name of the service for using in cache key
      * @param serviceEndpointAddress url to use when invoking service
-     * @param secured whether service is secured
      * @return
      */
     @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName,
                                              String serviceEndpointAddress,
-                                             Boolean secured,
                                              Boolean enableDefaultLoggingInterceptors,
                                              Map clientPolicyMap,
                                              List outInterceptors,
@@ -49,8 +47,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
         if(serviceEndpointAddress) {
             try {
-                if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
-                assignCxfProxy(clientInterface, serviceEndpointAddress, secured,
+                if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress") }
+                assignCxfProxy(clientInterface, serviceEndpointAddress,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
             } catch (Exception exception) {
@@ -61,7 +59,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             }
 
         } else {
-            CxfClientException cxfClientException = new CxfClientException("Web service client failed to initialize with url: $serviceEndpointAddress using secured: $secured")
+            CxfClientException cxfClientException = new CxfClientException("Web service client failed to initialize with url: $serviceEndpointAddress")
             if(Log.isErrorEnabled()) { Log.error(cxfClientException.message, cxfClientException) }
             throw cxfClientException
         }
@@ -75,7 +73,6 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 clientPolicyMap: clientPolicyMap,
                 handler: handler,
                 httpClientPolicy: httpClientPolicy,
-                security: [secured: secured],
                 proxyFactoryBindingId: proxyFactoryBindingId]
         interfaceMap.put(serviceName, serviceMap)
 
@@ -109,7 +106,6 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     }
 
     private void assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
-        def security = interfaceMap.get(serviceName).security
         WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
         List outInterceptors = interfaceMap.get(serviceName).outInterceptors
         List inInterceptors = interfaceMap.get(serviceName).inInterceptors
@@ -120,7 +116,6 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
         try {
             assignCxfProxy(clientInterface, serviceEndpointAddress,
-                           security?.secured ?: false,
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
                            handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
@@ -135,12 +130,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * Create the actual cxf client proxy
      * @param serviceInterface cxf generated port interface to use for service contract
      * @param serviceEndpointAddress url to use when invoking service
-     * @param secured whether service is secured
      * @param handler ws client invocation handler for the proxy
      */
     private void assignCxfProxy(Class<?> serviceInterface,
                                 String serviceEndpointAddress,
-                                Boolean secured,
                                 Boolean enableDefaultLoggingInterceptors,
                                 Map clientPolicyMap,
                                 WSClientInvocationHandler handler,

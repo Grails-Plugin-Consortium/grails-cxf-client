@@ -114,7 +114,6 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             clientInterface = client.clientInterface ?: ""
             serviceName = cxfClientName
             serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
-            secured = (client?.secured || client?.securityInterceptor) ?: false
             enableDefaultLoggingInterceptors = (client?.enableDefaultLoggingInterceptors?.toString() ?: "true") != "false"
             clientPolicyMap = [connectionTimeout: connectionTimeout, receiveTimeout: receiveTimeout, allowChunking: (client?.allowChunking) ?: false]
             if(client?.httpClientPolicy){

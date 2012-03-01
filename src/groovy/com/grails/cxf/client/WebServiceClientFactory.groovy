@@ -25,7 +25,6 @@ interface WebServiceClientFactory {
     Object getWebServiceClient(Class<?> clientInterface,
                                String serviceName,
                                String serviceEndpointAddress,
-                               Boolean secured,
                                Boolean enableDefaultLoggingInterceptors,
                                Map clientPolicyMap,
                                List outInterceptors,
