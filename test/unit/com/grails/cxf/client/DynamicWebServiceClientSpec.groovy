@@ -1,7 +1,5 @@
-package cxf.client
+package com.grails.cxf.client
 
-import com.grails.cxf.client.DynamicWebServiceClient
-import com.grails.cxf.client.WebServiceClientFactoryImpl
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
 import spock.lang.Specification

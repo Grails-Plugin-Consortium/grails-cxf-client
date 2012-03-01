@@ -1,7 +1,5 @@
-package cxf.client
+package com.grails.cxf.client
 
-import com.grails.cxf.client.CxfClientFaultConverter
-import com.grails.cxf.client.WebServiceClientFactoryImpl
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.interceptor.LoggingOutInterceptor

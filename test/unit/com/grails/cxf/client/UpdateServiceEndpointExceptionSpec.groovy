@@ -1,7 +1,7 @@
-package cxf.client
+package com.grails.cxf.client
 
-import spock.lang.Specification
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
+import spock.lang.Specification
 
 /**
  */

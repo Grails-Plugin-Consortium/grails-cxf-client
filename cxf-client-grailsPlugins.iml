@@ -114,6 +114,7 @@
         <SOURCES>
           <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-frontend-simple-2.3.0-sources.jar!/" />
           <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-core-2.3.0-sources.jar!/" />
+          <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-ws-security-2.3.0-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

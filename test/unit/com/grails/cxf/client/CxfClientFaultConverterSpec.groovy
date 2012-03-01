@@ -1,6 +1,5 @@
-package cxf.client
+package com.grails.cxf.client
 
-import com.grails.cxf.client.CxfClientFaultConverter
 import org.apache.cxf.message.Message
 import org.apache.cxf.message.MessageImpl
 import spock.lang.Specification
