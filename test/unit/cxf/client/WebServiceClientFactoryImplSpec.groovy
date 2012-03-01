@@ -17,7 +17,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null)
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/")
 
         then:
         webServiceClient != null
@@ -35,6 +35,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
         !factory.interfaceMap.get("testService").httpClientPolicy
+        factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
     }
 
     def "create web service client using factory method with http client policy"() {
@@ -42,7 +43,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20))
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20), "")
 
         then:
         webServiceClient != null
@@ -63,6 +64,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").httpClientPolicy.connectionTimeout == 10
         factory.interfaceMap.get("testService").httpClientPolicy.receiveTimeout == 20
         factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
+        !factory.interfaceMap.get("testService").proxyFactoryBindingId
     }
 
     def "create web service client using factory method with http client policy no chunking"() {
@@ -70,7 +72,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20, allowChunking: false))
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20, allowChunking: false), null)
 
         then:
         webServiceClient != null
@@ -90,6 +92,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").httpClientPolicy.connectionTimeout == 10
         factory.interfaceMap.get("testService").httpClientPolicy.receiveTimeout == 20
         !factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
+        !factory.interfaceMap.get("testService").proxyFactoryBindingId
     }
 
     def "create web service client using factory method and timeouts"() {
@@ -97,7 +100,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null)
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, false, [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null, "")
 
         then:
         webServiceClient != null
@@ -115,6 +118,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         !factory.interfaceMap.get("testService").security.secured
         factory.interfaceMap.get("testService").handler != null
         !factory.interfaceMap.get("testService").httpClientPolicy
+        !factory.interfaceMap.get("testService").proxyFactoryBindingId
     }
 
     def "create web service client using factory method and change url"() {
@@ -122,7 +126,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null)
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null, "")
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -155,6 +159,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
         !factory.interfaceMap.get("testService").security.secured
+        !factory.interfaceMap.get("testService").proxyFactoryBindingId
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/new"
     }
@@ -164,7 +169,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null)
+        Object webServiceClient = factory.getWebServiceClient(test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/")
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -181,6 +186,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").security.secured
         !factory.interfaceMap.get("testService").httpClientPolicy
+        factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
 
@@ -205,6 +211,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").security.secured
         !factory.interfaceMap.get("testService").httpClientPolicy
+        factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
     }

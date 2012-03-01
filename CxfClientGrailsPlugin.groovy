@@ -6,7 +6,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.2.7"
+    def version = "1.2.8"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -120,6 +120,7 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
             if(client?.httpClientPolicy){
                 httpClientPolicy = ref("${client.httpClientPolicy}")
             }
+            proxyFactoryBindingId = client.proxyFactoryBindingId
         }
     }
 

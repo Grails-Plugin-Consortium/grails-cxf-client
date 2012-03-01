@@ -165,6 +165,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 receiveTimeout = [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
                 allowChunking = [true or false] //optional - defaults to false
                 httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
+                proxyFactoryBindingId = [binding id uri if required] //optional - defaults to null
 
                 //wsdl config
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
@@ -197,6 +198,7 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
 <tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
+<tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.

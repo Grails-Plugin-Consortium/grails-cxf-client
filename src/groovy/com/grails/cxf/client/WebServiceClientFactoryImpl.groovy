@@ -42,7 +42,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                              List outInterceptors,
                                              List inInterceptors,
                                              List outFaultInterceptors,
-                                             HTTPClientPolicy httpClientPolicy) {
+                                             HTTPClientPolicy httpClientPolicy,
+                                             String proxyFactoryBindingId) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
 
@@ -51,7 +52,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress is secured $secured") }
                 assignCxfProxy(clientInterface, serviceEndpointAddress, secured,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
-                               inInterceptors, outFaultInterceptors, httpClientPolicy)
+                               inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
                         "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
@@ -74,7 +75,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 clientPolicyMap: clientPolicyMap,
                 handler: handler,
                 httpClientPolicy: httpClientPolicy,
-                security: [secured: secured]]
+                security: [secured: secured],
+                proxyFactoryBindingId: proxyFactoryBindingId]
         interfaceMap.put(serviceName, serviceMap)
 
         clientProxy
@@ -114,13 +116,14 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         List outFaultInterceptors = interfaceMap.get(serviceName).outFaultInterceptors
         Boolean enableDefaultLoggingInterceptors = interfaceMap.get(serviceName).enableDefaultLoggingInterceptors
         HTTPClientPolicy httpClientPolicy = interfaceMap.get(serviceName).httpClientPolicy
+        String proxyFactoryBindingId = interfaceMap.get(serviceName).proxyFactoryBindingId
         Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
         try {
             assignCxfProxy(clientInterface, serviceEndpointAddress,
                            security?.secured ?: false,
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
-                           handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
+                           handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
             if(Log.isDebugEnabled()) { Log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
         } catch (Exception exception) {
             handler.cxfProxy = null
@@ -144,10 +147,14 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                 List outInterceptors,
                                 List inInterceptors,
                                 List outFaultInterceptors,
-                                HTTPClientPolicy httpClientPolicy) {
+                                HTTPClientPolicy httpClientPolicy,
+                                String proxyFactoryBindingId) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
+        if(proxyFactoryBindingId) {
+            clientProxyFactory.bindingId = proxyFactoryBindingId
+        }
         Object cxfProxy = clientProxyFactory.create()
         addInterceptors(cxfProxy, enableDefaultLoggingInterceptors, clientPolicyMap,
                         outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)

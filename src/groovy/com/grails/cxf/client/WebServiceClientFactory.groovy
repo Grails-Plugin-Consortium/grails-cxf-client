@@ -31,5 +31,6 @@ interface WebServiceClientFactory {
                                List outInterceptors,
                                List inInterceptors,
                                List outFaultInterceptors,
-                               HTTPClientPolicy httpClientPolicy)
+                               HTTPClientPolicy httpClientPolicy,
+                               String proxyFactoryBindingId)
 }

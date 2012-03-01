@@ -1,14 +1,13 @@
 package cxf.client
 
-import spock.lang.Specification
 import com.grails.cxf.client.CxfClientFaultConverter
 import org.apache.cxf.message.Message
 import org.apache.cxf.message.MessageImpl
-import grails.test.mixin.Mock
+import spock.lang.Specification
 
 /**
  */
-class CxfClientFaultConverterSpec extends Specification{
+class CxfClientFaultConverterSpec extends Specification {
 
     def "attempt to handle a message"() {
         given:
@@ -24,7 +23,7 @@ class CxfClientFaultConverterSpec extends Specification{
         converter
     }
 
-     def "attempt to handle a null message"() {
+    def "attempt to handle a null message"() {
         given:
         CxfClientFaultConverter converter = new CxfClientFaultConverter()
 
