@@ -6,6 +6,7 @@ import groovy.transform.Synchronized
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
+import java.lang.reflect.UndeclaredThrowableException
 import org.apache.commons.logging.LogFactory
 import org.apache.cxf.BusFactory
 import org.apache.cxf.endpoint.Client
@@ -17,7 +18,7 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean
 import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
-import java.lang.reflect.UndeclaredThrowableException
+import java.lang.reflect.InvocationTargetException
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -261,9 +262,15 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
             try {
                 method.invoke(cxfProxy, args)
+            } catch (InvocationTargetException e){
+                if(Log.isErrorEnabled()) { Log.error e.message }
+                throw e.targetException
             } catch (UndeclaredThrowableException e) {
                 if(Log.isErrorEnabled()) { Log.error e.message }
                 throw e.cause
+            } catch (Exception e) {
+                if(Log.isErrorEnabled()) { Log.error e.message }
+                throw e
             }
         }
     }
