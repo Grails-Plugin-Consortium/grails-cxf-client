@@ -17,6 +17,7 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean
 import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
+import java.lang.reflect.UndeclaredThrowableException
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -243,6 +244,14 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             this.clientName = clientInterface.name
         }
 
+        /**
+         * invoke the service method on the proxy
+         * @param proxy the proxy object
+         * @param method method to invoke
+         * @param args any method params
+         * @return response from the method
+         * @throws Throwable any exceptions that occur
+         */
         Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if(!cxfProxy) {
                 String message = "Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize."
@@ -252,9 +261,9 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
             try {
                 method.invoke(cxfProxy, args)
-            } catch (Exception e) {
+            } catch (UndeclaredThrowableException e) {
                 if(Log.isErrorEnabled()) { Log.error e.message }
-                throw new CxfClientException(e)
+                throw e.cause
             }
         }
     }

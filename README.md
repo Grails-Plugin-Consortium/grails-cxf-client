@@ -588,6 +588,12 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 CHANGE LOG
 ---------------
 
+* v1.2.9
+    * Adding better exception handling
+
+* v1.2.8
+    * Ability to set proxyFactoryBindingId if you require different binding such as soap12
+
 * v1.2.7
     * Ability to set allowChunking
     * Ability to specify custom HTTPClientPolicy bean to use for the client (see [demo project][https://github.com/ctoestreich/cxf-client-demo/blob/master/grails-app/conf/spring/resources.groovy] for more details)
