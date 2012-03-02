@@ -263,10 +263,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             try {
                 method.invoke(cxfProxy, args)
             } catch (InvocationTargetException e){
-                if(Log.isErrorEnabled()) { Log.error e.message }
+                if(Log.isErrorEnabled()) { Log.error e.targetException.message }
                 throw e.targetException
             } catch (UndeclaredThrowableException e) {
-                if(Log.isErrorEnabled()) { Log.error e.message }
+                if(Log.isErrorEnabled()) { Log.error e.cause.message }
                 throw e.cause
             } catch (Exception e) {
                 if(Log.isErrorEnabled()) { Log.error e.message }
