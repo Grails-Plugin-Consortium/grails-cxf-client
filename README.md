@@ -12,6 +12,7 @@ CXF CLIENT
 * <a href="#Out">Custom Out Interceptors</a>
 * <a href="#Fault">Custom Out Fault Interceptors</a>
 * <a href="#Custom">Custom Http Client Policy</a>
+* <a href="#Exceptions">Dealing With Exceptions</a>
 * <a href="#Beans">User Client Beans Anywhere</a>
 * <a href="#Demo">Demo Project</a>
 * <a href="#Issues">Issues</a>
@@ -536,6 +537,45 @@ cxf {
 
 Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
 
+<p align="right"><a href="#Exceptions">Top</a></p>
+<a name="Beans"></a>
+DEALING WITH EXCEPTIONS
+---------------
+As of version 1.2.9 of the plugin, I have fixed the issue so your services with checked exceptions defined will not throw them as designed.  Given some service that throws an exception (ComplexContrivedException_Exception in our case) as follows:
+
+```java
+@WebResult(name = "return", targetNamespace = "")
+@RequestWrapper(localName = "complexMethod3", targetNamespace = "http://demo.client.cxf/", className = "cxf.client.demo.complex.ComplexMethod3")
+@WebMethod
+@ResponseWrapper(localName = "complexMethod3Response", targetNamespace = "http://demo.client.cxf/", className = "cxf.client.demo.complex.ComplexMethod3Response")
+public cxf.client.demo.complex.ComplexResponse complexMethod3(
+    @WebParam(name = "request", targetNamespace = "")
+    cxf.client.demo.complex.ComplexRequest request
+) throws ComplexContrivedException_Exception;
+```
+
+the checked exceptions can now be caught in code and dealt with as desired:
+
+```groovy
+try {
+    response1 = complexServiceClient.complexMethod3(request1)
+} catch (ComplexContrivedException_Exception e) {
+    log.error e
+}
+```
+
+In additiona, any general SOAPFaultException thrown can be caught as well.
+
+```groovy
+try {
+    response1 = complexServiceClient.complexMethod3(request1)
+} catch (ComplexContrivedException_Exception e) {
+    log.error e
+} catch (SOAPFaultException e) {
+    log.error e
+}
+```
+
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Beans"></a>
 USING CLIENT BEANS ANYWHERE
@@ -590,6 +630,9 @@ CHANGE LOG
 
 * v1.2.9
     * Adding better exception handling
+    * Checked exceptions will bubble correctly
+    * SOAPFault Exceptions will also bubble correctly
+    * Fixed bug from config reader from 1.2.8
 
 * v1.2.8
     * Ability to set proxyFactoryBindingId if you require different binding such as soap12
