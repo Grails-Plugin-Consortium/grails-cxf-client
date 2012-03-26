@@ -10,6 +10,8 @@ import org.springframework.context.MessageSource
  */
 class DynamicWebServiceClient implements FactoryBean<Object> {
 
+    String wsdlURL
+    String wsdlServiceName
     Class<?> clientInterface
     Boolean enableDefaultLoggingInterceptors
     def clientPolicyMap = [:]
@@ -29,7 +31,9 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
 before setting the clientInterface=${clientInterface} and 
 serviceEndpointAddress=${serviceEndpointAddress} properties""")
         }
-        webServiceClientFactory.getWebServiceClient(clientInterface,
+        webServiceClientFactory.getWebServiceClient(wsdlURL,
+                                                    wsdlServiceName,
+                                                    clientInterface,
                                                     serviceName,
                                                     serviceEndpointAddress,
                                                     enableDefaultLoggingInterceptors,

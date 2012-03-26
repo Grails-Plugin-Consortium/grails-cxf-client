@@ -6,7 +6,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.2.9"
+    def version = "1.2.9a"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -107,7 +107,8 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
                     outList << ref("securityInterceptor${cxfClientName}")
                 }
             }
-
+            wsdlURL = client?.wsdl ?: null
+            wsdlServiceName = client?.wsdlServiceName ?: null
             inInterceptors = inList
             outInterceptors = outList
             outFaultInterceptors = outFaultList
