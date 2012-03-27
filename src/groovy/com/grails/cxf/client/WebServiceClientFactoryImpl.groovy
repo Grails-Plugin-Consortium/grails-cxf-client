@@ -19,6 +19,7 @@ import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import java.lang.reflect.InvocationTargetException
+import javax.xml.namespace.QName
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -35,7 +36,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param serviceEndpointAddress url to use when invoking service
      * @return
      */
-    @Synchronized Object getWebServiceClient(Class<?> clientInterface, String serviceName,
+    @Synchronized Object getWebServiceClient(String wsdlURL, String wsdlServiceName, 
+                                             Class<?> clientInterface, String serviceName,
                                              String serviceEndpointAddress,
                                              Boolean enableDefaultLoggingInterceptors,
                                              Map clientPolicyMap,
@@ -50,7 +52,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(serviceEndpointAddress) {
             try {
                 if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress") }
-                assignCxfProxy(clientInterface, serviceEndpointAddress,
+                assignCxfProxy(wsdlURL, wsdlServiceName, clientInterface, serviceEndpointAddress,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
             } catch (Exception exception) {
@@ -67,7 +69,9 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         if(Log.isDebugEnabled()) { Log.debug("Created service $serviceName, caching reference to allow changing url later.") }
-        def serviceMap = [clientInterface: clientInterface,
+        def serviceMap = [wsdlURL: wsdlURL,
+                wsdlServiceName: wsdlServiceName,
+                clientInterface: clientInterface,
                 outInterceptors: outInterceptors,
                 inInterceptors: inInterceptors,
                 outFaultInterceptors: outFaultInterceptors,
@@ -108,6 +112,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     }
 
     private void assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
+        String wsdlURL = interfaceMap.get(serviceName).wsdlURL
+        String wsdlServiceName = interfaceMap.get(serviceName).wsdlServiceName
         WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
         List outInterceptors = interfaceMap.get(serviceName).outInterceptors
         List inInterceptors = interfaceMap.get(serviceName).inInterceptors
@@ -117,7 +123,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         String proxyFactoryBindingId = interfaceMap.get(serviceName).proxyFactoryBindingId
         Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
         try {
-            assignCxfProxy(clientInterface, serviceEndpointAddress,
+            assignCxfProxy(wsdlURL, wsdlServiceName, clientInterface, serviceEndpointAddress,
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
                            handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
@@ -134,7 +140,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param serviceEndpointAddress url to use when invoking service
      * @param handler ws client invocation handler for the proxy
      */
-    private void assignCxfProxy(Class<?> serviceInterface,
+    private void assignCxfProxy(String wsdlURL, String wsdlServiceName,
+                                Class<?> serviceInterface,
                                 String serviceEndpointAddress,
                                 Boolean enableDefaultLoggingInterceptors,
                                 Map clientPolicyMap,
@@ -144,9 +151,12 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                 List outFaultInterceptors,
                                 HTTPClientPolicy httpClientPolicy,
                                 String proxyFactoryBindingId) {
-        JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
+        JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass:serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
+        if (wsdlURL) {clientProxyFactory.setWsdlURL(wsdlURL)}
+        if (wsdlServiceName) {clientProxyFactory.setServiceName(QName.valueOf(wsdlServiceName))}
+        
         if(proxyFactoryBindingId) {
             clientProxyFactory.bindingId = proxyFactoryBindingId
         }
