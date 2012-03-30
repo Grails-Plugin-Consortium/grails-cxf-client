@@ -3,10 +3,6 @@ package com.grails.cxf.client
 import com.grails.cxf.client.exception.CxfClientException
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import groovy.transform.Synchronized
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
-import java.lang.reflect.UndeclaredThrowableException
 import org.apache.commons.logging.LogFactory
 import org.apache.cxf.BusFactory
 import org.apache.cxf.endpoint.Client
@@ -18,8 +14,9 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean
 import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
-import java.lang.reflect.InvocationTargetException
+
 import javax.xml.namespace.QName
+import java.lang.reflect.*
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -36,7 +33,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param serviceEndpointAddress url to use when invoking service
      * @return
      */
-    @Synchronized Object getWebServiceClient(String wsdlURL, String wsdlServiceName, 
+    @Synchronized Object getWebServiceClient(String wsdlURL, String wsdlServiceName,
                                              Class<?> clientInterface, String serviceName,
                                              String serviceEndpointAddress,
                                              Boolean enableDefaultLoggingInterceptors,
@@ -55,7 +52,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 assignCxfProxy(wsdlURL, wsdlServiceName, clientInterface, serviceEndpointAddress,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
-            } catch (Exception exception) {
+            } catch(Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
                         "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
                 if(Log.isErrorEnabled()) { Log.error(cxfClientException.message, cxfClientException) }
@@ -128,7 +125,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
                            handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
             if(Log.isDebugEnabled()) { Log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
-        } catch (Exception exception) {
+        } catch(Exception exception) {
             handler.cxfProxy = null
             throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
         }
@@ -151,15 +148,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                 List outFaultInterceptors,
                                 HTTPClientPolicy httpClientPolicy,
                                 String proxyFactoryBindingId) {
-        JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass:serviceInterface,
+        JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
-        if (wsdlURL) {clientProxyFactory.setWsdlURL(wsdlURL)}
-        if (wsdlServiceName) {clientProxyFactory.setServiceName(QName.valueOf(wsdlServiceName))}
-        
-        if(proxyFactoryBindingId) {
-            clientProxyFactory.bindingId = proxyFactoryBindingId
-        }
+        if(wsdlURL) {clientProxyFactory.wsdlURL = wsdlURL}
+        if(wsdlServiceName) {clientProxyFactory.serviceName = QName.valueOf(wsdlServiceName)}
+        if(proxyFactoryBindingId) {clientProxyFactory.bindingId = proxyFactoryBindingId}
+
         Object cxfProxy = clientProxyFactory.create()
         addInterceptors(cxfProxy, enableDefaultLoggingInterceptors, clientPolicyMap,
                         outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy)
@@ -272,13 +267,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
             try {
                 method.invoke(cxfProxy, args)
-            } catch (InvocationTargetException e){
+            } catch(InvocationTargetException e) {
                 if(Log.isErrorEnabled()) { Log.error e.targetException.message }
                 throw e.targetException
-            } catch (UndeclaredThrowableException e) {
+            } catch(UndeclaredThrowableException e) {
                 if(Log.isErrorEnabled()) { Log.error e.cause.message }
                 throw e.cause
-            } catch (Exception e) {
+            } catch(Exception e) {
                 if(Log.isErrorEnabled()) { Log.error e.message }
                 throw e
             }

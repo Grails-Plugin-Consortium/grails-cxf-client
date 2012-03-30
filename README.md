@@ -7,6 +7,7 @@ CXF CLIENT
 * <a href="#Script">Wsdl2java Script</a>
 * <a href="#Manually">Wsdl2java Manually</a>
 * <a href="#Plugin">Plugin Configuration</a>
+* <a href="#Mime">Mime Attachments</a>
 * <a href="#Security">Custom Security Interceptors</a>
 * <a href="#In">Custom In Interceptors</a>
 * <a href="#Out">Custom Out Interceptors</a>
@@ -167,6 +168,8 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 allowChunking = [true or false] //optional - defaults to false
                 httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
                 proxyFactoryBindingId = [binding id uri if required] //optional - defaults to null
+                wsdlURL = ??
+                wsdlServiceName = ??
 
                 //wsdl config
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
@@ -200,6 +203,8 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
 <tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
+<tr><td>wsdlURL</td><td>??</td><td>No</td></tr>
+<tr><td>wsdlServiceName</td><td>??</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -276,6 +281,13 @@ class DemoController {
 ```
 
 _**NOTE:** You should type the beans with the cxf port interface type so as to get intellisense auto-completion on the service methods. By simply using def you will not know what methods are available on the soap service without peaking into the wsdl or generated client port interface manually._
+
+
+<p align="right"><a href="#Top">Top</a></p>
+<a name="Mime"></a>
+MIME ATTACHMENTS
+----------------
+
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Security"></a>
@@ -627,6 +639,9 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+
+* v1.3.0
+    * Adding reponse mime attachement support - Thanks to Kyle Dickerson for helping with this issue.
 
 * v1.2.9
     * Adding better exception handling

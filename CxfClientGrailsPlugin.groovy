@@ -6,7 +6,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.2.9a"
+    def version = "1.3.0"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -36,10 +36,10 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     def scm = [url: "https://github.com/ctoestreich/cxf-client"]
 
     def watchedResources = [
-            "file:${getPluginLocation()}/grails-app/services/**/*Service.groovy",
-            "file:${getPluginLocation()}/grails-app/controllers/**/*Controller.groovy",
-            "file:${getPluginLocation()}/grails-app/taglib/**/*TagLib.groovy",
-            "file:${getPluginLocation()}/grails-app/taglib/**/*Job.groovy"
+            "file:${pluginLocation}/grails-app/services/**/*Service.groovy",
+            "file:${pluginLocation}/grails-app/controllers/**/*Controller.groovy",
+            "file:${pluginLocation}/grails-app/taglib/**/*TagLib.groovy",
+            "file:${pluginLocation}/grails-app/taglib/**/*Job.groovy"
     ]
 
     def doWithWebDescriptor = { xml ->
@@ -167,6 +167,6 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
     }
 
     String getPluginLocation() {
-        return getBuildConfig()?.grails?.plugin?.location?.'cxf-client'
+        return buildConfig?.grails?.plugin?.location?.'cxf-client'
     }
 }
