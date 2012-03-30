@@ -2,8 +2,8 @@ ruleset {
 
     description 'CodeNarc RuleSet'
 
-    ruleset( "http://codenarc.sourceforge.net/StarterRuleSet-AllRulesByCategory.groovy.txt" ) {
-
+//    ruleset( "http://codenarc.sourceforge.net/StarterRuleSet-AllRulesByCategory.groovy.txt" ) {
+    ruleset("file:grails-app/conf/codenarc.ruleset.all.groovy.txt") {
         DuplicateNumberLiteral   ( enabled : false )
         DuplicateStringLiteral   ( enabled : false )
         BracesForClass           ( enabled : false )
