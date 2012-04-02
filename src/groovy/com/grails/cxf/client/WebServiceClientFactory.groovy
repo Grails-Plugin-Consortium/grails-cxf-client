@@ -41,4 +41,11 @@ interface WebServiceClientFactory {
 	 * @throws com.grails.cxf.client.exception.UpdateServiceEndpointException If endpoint can not be updated
 	 */
 	void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress) throws UpdateServiceEndpointException
+
+	/**
+	 * Return the endpoint address this service is currently using.
+	 * @param serviceName name of the service
+	 * @return the service's current endpoint address (or null if not found)
+	 */
+	String getServiceEndpointAddress(String serviceName)
 }

@@ -205,6 +205,19 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
     }
+
+	def "create web service client using factory method and retrieve url"() {
+		given:
+		WebServiceClientFactory webServiceClientFactory = new WebServiceClientFactoryImpl()
+		String serviceName = 'testService'
+		String serviceEndpointAddress = 'http://localhost:8080/cxf-client'
+
+		when: "create an initial service"
+		webServiceClientFactory.getWebServiceClient(null, null, test.mock.SimpleServicePortType, serviceName, serviceEndpointAddress, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/")
+
+		then: "can retrieve the service endpoint address"
+		webServiceClientFactory.getServiceEndpointAddress(serviceName) == serviceEndpointAddress
+	}
 }
 
 
