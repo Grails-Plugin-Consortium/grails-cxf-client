@@ -1,4 +1,4 @@
-<a name="Top"></a>  
+<a name="Top"></a>
 
 CXF CLIENT
 ======
