@@ -39,7 +39,7 @@ grails.project.dependency.resolution = {
     }
 
      plugins {
-        test (":spock:0.6-SNAPSHOT") {
+        test (":spock:0.6") {
             export = false
         }
         test (":code-coverage:1.2.5") {
