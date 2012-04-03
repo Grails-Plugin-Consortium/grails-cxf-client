@@ -6,7 +6,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.3.0"
+    def version = "1.3.1"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -99,7 +99,6 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         validateTimeouts(cxfClientName, 'connectionTimeout', connectionTimeout)
         validateTimeouts(cxfClientName, 'receiveTimeout', receiveTimeout)
 
-
         "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
             if(client?.secured || client?.securityInterceptor) {
@@ -109,8 +108,11 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
                     outList << ref("securityInterceptor${cxfClientName}")
                 }
             }
-            wsdlURL = client?.wsdl ?: null
-            wsdlServiceName = client?.wsdlServiceName ?: null
+            //both of these are used for mime attachments only atm.
+            if(client?.wsdlServiceName){
+                wsdlURL = client?.wsdl ?: null
+                wsdlServiceName = client?.wsdlServiceName ?: null
+            }
             inInterceptors = inList
             outInterceptors = outList
             outFaultInterceptors = outFaultList

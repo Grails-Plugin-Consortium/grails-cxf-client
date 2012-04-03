@@ -28,7 +28,7 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.3/projects/cxf-client/plugins/release-1.0.1/src/java" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.3/projects/cxf-client/plugins/release-1.0.1/src/groovy" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.0.3/projects/cxf-client/plugins/spock-0.6-SNAPSHOT" />
+    <content url="file://$USER_HOME$/.grails/2.0.3/projects/cxf-client/plugins/spock-0.6" />
     <content url="file://$USER_HOME$/.grails/2.0.3/projects/cxf-client/plugins/svn-1.0.2">
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.3/projects/cxf-client/plugins/svn-1.0.2/src/groovy" isTestSource="false" />
     </content>
@@ -78,8 +78,8 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sourceforge.cobertura/cobertura/jars/cobertura-1.9.4.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/junit/junit-dep/jars/junit-dep-4.9.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8-SNAPSHOT.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-grails-support/jars/spock-grails-support-0.6-groovy-1.8-SNAPSHOT.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-grails-support/jars/spock-grails-support-0.6-groovy-1.8.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.gmetrics/GMetrics/jars/GMetrics-0.5.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codenarc/CodeNarc/jars/CodeNarc-0.17.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/xerces/xercesImpl/jars/xercesImpl-2.8.1.jar!/" />
@@ -116,11 +116,7 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.maven/maven-ant-tasks/jars/maven-ant-tasks-2.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-frontend-simple-2.3.0-sources.jar!/" />
-          <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-core-2.3.0-sources.jar!/" />
-          <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-ws-security-2.3.0-sources.jar!/" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
