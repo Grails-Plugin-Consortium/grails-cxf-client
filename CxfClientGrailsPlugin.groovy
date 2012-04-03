@@ -16,7 +16,7 @@ class CxfClientGrailsPlugin {
             "grails-app/views/error.gsp",
             "test/**",
             "src/groovy/test/**",
-            "spock-0.6-SNAPSHOT"
+            "spock-0.6"
     ]
 
     def license = "APACHE"
@@ -25,6 +25,8 @@ class CxfClientGrailsPlugin {
     def developers = [
             [name: "Christian Oestreich", email: "acetrike@gmail.com"],
             [name: "Brett Borchardt", email: "bborchardt@gmail.com"],
+            [name: "Laura Helde", email: "laurahelde@gmail.com"],
+            [name: "Kyle Dickerson", email: "kyle.dickerson@gmail.com"],
             [name: "Jordan Howe", email: "jordan.howe@gmail.com"]]
     def title = "Cxf Client - Support for Soap Service Endpoints"
     def description = '''\\
