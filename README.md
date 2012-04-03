@@ -14,6 +14,7 @@ CXF CLIENT
 * <a href="#Custom">Custom Http Client Policy</a>
 * <a href="#Exceptions">Dealing With Exceptions</a>
 * <a href="#Beans">User Client Beans Anywhere</a>
+* <a href="#Endpoints">Retrieving and Updating Endpoints</a>
 * <a href="#Demo">Demo Project</a>
 * <a href="#Issues">Issues</a>
 * <a href="#Change">Change Log</a>
@@ -597,6 +598,28 @@ cxf {
 
 ```groovy
 SimpleServicePortType simpleServiceClient = ApplicationHolder.application.mainContext.getBean("simpleServiceClient")
+```
+
+<p align="right"><a href="#Top">Top</a></p>
+<a name="Endpoints"></a>
+RETRIEVING AND UPDATING ENDPOINTS
+---------------
+The service endpoint address for any given service can be retrieved and updated at runtime using the WebserviceClientFactory interface.
+
+To retrieve an endpoint:
+
+```groovy
+WebserviceClientFactory webserviceClientFactory
+
+String endpointAddress = webserviceClientFactory.getServiceEndpointAddress('simpleServiceClient')
+```
+
+To update an endpoint:
+
+```groovy
+WebserviceClientFactory webserviceClientFactory
+
+webserviceClientFactory.updateServiceEndpointAddress('simpleServiceClient', 'http://www.changeme.com/services/newURL')
 ```
 
 <p align="right"><a href="#Top">Top</a></p>
