@@ -7,17 +7,17 @@ ruleset {
         '''
 
     // rulesets/basic.xml
-    //AssertWithinFinallyBlock
+    AssertWithinFinallyBlock
     AssignmentInConditional
     BigDecimalInstantiation
     BitwiseOperatorInConditional
     BooleanGetBoolean
-    //BrokenNullCheck
+    BrokenNullCheck
     BrokenOddnessCheck
     ClassForName
     ComparisonOfTwoConstants
     ComparisonWithSelf
-    //ConstantAssertExpression
+    ConstantAssertExpression
     ConstantIfExpression
     ConstantTernaryExpression
     DeadCode
@@ -48,13 +48,13 @@ ruleset {
     RemoveAllOnSelf
     ReturnFromFinallyBlock
     ThrowExceptionFromFinallyBlock
-
+    
     // rulesets/braces.xml
     ElseBlockBraces
     ForStatementBraces
     IfStatementBraces
     WhileStatementBraces
-
+    
     // rulesets/concurrency.xml
     BusyWait
     DoubleCheckedLocking
@@ -81,17 +81,17 @@ ruleset {
     VolatileArrayField
     VolatileLongOrDoubleField
     WaitOutsideOfWhileLoop
-
+    
     // rulesets/convention.xml
     ConfusingTernary
     CouldBeElvis
-    //HashtableIsObsolete
+    HashtableIsObsolete
     InvertedIfElse
     LongLiteralWithLowerCaseL
-    //ParameterReassignment
-    //TernaryCouldBeElvis
-    //VectorIsObsolete
-
+    ParameterReassignment
+    TernaryCouldBeElvis
+    VectorIsObsolete
+    
     // rulesets/design.xml
     AbstractClassWithPublicConstructor
     AbstractClassWithoutAbstractMethod
@@ -104,19 +104,19 @@ ruleset {
     EmptyMethodInAbstractClass
     FinalClassWithProtectedMember
     ImplementationAsType
-    //PrivateFieldCouldBeFinal
+    PrivateFieldCouldBeFinal
     PublicInstanceField
     ReturnsNullInsteadOfEmptyArray
     ReturnsNullInsteadOfEmptyCollection
     SimpleDateFormatMissingLocale
     StatelessSingleton
-
+    
     // rulesets/dry.xml
     DuplicateListLiteral
     DuplicateMapLiteral
     DuplicateNumberLiteral
     DuplicateStringLiteral
-
+    
     // rulesets/exceptions.xml
     CatchArrayIndexOutOfBoundsException
     CatchError
@@ -136,7 +136,7 @@ ruleset {
     ThrowNullPointerException
     ThrowRuntimeException
     ThrowThrowable
-
+    
     // rulesets/formatting.xml
     BracesForClass
     BracesForForLoop
@@ -145,7 +145,7 @@ ruleset {
     BracesForTryCatchFinally
     ClassJavadoc
     LineLength
-
+    
     // rulesets/generic.xml
     IllegalClassReference
     IllegalPackageReference
@@ -153,7 +153,7 @@ ruleset {
     RequiredRegex
     RequiredString
     StatelessClass
-
+    
     // rulesets/grails.xml
     GrailsDomainHasEquals
     GrailsDomainHasToString
@@ -161,7 +161,7 @@ ruleset {
     GrailsServletContextReference
     GrailsSessionReference
     GrailsStatelessService
-
+    
     // rulesets/groovyism.xml
     AssignCollectionSort
     AssignCollectionUnique
@@ -194,7 +194,7 @@ ruleset {
     GroovyLangImmutable
     UseCollectMany
     UseCollectNested
-
+    
     // rulesets/imports.xml
     DuplicateImport
     ImportFromSamePackage
@@ -202,13 +202,13 @@ ruleset {
     MisorderedStaticImports
     UnnecessaryGroovyImport
     UnusedImport
-
+    
     // rulesets/jdbc.xml
     DirectConnectionManagement
     JdbcConnectionReference
     JdbcResultSetReference
     JdbcStatementReference
-
+    
     // rulesets/junit.xml
     ChainedTest
     CoupledTestCase
@@ -230,7 +230,7 @@ ruleset {
     UseAssertSameInsteadOfAssertTrue
     UseAssertTrueInsteadOfAssertEquals
     UseAssertTrueInsteadOfNegation
-
+    
     // rulesets/logging.xml
     LoggerForDifferentClass
     LoggerWithWrongModifiers
@@ -240,7 +240,7 @@ ruleset {
     Println
     SystemErrPrint
     SystemOutPrint
-
+    
     // rulesets/naming.xml
     AbstractClassName
     ClassName
@@ -254,7 +254,7 @@ ruleset {
     ParameterName
     PropertyName
     VariableName
-
+    
     // rulesets/security.xml
     FileCreateTempFile
     InsecureRandom
@@ -265,21 +265,21 @@ ruleset {
     PublicFinalizeMethod
     SystemExit
     UnsafeArrayDeclaration
-
+    
     // rulesets/serialization.xml
     SerialPersistentFields
     SerialVersionUID
     SerializableClassMustDefineSerialVersionUID
-
+    
     // rulesets/size.xml
     AbcComplexity
     ClassSize
-    //CrapMetric
+    CrapMetric
     CyclomaticComplexity
     MethodCount
     MethodSize
     NestedBlockDepth
-
+    
     // rulesets/unnecessary.xml
     AddEmptyString
     ConsecutiveLiteralAppends
@@ -324,7 +324,7 @@ ruleset {
     UnnecessarySubstring
     UnnecessaryTernaryExpression
     UnnecessaryTransientModifier
-
+    
     // rulesets/unused.xml
     UnusedArray
     UnusedMethodParameter
@@ -333,4 +333,6 @@ ruleset {
     UnusedPrivateMethod
     UnusedPrivateMethodParameter
     UnusedVariable
+    
+    
 }
