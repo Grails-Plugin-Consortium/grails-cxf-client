@@ -111,6 +111,11 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
     }
 
+	String getServiceEndpointAddress(String serviceName) {
+		def cxfProxy = interfaceMap[serviceName]?.handler?.cxfProxy
+		cxfProxy ? ClientProxy.getClient(cxfProxy)?.conduit?.target?.address?.value : null
+	}
+
     private void assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
         String wsdlURL = interfaceMap.get(serviceName).wsdlURL
         String wsdlServiceName = interfaceMap.get(serviceName).wsdlServiceName
