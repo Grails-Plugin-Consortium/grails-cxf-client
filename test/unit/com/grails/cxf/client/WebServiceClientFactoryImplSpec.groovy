@@ -206,6 +206,56 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
     }
 
+    def "create web service client using factory method and change url on empty name"() {
+        given:
+        WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
+
+        when: "we create an initial service"
+        Object webServiceClient = factory.getWebServiceClient(null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/")
+
+        then: "we should have some stuff hooked up here"
+        webServiceClient != null
+        factory.interfaceMap.containsKey("testService")
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").inInterceptors instanceof List
+        factory.interfaceMap.get("testService").outInterceptors instanceof List
+        factory.interfaceMap.get("testService").outFaultInterceptors instanceof List
+        factory.interfaceMap.get("testService").inInterceptors.size() > 0
+        factory.interfaceMap.get("testService").outInterceptors.size() > 0
+        factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
+        factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
+        factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
+        !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
+        !factory.interfaceMap.get("testService").httpClientPolicy
+        factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
+        factory.interfaceMap.get("testService").handler != null
+        factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
+
+        when: "change the url to something new using invalid name"
+        factory.updateServiceEndpointAddress('', "http://localhost:8080/cxf-client/new")
+
+        then: "all things should still remain in cache and the url should not have changed and exception should be thrown"
+        UpdateServiceEndpointException exception = thrown()
+        exception.message.contains("Must provide a service name")
+        !factory.interfaceMap.containsKey("unknownService")
+        webServiceClient != null
+        factory.interfaceMap.containsKey("testService")
+        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").inInterceptors instanceof List
+        factory.interfaceMap.get("testService").outInterceptors instanceof List
+        factory.interfaceMap.get("testService").outFaultInterceptors instanceof List
+        factory.interfaceMap.get("testService").inInterceptors.size() > 0
+        factory.interfaceMap.get("testService").outInterceptors.size() > 0
+        factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
+        factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
+        factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
+        !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
+        !factory.interfaceMap.get("testService").httpClientPolicy
+        factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
+        factory.interfaceMap.get("testService").handler != null
+        factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
+    }
+
 	def "create web service client using factory method and retrieve url"() {
 		given:
 		WebServiceClientFactory webServiceClientFactory = new WebServiceClientFactoryImpl()

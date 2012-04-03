@@ -26,9 +26,9 @@ class CxfClientGrailsPlugin {
             [name: "Christian Oestreich", email: "acetrike@gmail.com"],
             [name: "Brett Borchardt", email: "bborchardt@gmail.com"],
             [name: "Jordan Howe", email: "jordan.howe@gmail.com"]]
-    def title = "Cxf Client - Support for CXF and JAXB Soap Clients"
+    def title = "Cxf Client - Support for Soap Service Endpoints"
     def description = '''\\
-Used for easily integrating existing or new cxf/jaxb web service client code with soap services.  Also provides wsdl2java grails target to easily generate code into srv/java from configured cxf clients.
+Used for easily calling soap web services.  Provides wsdl2java grails target to easily generate code into src/java from configured cxf clients.  Ability to dynamically update endpoint at runtime.
 '''
 
     // URL to the plugin's documentation
@@ -152,8 +152,22 @@ Used for easily integrating existing or new cxf/jaxb web service client code wit
         // TODO Implement post initialization spring config (optional)
     }
 
+    //todo: add and test the onchange registration for this
     def onChange = { event ->
-
+//        if (event.source) {
+//            def serviceClass = application.addServiceClass(event.source)
+//            def serviceName = "${serviceClass.propertyName}"
+//            def beans = beans {
+//                "$serviceName"(serviceClass.getClazz()) { bean ->
+//                    bean.autowire =  true
+//                }
+//            }
+//            if (event.ctx) {
+//                event.ctx.registerBeanDefinition(
+//                        serviceName,
+//                        beans.getBeanDefinition(serviceName))
+//            }
+//        }
     }
 
     def onConfigChange = { event ->

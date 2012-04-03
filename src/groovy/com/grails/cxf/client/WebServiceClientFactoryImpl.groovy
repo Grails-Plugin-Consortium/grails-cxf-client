@@ -95,7 +95,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
 
         if(!serviceName || !interfaceMap.containsKey(serviceName)) {
-            throw new UpdateServiceEndpointException('Can not update address for service. Must provide a service name.')
+            throw new UpdateServiceEndpointException("Can not update address for service $serviceName. Must provide a service name.")
         }
 
         Class<?> clientInterface = interfaceMap.get(serviceName).clientInterface
@@ -105,6 +105,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             if(Log.isDebugEnabled()) {
                 Log.debug("Unable to find existing client proxy matching name ${serviceName}")
             }
+            throw new UpdateServiceEndpointException("Unable to find existing client proxy matching name ${serviceName}")
         }
     }
 

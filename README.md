@@ -204,8 +204,8 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
 <tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
-<tr><td>wsdlURL</td><td>??</td><td>No</td></tr>
-<tr><td>wsdlServiceName</td><td>??</td><td>No</td></tr>
+<tr><td>wsdlURL</td><td>Url that will be passed into JaxWsProxyFactoryBean to help resolve mime attachements</td><td>No</td></tr>
+<tr><td>wsdlServiceName</td><td>Service name that will be passed into JaxWsProxyFactoryBean to help resolve mime attachements</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -288,7 +288,7 @@ _**NOTE:** You should type the beans with the cxf port interface type so as to g
 <a name="Mime"></a>
 MIME ATTACHMENTS
 ----------------
-
+Functionality was recently added by Kyle Dickerson to support mime type attachements in a response.  To do this you will need to set both the _wsdlURL_ and _wsdlServiceName_ properties.  This is done so that cxf will be able to resolve correctly the attachment data against the wsdl.  If you fail to set these you may cause an IndexOutOfBounds thrown from cxf.
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Security"></a>
@@ -618,7 +618,13 @@ RETRIEVING AND UPDATING ENDPOINTS
 ---------------
 The service endpoint address for any given service can be retrieved and updated at runtime using the WebserviceClientFactory interface.
 
-To retrieve an endpoint:
+I have synchronized the access to update address method to ensure thread safe access to the underlying service map.  The method signature is as follows:
+
+```groovy
+@Synchronized void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress) throws UpdateServiceEndpointException
+```
+
+To retrieve an endpoint via code:
 
 ```groovy
 WebserviceClientFactory webserviceClientFactory
@@ -633,6 +639,8 @@ WebserviceClientFactory webserviceClientFactory
 
 webserviceClientFactory.updateServiceEndpointAddress('simpleServiceClient', 'http://www.changeme.com/services/newURL')
 ```
+
+If no service endpoint is found matching the `serviceName` or if an empty name is passed, an UpdateServiceEndpointException will be thrown.  This was done to give concrete feedback of an endpoint update failure.
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Demo"></a>
@@ -664,6 +672,7 @@ CHANGE LOG
 ---------------
 
 * v1.3.0
+    * Adding ability to update endpoint during runtime if needed - Thanks to Laura Helde for finalizing this work.
     * Adding reponse mime attachement support - Thanks to Kyle Dickerson for helping with this issue.
 
 * v1.2.9
@@ -687,14 +696,15 @@ CHANGE LOG
 FUTURE REVISIONS
 ---------------
 
-* Ability to dynamically reload endpoint url at runtime
+Currently taking submissions for improvements.
+
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="License"></a>
 LICENSE
 ---------------
 
-Copyright 2011 Christian Oestreich
+Copyright 2012 Christian Oestreich
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

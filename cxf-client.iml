@@ -30,6 +30,14 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/groovy" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/domain" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/taglib" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
       <excludeFolder url="file://$MODULE_DIR$/web-app/plugins" />
@@ -38,17 +46,53 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (cxf-client)">
-        <CLASSES />
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/xalan/xalan/jars/xalan-2.7.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-ws-security/jars/cxf-rt-ws-security-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/joda-time/joda-time/jars/joda-time-1.6.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.opensaml/xmltooling/jars/xmltooling-1.3.2-1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.opensaml/openws/jars/openws-1.4.2-1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.opensaml/opensaml/jars/opensaml-2.5.1-1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.santuario/xmlsec/bundles/xmlsec-1.4.6.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.ws.security/wss4j/bundles/wss4j-1.6.4.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.jettison/jettison/bundles/jettison-1.3.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-transports-common/jars/cxf-rt-transports-common-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-transports-http/jars/cxf-rt-transports-http-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.ws.rs/jsr311-api/jars/jsr311-api-1.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-frontend-jaxrs/jars/cxf-rt-frontend-jaxrs-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-ws-addr/jars/cxf-rt-ws-addr-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-frontend-simple/jars/cxf-rt-frontend-simple-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-bindings-xml/jars/cxf-rt-bindings-xml-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-databinding-jaxb/jars/cxf-rt-databinding-jaxb-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-tools-common/jars/cxf-tools-common-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-bindings-soap/jars/cxf-rt-bindings-soap-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.geronimo.specs/geronimo-javamail_1.4_spec/bundles/geronimo-javamail_1.4_spec-1.7.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.sun.xml.bind/jaxb-impl/jars/jaxb-impl-2.1.13.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-core/jars/cxf-rt-core-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.woodstox/stax2-api/jars/stax2-api-3.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.woodstox/woodstox-core-asl/jars/woodstox-core-asl-4.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/wsdl4j/wsdl4j/jars/wsdl4j-1.6.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.neethi/neethi/bundles/neethi-3.0.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.ws.xmlschema/xmlschema-core/bundles/xmlschema-core-2.0.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-common-utilities/jars/cxf-common-utilities-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-api/jars/cxf-api-2.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/asm/asm/jars/asm-3.3.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-frontend-jaxws/jars/cxf-rt-frontend-jaxws-2.5.2.jar!/" />
+        </CLASSES>
         <JAVADOC />
         <SOURCES>
           <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-frontend-simple-2.3.0-sources.jar!/" />
           <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-core-2.3.0-sources.jar!/" />
           <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-ws-security-2.3.0-sources.jar!/" />
         </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="grails-2.0.0" level="application" />
     <orderEntry type="module" module-name="cxf-client-grailsPlugins" />
+    <orderEntry type="library" name="grails-2.0.3" level="application" />
   </component>
 </module>
 
