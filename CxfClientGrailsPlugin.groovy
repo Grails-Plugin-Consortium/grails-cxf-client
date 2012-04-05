@@ -13,6 +13,7 @@ class CxfClientGrailsPlugin {
     def dependsOn = [:]
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
+            "grails-app/conf/codenarc*.*",
             "grails-app/views/error.gsp",
             "test/**",
             "src/groovy/test/**",
