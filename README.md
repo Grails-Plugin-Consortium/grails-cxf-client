@@ -203,7 +203,8 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
 <tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
-<tr><td>wsdlServiceName</td><td>Service name that will be passed into JaxWsProxyFactoryBean to help resolve mime attachements</td><td>No</td></tr>
+<tr><td>wsdl</td><td>Location of the wsdl either locally or a url (must be available at runtime).  Will be passed into JaxWsProxyFactoryBean.  WSDL will be loaded to handle things that cannot be captured in Java classes via wsdl2java (like MIME attachments). Requires defining _wsdlServiceName_. (default: null)</td><td>No</td></tr>
+<tr><td>wsdlServiceName</td><td>The QName of the service you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  Only needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLService') (default: null)</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -286,7 +287,7 @@ _**NOTE:** You should type the beans with the cxf port interface type so as to g
 <a name="Mime"></a>
 MIME ATTACHMENTS
 ----------------
-Functionality was recently added by Kyle Dickerson to support mime type attachements in a response.  To do this you will need to set both the _wsdlURL_ and _wsdlServiceName_ properties.  This is done so that cxf will be able to resolve correctly the attachment data against the wsdl.  If you fail to set these you may cause an IndexOutOfBounds thrown from cxf.
+Functionality was recently added by Kyle Dickerson to support mime type attachements in a response.  To do this you will need to set both the _wsdl_ and _wsdlServiceName_ properties.  This is done so that cxf will be able to resolve correctly the attachment data against the wsdl.  If you fail to set these you may cause an IndexOutOfBounds thrown from cxf.
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Security"></a>
