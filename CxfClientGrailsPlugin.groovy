@@ -6,7 +6,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.3.1"
+    def version = "1.3.1a"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -113,6 +113,9 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
             if(client?.wsdlServiceName){
                 wsdlURL = client?.wsdl ?: null
                 wsdlServiceName = client?.wsdlServiceName ?: null
+            }
+            if(client?.wsdlEndpointName){
+                wsdlEndpointName = client?.wsdlEndpointName ?: null
             }
             inInterceptors = inList
             outInterceptors = outList

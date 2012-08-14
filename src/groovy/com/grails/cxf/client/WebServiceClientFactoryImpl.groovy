@@ -33,7 +33,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param serviceEndpointAddress url to use when invoking service
      * @return
      */
-    @Synchronized Object getWebServiceClient(String wsdlURL, String wsdlServiceName,
+    @Synchronized Object getWebServiceClient(String wsdlURL, String wsdlServiceName, String wsdlEndpointName,
                                              Class<?> clientInterface, String serviceName,
                                              String serviceEndpointAddress,
                                              Boolean enableDefaultLoggingInterceptors,
@@ -49,7 +49,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(serviceEndpointAddress) {
             try {
                 if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress") }
-                assignCxfProxy(wsdlURL, wsdlServiceName, clientInterface, serviceEndpointAddress,
+                assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
             } catch(Exception exception) {
@@ -68,6 +68,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(Log.isDebugEnabled()) { Log.debug("Created service $serviceName, caching reference to allow changing url later.") }
         def serviceMap = [wsdlURL: wsdlURL,
                 wsdlServiceName: wsdlServiceName,
+                wsdlEndpointName: wsdlEndpointName,
                 clientInterface: clientInterface,
                 outInterceptors: outInterceptors,
                 inInterceptors: inInterceptors,
@@ -117,6 +118,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private void assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
         String wsdlURL = interfaceMap.get(serviceName).wsdlURL
         String wsdlServiceName = interfaceMap.get(serviceName).wsdlServiceName
+        String wsdlEndpointName = interfacMap.get(serviceName).wsdlEndpointName
         WSClientInvocationHandler handler = interfaceMap.get(serviceName).handler
         List outInterceptors = interfaceMap.get(serviceName).outInterceptors
         List inInterceptors = interfaceMap.get(serviceName).inInterceptors
@@ -126,7 +128,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         String proxyFactoryBindingId = interfaceMap.get(serviceName).proxyFactoryBindingId
         Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
         try {
-            assignCxfProxy(wsdlURL, wsdlServiceName, clientInterface, serviceEndpointAddress,
+            assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
                            handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
@@ -144,6 +146,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param handler ws client invocation handler for the proxy
      */
     private void assignCxfProxy(String wsdlURL, String wsdlServiceName,
+                                String wsdlEndpointName,
                                 Class<?> serviceInterface,
                                 String serviceEndpointAddress,
                                 Boolean enableDefaultLoggingInterceptors,
@@ -159,6 +162,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                                                              bus: BusFactory.defaultBus)
         if(wsdlURL) {clientProxyFactory.wsdlURL = wsdlURL}
         if(wsdlServiceName) {clientProxyFactory.serviceName = QName.valueOf(wsdlServiceName)}
+        if(wsdlEndpointName) {clientProxyFactory.endpointName = QName.valueOf(wsdlEndpointName)}
         if(proxyFactoryBindingId) {clientProxyFactory.bindingId = proxyFactoryBindingId}
 
         Object cxfProxy = clientProxyFactory.create()
