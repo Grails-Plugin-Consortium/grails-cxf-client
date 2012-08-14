@@ -23,7 +23,10 @@ interface WebServiceClientFactory {
      * @return The web service client.  The returned object will proxy the clientInterface (allowing it
      *         to be injected into other classes as the interface).
      */
-    Object getWebServiceClient(String wsdlURL, String wsdlServiceName, Class<?> clientInterface,
+    Object getWebServiceClient(String wsdlURL, 
+                               String wsdlServiceName, 
+                               String wsdlEndpointName, 
+                               Class<?> clientInterface,
                                String serviceName,
                                String serviceEndpointAddress,
                                Boolean enableDefaultLoggingInterceptors,

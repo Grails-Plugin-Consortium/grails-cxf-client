@@ -114,6 +114,9 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
                 wsdlURL = client?.wsdl ?: null
                 wsdlServiceName = client?.wsdlServiceName ?: null
             }
+            if(client?.wsdlEndpointName){
+                wsdlEndpointName = client?.wsdlEndpointName ?: null
+            }
             inInterceptors = inList
             outInterceptors = outList
             outFaultInterceptors = outFaultList

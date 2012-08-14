@@ -170,6 +170,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
                 proxyFactoryBindingId = [binding id uri if required] //optional - defaults to null
                 wsdlServiceName = [set to enable mime type mapping] //optional - defaults to null
+                wsdlEndpointName = [may be needed for correct wsdl initialization] //optional - defaults to null
 
                 //wsdl config
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
@@ -204,7 +205,8 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
 <tr><td>wsdl</td><td>Location of the wsdl either locally or a url (must be available at runtime).  Will be passed into JaxWsProxyFactoryBean.  WSDL will be loaded to handle things that cannot be captured in Java classes via wsdl2java (like MIME attachments). Requires defining _wsdlServiceName_. (default: null)</td><td>No</td></tr>
-<tr><td>wsdlServiceName</td><td>The QName of the service you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  Only needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLService') (default: null)</td><td>No</td></tr>
+<tr><td>wsdlServiceName</td><td>The QName of the service you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  Only needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLServicePorts') (default: null)</td><td>No</td></tr>
+<tr><td>wsdlEndpointName</td><td>The QName of the endpoint/port in the WSDL you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  May be needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLServicePort') (default: null)</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -287,7 +289,7 @@ _**NOTE:** You should type the beans with the cxf port interface type so as to g
 <a name="Mime"></a>
 MIME ATTACHMENTS
 ----------------
-Functionality was recently added by Kyle Dickerson to support mime type attachements in a response.  To do this you will need to set both the _wsdl_ and _wsdlServiceName_ properties.  This is done so that cxf will be able to resolve correctly the attachment data against the wsdl.  If you fail to set these you may cause an IndexOutOfBounds thrown from cxf.
+Functionality was recently added by Kyle Dickerson to support mime type attachements in a response.  To do this you will need to set both the _wsdl_ and _wsdlServiceName_ properties.  This is done so that cxf will be able to resolve correctly the attachment data against the wsdl.  If you fail to set these you may cause an IndexOutOfBounds thrown from cxf.  You may need to define _wsdlEndpointName_ as well.
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Security"></a>
