@@ -12,6 +12,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
 
     String wsdlURL
     String wsdlServiceName
+    String wsdlEndpointName
     Class<?> clientInterface
     Boolean enableDefaultLoggingInterceptors
     def clientPolicyMap = [:]
@@ -33,6 +34,7 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
         }
         webServiceClientFactory.getWebServiceClient(wsdlURL,
                                                     wsdlServiceName,
+                                                    wsdlEndpointName,
                                                     clientInterface,
                                                     serviceName,
                                                     serviceEndpointAddress,
