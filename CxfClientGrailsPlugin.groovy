@@ -6,17 +6,31 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.3.1a"
+    def version = "1.4.0"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
     def dependsOn = [:]
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            "grails-app/conf/codenarc*.*",
-            "grails-app/views/error.gsp",
-            "test/**",
-            "src/groovy/test/**",
+            'grails-app/conf/hibernate',
+            'grails-app/conf/spring',
+            'grails-app/conf/DataSource.groovy',
+            'grails-app/conf/UrlMappings.groovy',
+            'grails-app/conf/codenarc.groovy',
+            'grails-app/conf/codenarc.ruleset.all.groovy.txt',
+            'grails-app/controllers/**',
+            'grails-app/domain/**',
+            'grails-app/endpoints/**',
+            'grails-app/i18n/**',
+            'grails-app/services/**',
+            'grails-app/taglib/**',
+            'grails-app/utils/**',
+            'grails-app/views/**',
+            'lib/**',
+            'target/**',
+            'web-app/**',
+            'codenarc.properties',
             "spock-0.6"
     ]
 

@@ -1,53 +1,135 @@
+grails.project.work.dir = "target"
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
-//grails.project.war.file = "target/${appName}-${appVersion}.war"
+
 grails.project.dependency.resolution = {
-    // inherit Grails' default dependencies
-    inherits("global") {
-        // uncomment to disable ehcache
-        // excludes 'ehcache'
-    }
-    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+
+    def exportLibs = { export: false }
+    def excludeConflicting = { excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis' }
+
+    def cxfGroup = 'org.apache.cxf'
+    def cxfVersion = '2.6.1'
+
+    def pluginsGroup = 'org.grails.plugins'
+    def grailsVersion = '2.1.0'
+
+    inherits("global") {}
+
+    log "warn"
+
     repositories {
         grailsPlugins()
         grailsHome()
         grailsCentral()
-
-        // uncomment the below to enable remote dependency resolution
-        // from public Maven repositories
-        //mavenLocal()
         mavenCentral()
-        //mavenRepo "http://snapshots.repository.codehaus.org"
-        //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
-        //mavenRepo "http://repository.jboss.com/maven2/"
-    }
-    dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-        compile('org.apache.cxf:cxf-rt-frontend-jaxws:2.5.2') {
-            excludes 'spring-web'
-        }
-        compile('org.apache.cxf:cxf-rt-frontend-jaxrs:2.5.2') {
-            excludes 'xmlbeans', 'spring-web', 'spring-core'
-        }
-        compile('org.apache.ws.security:wss4j:1.6.4')
-        compile('org.apache.cxf:cxf-rt-ws-security:2.5.2') {
-            excludes 'spring-web'
-        }
-        // runtime 'mysql:mysql-connector-java:5.1.13'
     }
 
-     plugins {
-        test (":spock:0.6") {
-            export = false
-        }
-        test (":code-coverage:1.2.5") {
-            export = false
-        }
-        test (":codenarc:0.17") {
-            export = false
-        }
+    dependencies {
+
+        build name: 'commons-cli',
+              version: '1.2',
+              group: 'commons-cli'
+
+        /* Dependencies for the Wsdl To Java script ***************************/
+        build name: 'cxf-tools-wsdlto-core',
+              version: cxfVersion,
+              group: cxfGroup,
+              excludeConflicting
+
+        build name: 'cxf-tools-wsdlto-frontend-jaxws',
+              version: cxfVersion,
+              group: cxfGroup,
+              excludeConflicting
+
+        build name: 'cxf-tools-wsdlto-databinding-jaxb',
+              version: cxfVersion,
+              group: cxfGroup,
+              excludeConflicting
+
+        /* Dependencies for the Cxf Runtime ***********************************/
+        compile name: 'cxf-rt-frontend-jaxws',
+                version: cxfVersion,
+                group: cxfGroup,
+                excludeConflicting
+
+        compile name: 'cxf-rt-frontend-jaxrs',
+                version: cxfVersion,
+                group: cxfGroup,
+                excludeConflicting
+
+        compile name: 'cxf-rt-ws-security',
+                version: cxfVersion,
+                group: cxfGroup,
+                excludeConflicting
+
+        compile name: 'wss4j',
+                version: '1.6.6',
+                group: 'org.apache.ws.security',
+                excludeConflicting
+
+        /* Some Testing Help **************************************************/
+
+        test name: 'geb-spock',
+             version: '0.7.2',
+             group: 'org.codehaus.geb',
+             exportLibs
+
+        test name: 'selenium-htmlunit-driver',
+             version: '2.20.0',
+             group: 'org.seleniumhq.selenium', {
+                    with exportLibs
+                    with excludeConflicting
+                }
+
+        test name: 'selenium-chrome-driver',
+             version: '2.20.0',
+             group: 'org.seleniumhq.selenium',
+             exportLibs
+    }
+
+    plugins {
+        /* Grails required plugins ********************************************/
+        runtime name: 'hibernate',
+                version: grailsVersion,
+                group: pluginsGroup,
+                exportLibs
+
+        runtime name: 'tomcat',
+                version: grailsVersion,
+                group: pluginsGroup,
+                exportLibs
+
+        compile name: 'release',
+                version: '2.0.4',
+                group: pluginsGroup,
+                exportLibs
+
+        /* Spock and Geb for Testing ******************************************/
+        test name: 'spock',
+             version: '0.6',
+             group: pluginsGroup,
+             exportLibs
+
+        test name: 'geb',
+             version: '0.7.2',
+             group: pluginsGroup,
+             exportLibs
+
+        test name: 'wslite',
+             version: '0.7.1.0',
+             group: pluginsGroup,
+             exportLibs
+
+        test name: 'code-coverage',
+             version: '1.2.5',
+             group: pluginsGroup,
+             exportLibs
+
+        test name: 'codenarc',
+             version: '0.17',
+             group: pluginsGroup,
+             exportLibs
     }
 }
 
