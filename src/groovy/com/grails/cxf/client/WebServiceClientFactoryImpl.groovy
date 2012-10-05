@@ -3,7 +3,7 @@ package com.grails.cxf.client
 import com.grails.cxf.client.exception.CxfClientException
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import groovy.transform.Synchronized
-import org.apache.commons.logging.LogFactory
+import groovy.util.logging.Commons
 import org.apache.cxf.BusFactory
 import org.apache.cxf.endpoint.Client
 import org.apache.cxf.frontend.ClientProxy
@@ -18,9 +18,9 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import javax.xml.namespace.QName
 import java.lang.reflect.*
 
+@Commons
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
-    private static final Log = LogFactory.getLog(this)
     private static final int ZERO = 0
     private static final int RECEIVE_TIMEOUT = 60000
     private static final int CONNECTION_TIMEOUT = 30000
@@ -48,24 +48,24 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
         if(serviceEndpointAddress) {
             try {
-                if(Log.isDebugEnabled()) { Log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress") }
+                log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress")
                 assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
             } catch(Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
                         "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
-                if(Log.isErrorEnabled()) { Log.error(cxfClientException.message, cxfClientException) }
+                log.error(cxfClientException.message, cxfClientException)
                 throw cxfClientException
             }
 
         } else {
             CxfClientException cxfClientException = new CxfClientException("Web service client failed to initialize with url: $serviceEndpointAddress")
-            if(Log.isErrorEnabled()) { Log.error(cxfClientException.message, cxfClientException) }
+            log.error(cxfClientException.message, cxfClientException)
             throw cxfClientException
         }
 
-        if(Log.isDebugEnabled()) { Log.debug("Created service $serviceName, caching reference to allow changing url later.") }
+        log.debug("Created service $serviceName, caching reference to allow changing url later.")
         def serviceMap = [wsdlURL: wsdlURL,
                 wsdlServiceName: wsdlServiceName,
                 wsdlEndpointName: wsdlEndpointName,
@@ -91,9 +91,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      */
     @Synchronized void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress)
     throws UpdateServiceEndpointException {
-        if(Log.isDebugEnabled()) {
-            Log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
-        }
+        log.debug("Changing the service $serviceName endpoint address to $serviceEndpointAddress")
 
         if(!serviceName || !interfaceMap.containsKey(serviceName)) {
             throw new UpdateServiceEndpointException("Can not update address for service $serviceName. Must provide a service name.")
@@ -103,17 +101,15 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         if(clientInterface) {
             assignCxfProxyFromInterfaceMap(serviceName, clientInterface, serviceEndpointAddress)
         } else {
-            if(Log.isDebugEnabled()) {
-                Log.debug("Unable to find existing client proxy matching name ${serviceName}")
-            }
+            log.debug("Unable to find existing client proxy matching name ${serviceName}")
             throw new UpdateServiceEndpointException("Unable to find existing client proxy matching name ${serviceName}")
         }
     }
 
-	String getServiceEndpointAddress(String serviceName) {
-		def cxfProxy = interfaceMap[serviceName]?.handler?.cxfProxy
-		cxfProxy ? ClientProxy.getClient(cxfProxy)?.conduit?.target?.address?.value : null
-	}
+    String getServiceEndpointAddress(String serviceName) {
+        def cxfProxy = interfaceMap[serviceName]?.handler?.cxfProxy
+        cxfProxy ? ClientProxy.getClient(cxfProxy)?.conduit?.target?.address?.value : null
+    }
 
     private void assignCxfProxyFromInterfaceMap(String serviceName, Class<?> clientInterface, String serviceEndpointAddress) {
         String wsdlURL = interfaceMap.get(serviceName).wsdlURL
@@ -132,10 +128,12 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
                            handler, outInterceptors, inInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId)
-            if(Log.isDebugEnabled()) { Log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress") }
+            log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
         } catch(Exception exception) {
             handler.cxfProxy = null
-            throw new UpdateServiceEndpointException("Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible.", exception)
+            def message = "Could not create web service client for Service Endpoint Address at $serviceEndpointAddress.  Make sure Endpoint URL exists and is accessible."
+            log.error exception
+            throw new UpdateServiceEndpointException(message, exception)
         }
     }
 
@@ -271,20 +269,20 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if(!cxfProxy) {
                 String message = "Error invoking method ${method.name} on interface $clientName. Proxy must have failed to initialize."
-                if(Log.isErrorEnabled()) { Log.error message }
+                log.error message
                 throw new CxfClientException(message)
             }
 
             try {
                 method.invoke(cxfProxy, args)
             } catch(InvocationTargetException e) {
-                if(Log.isErrorEnabled()) { Log.error e.targetException.message }
+                log.error e.targetException.message
                 throw e.targetException
             } catch(UndeclaredThrowableException e) {
-                if(Log.isErrorEnabled()) { Log.error e.cause.message }
+                log.error e.cause.message
                 throw e.cause
             } catch(Exception e) {
-                if(Log.isErrorEnabled()) { Log.error e.message }
+                log.error e.message
                 throw e
             }
         }
