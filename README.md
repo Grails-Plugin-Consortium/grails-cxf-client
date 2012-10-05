@@ -35,24 +35,12 @@ The Cxf Client plugin will allow you to use existing (or new) apache cxf wsdl2ja
 WSDL2JAVA SCRIPT
 ---------------
 
-This plugin provides a convenient way to run wsdl2java as a grails run target in your project.  You must have apache cxf installed on your machine somewhere for this to work correctly.
+This plugin provides a convenient way to run wsdl2java as a grails run target in your project.
 
-I have mine installed in c:\apps\apache-cxf-2.4.2 so I will add the [installDir] config setting to my configuration node to tell the script where to find the apache cxf classes to put on the classpath.
-
-```groovy
-cxf {
-    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
-    client {
-        ...
-    }
-}
-```
-
-After I have done that I need to point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
+First point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
 
 ```groovy
 cxf {
-    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
     client {
         simpleServiceClient {
             //used in wsdl2java
@@ -83,7 +71,6 @@ Starting with version 1.2.4, you have the ability to provide wsdl2java custom ar
 
 ```groovy
 cxf {
-    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
     client {
         simpleServiceClient {
             //used in wsdl2java
@@ -103,9 +90,9 @@ cxf {
 }
 ```
 
-Note: The [installDir] and [wsdl] nodes are only used by the wsdl2java target and are not used in wiring the beans at runtime.
+Note: The [wsdl] node is only used by the wsdl2java target and are not used in wiring the beans at runtime.
 
-After adding both [installDir] and [wsdl] nodes I can now run the following grails command to generate the cxf/jaxb classes into the src/java directory of the project:
+After adding the [wsdl] node I can now run the following grails command to generate the cxf/jaxb classes into the src/java directory of the project:
 
     grails wsdl2java
 
@@ -151,7 +138,6 @@ or from the source code you could also package and install from a zip.
 Once the plugin is installed and you have your jaxb objects and cxf client port interface in your path (lib or src), you need to add the following to the Config.groovy of your project:
 
     cxf {
-        installDir = [install dir for apache cxf]
         client {
             [beanName] {
                 clientInterface = [package and name of wsdl2java -client generated port interface class]
@@ -539,7 +525,6 @@ Config.groovy
 
 ```groovy
 cxf {
-    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
     client {
         simpleServiceClient {
             clientInterface = cxf.client.demo.simple.SimpleServicePortType
@@ -600,7 +585,6 @@ Here is one example that could be called from a class in src/groovy
 
 ```groovy
 cxf {
-    installDir = "C:/apps/apache-cxf-2.4.2" //only used for wsdl2java script target
     client {
         simpleServiceClient {
             ...
@@ -671,6 +655,9 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v1.4.0
+    * Updating the wsdl2-java script to not require the installPath any longer
+    * Updating cxf to version 2.6.1 to match the cxf plugin
 
 * v1.3.0
     * Adding ability to update endpoint during runtime if needed - Thanks to Laura Helde for finalizing this work.

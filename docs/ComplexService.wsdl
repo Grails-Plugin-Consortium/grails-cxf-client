@@ -1,0 +1,168 @@
+<wsdl:definitions name="ComplexService" targetNamespace="http://demo.client.cxf/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://demo.client.cxf/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://demo.client.cxf/" xmlns:tns="http://demo.client.cxf/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:complexType name="complexRequest">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="singleChild" type="tns:complexChild"/>
+                    <xs:element minOccurs="0" name="propagateCount" type="xs:int"/>
+                    <xs:element minOccurs="0" name="taskName" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="complexChild">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="name" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="complexResponse">
+                <xs:sequence>
+
+                    <xs:element minOccurs="0" name="childCount" type="xs:int"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="children" nillable="true" type="tns:complexChild"/>
+                    <xs:element minOccurs="0" name="message" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ComplexContrivedException" type="tns:ComplexContrivedException"/>
+            <xs:complexType name="ComplexContrivedException">
+                <xs:sequence>
+                    <xs:element name="contrivedMessage" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="complexMethod3" type="tns:complexMethod3"/>
+            <xs:complexType name="complexMethod3">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="request" type="tns:complexRequest"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="complexMethod3Response" type="tns:complexMethod3Response"/>
+            <xs:complexType name="complexMethod3Response">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="return" type="tns:complexResponse"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="complexMethod2" type="tns:complexMethod2"/>
+            <xs:complexType name="complexMethod2">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="request" type="tns:complexRequest"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="complexMethod2Response" type="tns:complexMethod2Response"/>
+            <xs:complexType name="complexMethod2Response">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="return" type="tns:complexResponse"/>
+                </xs:sequence>
+
+            </xs:complexType>
+            <xs:element name="complexMethod1" type="tns:complexMethod1"/>
+            <xs:complexType name="complexMethod1">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="request" type="tns:complexRequest"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="complexMethod1Response" type="tns:complexMethod1Response"/>
+            <xs:complexType name="complexMethod1Response">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="return" type="tns:complexResponse"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="complexMethod2Response">
+
+        <wsdl:part element="tns:complexMethod2Response" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="ComplexContrivedException">
+        <wsdl:part element="tns:ComplexContrivedException" name="ComplexContrivedException">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="complexMethod3Response">
+        <wsdl:part element="tns:complexMethod3Response" name="parameters">
+
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="complexMethod1Response">
+        <wsdl:part element="tns:complexMethod1Response" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="complexMethod2">
+        <wsdl:part element="tns:complexMethod2" name="parameters">
+        </wsdl:part>
+
+    </wsdl:message>
+    <wsdl:message name="complexMethod1">
+        <wsdl:part element="tns:complexMethod1" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="complexMethod3">
+        <wsdl:part element="tns:complexMethod3" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+
+    <wsdl:portType name="ComplexServicePortType">
+        <wsdl:operation name="complexMethod3">
+            <wsdl:input message="tns:complexMethod3" name="complexMethod3">
+            </wsdl:input>
+            <wsdl:output message="tns:complexMethod3Response" name="complexMethod3Response">
+            </wsdl:output>
+            <wsdl:fault message="tns:ComplexContrivedException" name="ComplexContrivedException">
+            </wsdl:fault>
+        </wsdl:operation>
+
+        <wsdl:operation name="complexMethod2">
+            <wsdl:input message="tns:complexMethod2" name="complexMethod2">
+            </wsdl:input>
+            <wsdl:output message="tns:complexMethod2Response" name="complexMethod2Response">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="complexMethod1">
+            <wsdl:input message="tns:complexMethod1" name="complexMethod1">
+            </wsdl:input>
+
+            <wsdl:output message="tns:complexMethod1Response" name="complexMethod1Response">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ComplexServiceSoapBinding" type="tns:ComplexServicePortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="complexMethod3">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="complexMethod3">
+
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="complexMethod3Response">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ComplexContrivedException">
+                <soap:fault name="ComplexContrivedException" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+
+        <wsdl:operation name="complexMethod2">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="complexMethod2">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="complexMethod2Response">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="complexMethod1">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="complexMethod1">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="complexMethod1Response">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+    </wsdl:binding>
+    <wsdl:service name="ComplexService">
+        <wsdl:port binding="tns:ComplexServiceSoapBinding" name="ComplexServicePort">
+            <soap:address location="http://localhost:8080/cxf-client-demo/services/complex"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -27,6 +27,7 @@ class CxfClientGrailsPlugin {
             'grails-app/taglib/**',
             'grails-app/utils/**',
             'grails-app/views/**',
+            'docs/**',
             'lib/**',
             'target/**',
             'web-app/**',
