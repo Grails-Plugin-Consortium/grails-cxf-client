@@ -656,7 +656,7 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 CHANGE LOG
 ---------------
 * v1.4.0
-    * Updating the wsdl2-java script to not require the installPath any longer
+    * Updating the wsdl2java script to not require the installPath any longer
     * Updating cxf to version 2.6.1 to match the cxf plugin
 
 * v1.3.0
