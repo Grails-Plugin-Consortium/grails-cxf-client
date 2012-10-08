@@ -49,7 +49,6 @@ class CxfClientGrailsPlugin {
     def description = '''\\
 Used for easily calling soap web services.  Provides wsdl2java grails target to easily generate code into src/java from configured cxf clients.  Ability to dynamically update endpoint at runtime.
 '''
-
     // URL to the plugin's documentation
     def documentation = "https://github.com/ctoestreich/cxf-client"
     def scm = [url: "https://github.com/ctoestreich/cxf-client"]
