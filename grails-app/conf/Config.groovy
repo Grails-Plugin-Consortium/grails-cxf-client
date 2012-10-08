@@ -27,7 +27,9 @@ log4j = {
 
     warn 'org.mortbay.log'
 
-    info 'com.grails.cxf.client'
+    info 'com.grails.cxf.client',
+         'com.grails.cxf.client.security',
+         'com.grails.cxf.client.exception'
 }
 
 grails.views.default.codec = "none" // none, html, base64
