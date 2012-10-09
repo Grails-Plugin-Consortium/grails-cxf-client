@@ -26,25 +26,25 @@ grails.project.dependency.resolution = {
 
     dependencies {
 
-        build('commons-cli:commons-cli:1.2')
+        compile('commons-cli:commons-cli:1.2')
 
-        build("${cxfGroup}:cxf-tools-wsdlto-core:${cxfVersion}") {
+        compile("${cxfGroup}:cxf-tools-wsdlto-core:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        build("${cxfGroup}:cxf-tools-wsdlto-frontend-jaxws:${cxfVersion}") {
+        compile("${cxfGroup}:cxf-tools-wsdlto-frontend-jaxws:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        build("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
+        compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        build("${cxfGroup}:cxf-rt-frontend-jaxws:${cxfVersion}") {
+        compile("${cxfGroup}:cxf-rt-frontend-jaxws:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        build("${cxfGroup}:cxf-rt-frontend-jaxrs:${cxfVersion}") {
+        compile("${cxfGroup}:cxf-rt-frontend-jaxrs:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
@@ -81,9 +81,9 @@ grails.project.dependency.resolution = {
         //remove this before committing.  Only used to release...not test.
         // This still an issue?!?
         // http://grails.1312388.n4.nabble.com/Geb-and-Release-plugin-httpclient-conflicts-td4295238.html
-//        build("${pluginsGroup}:release:2.0.4") {
-//            export = false
-//        }
+        build("${pluginsGroup}:release:2.0.4") {
+            export = false
+        }
 
         /* Grails required plugins ********************************************/
         runtime("${pluginsGroup}:hibernate:${grailsVersion}") {

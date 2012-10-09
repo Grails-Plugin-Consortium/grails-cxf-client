@@ -54,12 +54,6 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.woodstox/stax2-api/jars/stax2-api-3.1.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/wsdl4j/wsdl4j/jars/wsdl4j-1.6.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/joda-time/joda-time/jars/joda-time-1.6.2.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.opensaml/xmltooling/jars/xmltooling-1.3.2-1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.opensaml/openws/jars/openws-1.4.2-1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.opensaml/opensaml/jars/opensaml-2.5.1-1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.santuario/xmlsec/bundles/xmlsec-1.5.2.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.ws.security/wss4j/bundles/wss4j-1.6.6.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-transports-http/jars/cxf-rt-transports-http-2.6.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-frontend-jaxrs/jars/cxf-rt-frontend-jaxrs-2.6.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.neethi/neethi/bundles/neethi-3.0.2.jar!/" />
@@ -93,8 +87,6 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-grails-support/jars/spock-grails-support-0.6-groovy-1.8.jar!/" />
           <root url="file://$MODULE_DIR$/lib" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/asm/asm-tree/jars/asm-tree-3.0.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sf.ehcache/ehcache-core/jars/ehcache-core-2.5.1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-rt-ws-security/jars/cxf-rt-ws-security-2.6.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
