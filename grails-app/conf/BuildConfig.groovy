@@ -86,13 +86,13 @@ grails.project.dependency.resolution = {
 //        }
 
         /* Grails required plugins ********************************************/
-//        runtime("${pluginsGroup}:hibernate:${grailsVersion}") {
-//            export = false
-//        }
-//
-//        runtime("${pluginsGroup}:tomcat:${grailsVersion}") {
-//            export = false
-//        }
+        runtime("${pluginsGroup}:hibernate:${grailsVersion}") {
+            export = false
+        }
+
+        runtime("${pluginsGroup}:tomcat:${grailsVersion}") {
+            export = false
+        }
 
         /* Spock and Geb for Testing ******************************************/
         runtime("${pluginsGroup}:spock:0.6") {
