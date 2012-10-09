@@ -5,11 +5,10 @@ grails.project.test.reports.dir = "target/test-reports"
 
 grails.project.dependency.resolution = {
 
-    def exportLibs = { export: false }
-    def excludeConflicting = { excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis' }
-
     def cxfGroup = 'org.apache.cxf'
     def cxfVersion = '2.6.1'
+
+    def gebVersion = '0.7.2'
 
     def pluginsGroup = 'org.grails.plugins'
     def grailsVersion = '2.1.0'
@@ -53,25 +52,29 @@ grails.project.dependency.resolution = {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
+        compile("${cxfGroup}:cxf-rt-ws-security:${cxfVersion}"){
+            excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
+        }
+
         /* Some Testing Help **************************************************/
-        test("org.codehaus.geb:geb-spock:${gebVersion}") {
-            export = false
-        }
-
-        test('org.seleniumhq.selenium:selenium-htmlunit-driver:2.25.0') {
-            excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
-            export = false
-        }
-
-        test('org.seleniumhq.selenium:selenium-chrome-driver:2.20.0') {
-            excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
-            export = false
-        }
-
-        test('org.seleniumhq.selenium:selenium-firefox-driver:2.20.0') {
-            excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
-            export = false
-        }
+//        test("org.codehaus.geb:geb-spock:${gebVersion}") {
+//            export = false
+//        }
+//
+//        test('org.seleniumhq.selenium:selenium-htmlunit-driver:2.25.0') {
+//            excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
+//            export = false
+//        }
+//
+//        test('org.seleniumhq.selenium:selenium-chrome-driver:2.20.0') {
+//            excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
+//            export = false
+//        }
+//
+//        test('org.seleniumhq.selenium:selenium-firefox-driver:2.20.0') {
+//            excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
+//            export = false
+//        }
     }
 
     plugins {
@@ -96,9 +99,9 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        runtime("${pluginsGroup}:geb:${gebVersion}") {
-            export = false
-        }
+//        runtime("${pluginsGroup}:geb:${gebVersion}") {
+//            export = false
+//        }
 
         runtime("${pluginsGroup}:code-coverage:1.2.5") {
             export = false
@@ -108,9 +111,9 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        runtime("${pluginsGroup}:wslite:0.7.1.0") {
-            export = false
-        }
+//        runtime("${pluginsGroup}:wslite:0.7.1.0") {
+//            export = false
+//        }
     }
 }
 
