@@ -6,9 +6,9 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.project.dependency.resolution = {
 
     def cxfGroup = 'org.apache.cxf'
-    def cxfVersion = '2.6.1'
+    def cxfVersion = '2.6.2'
 
-    def gebVersion = '0.7.2'
+//    def gebVersion = '0.7.2'
 
     def pluginsGroup = 'org.grails.plugins'
     def grailsVersion = '2.1.0'
@@ -48,7 +48,7 @@ grails.project.dependency.resolution = {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile('org.apache.ws.security:wss4j:1.6.6'){
+        compile('org.apache.ws.security:wss4j:1.6.7'){
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
