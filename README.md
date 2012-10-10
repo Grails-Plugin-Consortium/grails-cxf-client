@@ -11,7 +11,8 @@ CXF CLIENT
 * <a href="#Security">Custom Security Interceptors</a>
 * <a href="#In">Custom In Interceptors</a>
 * <a href="#Out">Custom Out Interceptors</a>
-* <a href="#Fault">Custom Out Fault Interceptors</a>
+* <a href="#InFault">Custom In Fault Interceptors</a>
+* <a href="#OutFault">Custom Out Fault Interceptors</a>
 * <a href="#Custom">Custom Http Client Policy</a>
 * <a href="#Exceptions">Dealing With Exceptions</a>
 * <a href="#Beans">User Client Beans Anywhere</a>
@@ -145,9 +146,10 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 username = [username] //optional - used when secured is true - currently wss4j interceptor
                 password = [password] //optional - used when secured is true - currently wss4j interceptor
                 securityInterceptor = [text name of custom bean to use] //optional - defaults to wss4j interceptor
-                inInterceptors = [list of cxf in interceptors to add to the request] //optional - defaults to []
-                outInterceptors = [list of cxf out interceptors to add to the request] //optional - defaults to []
-                outFaultInterceptors = [list of cxf out fault interceptors to add to the request] //optional - defaults to []
+                inInterceptors = [list of cxf in interceptors to add to the client] //optional - defaults to []
+                outInterceptors = [list of cxf out interceptors to add to the client] //optional - defaults to []
+                inFaultInterceptors = [list of cxf in fault interceptors to add to the client] //optional - defaults to []
+                outFaultInterceptors = [list of cxf out fault interceptors to add to the client] //optional - defaults to []
                 enableDefaultLoggingInterceptors = [turn on or off default in/out logging] //optional - defaults to true
                 secured = [true or false] //optional - defaults to false
                 connectionTimeout = [Number of milliseconds to wait for connection] //optional - Defaults to 60000 (use 0 to wait infinitely)
@@ -182,6 +184,7 @@ Config used at runtime to invoke service.
 interceptor in the outInterceptors property as well.  You would still be required to set secured=true.  This is here as a convenience to any existing configured clients that do not wish to switch to using the newer outInterceptors property.  See below for examples (default: "")</td><td>No</td></tr>
 <tr><td>inInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an in interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
 <tr><td>outInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an out interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
+<tr><td>inFaultInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an in fault interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
 <tr><td>outFaultInterceptors</td><td>Provide a bean name or list of bean names in "name", "name, name" or ["name","name"] format to wire in as an out fault interceptor for apache cxf.  If you set it is expected that you will configure the beans in the resources.groovy file.  See below for examples (default: [])</td><td>No</td></tr>
 <tr><td>enableDefaultLoggingInterceptors</td><td>When set to true, default in and out logging interceptors will be added to the service.  If you require custom logging interceptors and wish to turn off the default loggers for any reason (security, custom, etc), set this property to false and provide your own in and out logging interceptors via the inInterceptors or outInterceptors properties.  You may also simply wish to disable logging of cxf (soap messages, etc) by setting this to false without providing your own interceptors.  (default: true)</td><td>No</td></tr>
 <tr><td>connectionTimeout</td><td>Specifies the amount of time, in milliseconds, that the client will attempt to establish a connection before it times out. The default is 30000 (30 seconds). 0 specifies that the client will continue to attempt to open a connection indefinitely. (default: 30000)</td><td>No</td></tr>
@@ -484,7 +487,24 @@ info 'blah.blah.blah' //whatever package your custom interceptors are in
 ```
 
 <p align="right"><a href="#Top">Top</a></p>
-<a name="Fault"></a>
+<a name="InFault"></a>
+CUSTOM IN FAULT INTERCEPTORS
+---------------
+
+You can wire in your own custom in fault interceptors by adding the property inFaultInterceptors to the configured client.  Example coming soon, but should be similar to the earlier two examples.
+
+You will need to set the logging level in the log4j config section to enable the logging
+
+```groovy
+info 'com.grails.cxf.client'
+info 'org.apache.cxf.interceptor'
+info 'blah.blah.blah' //whatever package your custom interceptors are in
+//debug 'org.apache.cxf.interceptor' //choose appropriate level
+```
+
+
+<p align="right"><a href="#Top">Top</a></p>
+<a name="OutFault"></a>
 CUSTOM OUT FAULT INTERCEPTORS
 ---------------
 
@@ -655,6 +675,9 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v1.4.4
+    * Adding inFaultInterceptor support
+
 * v1.4.0
     * Updating the wsdl2java script to not require the installPath any longer
     * Updating cxf to version 2.6.1 to match the cxf plugin
