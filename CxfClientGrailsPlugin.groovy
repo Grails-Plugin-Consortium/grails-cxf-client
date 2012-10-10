@@ -86,6 +86,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         def inList = []
         def outList = []
         def outFaultList = []
+        def inFaultList = []
 
         log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
@@ -106,6 +107,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         addInterceptors.delegate = delegate
         addInterceptors(client?.inInterceptors, inList)
         addInterceptors(client?.outInterceptors, outList)
+        addInterceptors(client?.inFaultInterceptors, inFaultList)
         addInterceptors(client?.outFaultInterceptors, outFaultList)
 
         def connectionTimeout = client?.connectionTimeout ?: ((client?.connectionTimeout == 0) ? client.connectionTimeout : DEFAULT_CONNECTION_TIMEOUT) //use the cxf defaults instead of 0
@@ -134,6 +136,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
             }
             inInterceptors = inList
             outInterceptors = outList
+            inFaultInterceptors = inFaultList
             outFaultInterceptors = outFaultList
             clientInterface = client.clientInterface ?: ""
             serviceName = cxfClientName

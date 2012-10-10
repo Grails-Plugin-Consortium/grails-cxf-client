@@ -22,6 +22,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     MessageSource messageSource
     def outInterceptors = []
     def inInterceptors = []
+    def inFaultInterceptors = []
     def outFaultInterceptors = []
     def httpClientPolicy
     String proxyFactoryBindingId
@@ -42,6 +43,7 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                                                     clientPolicyMap,
                                                     outInterceptors,
                                                     inInterceptors,
+                                                    inFaultInterceptors,
                                                     outFaultInterceptors,
                                                     httpClientPolicy,
                                                     proxyFactoryBindingId)
