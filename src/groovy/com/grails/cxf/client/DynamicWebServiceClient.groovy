@@ -26,6 +26,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     def outFaultInterceptors = []
     def httpClientPolicy
     String proxyFactoryBindingId
+    String secureSocketProtocol
 
     Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
         if(!clientInterface || !serviceEndpointAddress) {
@@ -46,7 +47,8 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                                                     inFaultInterceptors,
                                                     outFaultInterceptors,
                                                     httpClientPolicy,
-                                                    proxyFactoryBindingId)
+                                                    proxyFactoryBindingId,
+                                                    secureSocketProtocol)
     }
 
     Class<?> getObjectType() {
