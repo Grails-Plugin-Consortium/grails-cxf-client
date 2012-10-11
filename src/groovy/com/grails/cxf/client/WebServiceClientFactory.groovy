@@ -36,7 +36,8 @@ interface WebServiceClientFactory {
                                List inFaultInterceptors,
                                List outFaultInterceptors,
                                HTTPClientPolicy httpClientPolicy,
-                               String proxyFactoryBindingId)
+                               String proxyFactoryBindingId,
+                               String secureSocketProtocol)
 
     /**
      * Method to allow updating endpoint and refreshing proxy reference

@@ -6,7 +6,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
     // the plugin version
-    def version = "1.4.4"
+    def version = "1.4.5"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
     // the other plugins this plugin depends on
@@ -147,6 +147,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
                 httpClientPolicy = ref("${client.httpClientPolicy}")
             }
             proxyFactoryBindingId = client?.proxyFactoryBindingId ?: ""
+            secureSocketProtocol = client?.secureSocketProtocol ?: "" //should be one of the constants in CxfClientConstants, but doesn't have to be
         }
     }
 
