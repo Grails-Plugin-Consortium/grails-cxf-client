@@ -690,6 +690,9 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v1.4.6
+    * Removing some jar deps from plugin causing issue with other plugins
+
 * v1.4.5
     * Reverted the use of @Commons to make app compatible with 1.3.0+
     * Added parameter for secureSocketProtocol to specify protocol.  Constants were added for this in CxfClientConstants class.
