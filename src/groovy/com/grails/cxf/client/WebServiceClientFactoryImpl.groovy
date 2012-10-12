@@ -26,7 +26,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private static final int RECEIVE_TIMEOUT = 60000
     private static final int CONNECTION_TIMEOUT = 30000
     def interfaceMap = [:]
-    Log log = LogFactory.getLog(getClass())
+    private static final Log log = LogFactory.getLog(WebServiceClientFactoryImpl)
 
     /**
      * create and cache the reference to the web service client proxy object
@@ -135,7 +135,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
-                           handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId,secureSocketProtocol)
+                           handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol)
             log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
         } catch(Exception exception) {
             handler.cxfProxy = null
@@ -176,7 +176,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         Object cxfProxy = clientProxyFactory.create()
         addInterceptors(cxfProxy, enableDefaultLoggingInterceptors, clientPolicyMap,
                         outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy)
-        if(secureSocketProtocol){
+        if(secureSocketProtocol) {
             setSsl(cxfProxy, secureSocketProtocol)
         }
         handler.cxfProxy = cxfProxy
@@ -184,7 +184,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
     private void setSsl(Object cxfProxy, String secureSocketProtocol) {
         //secureSocketProtocol should be one in Constants file, but let them set it to whatever
-        if(![CxfClientConstants.SSL_PROTOCOL_SSLV3, CxfClientConstants.SSL_PROTOCOL_TLSV1].contains(secureSocketProtocol)){
+        if(![CxfClientConstants.SSL_PROTOCOL_SSLV3, CxfClientConstants.SSL_PROTOCOL_TLSV1].contains(secureSocketProtocol)) {
             log.info "The provided secureSocketProtocol of $secureSocketProtocol might not be recognized"
         }
 
