@@ -50,13 +50,14 @@ grails.project.dependency.resolution = {
 
         compile('org.apache.ws.security:wss4j:1.6.7'){
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis',
-                     'junit', 'log4j', 'slf4j', 'slf4j-log4j12'
+                     'junit', 'log4j', 'slf4j', 'slf4j-log4j12','slf4j-api', 'slf4j-jdk14'
 
         }
 
         compile("${cxfGroup}:cxf-rt-ws-security:${cxfVersion}"){
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis',
-                     'ehcache', 'easymock', 'slf4j-jdk14', 'ehcache-core'
+                     'ehcache', 'easymock', 'ehcache-core',
+                     'log4j', 'slf4j', 'slf4j-log4j12','slf4j-api', 'slf4j-jdk14'
         }
 
         /* Some Testing Help **************************************************/
@@ -98,7 +99,7 @@ grails.project.dependency.resolution = {
         }
 
         /* Spock and Geb for Testing ******************************************/
-        runtime("${pluginsGroup}:spock:0.6") {
+        test("${pluginsGroup}:spock:0.6") {
             export = false
         }
 
@@ -106,11 +107,11 @@ grails.project.dependency.resolution = {
 //            export = false
 //        }
 
-        runtime("${pluginsGroup}:code-coverage:1.2.5") {
+        test("${pluginsGroup}:code-coverage:1.2.5") {
             export = false
         }
 
-        runtime("${pluginsGroup}:codenarc:0.17") {
+        test("${pluginsGroup}:codenarc:0.17") {
             export = false
         }
 
