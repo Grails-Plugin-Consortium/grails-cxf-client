@@ -1,8 +1,6 @@
 package com.grails.cxf.client.exception
 
-/**
- */
-class UpdateServiceEndpointException extends Throwable implements Serializable {
+class UpdateServiceEndpointException extends Throwable {
 
     /**
      * Serialization Version ID compatibility - indication of what version may be restored.

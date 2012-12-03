@@ -1,0 +1,7 @@
+/cobertura.ser
+*.log
+/target
+*.zip
+/plugin.xml
+.settings/
+web-app/

@@ -2,13 +2,12 @@ includeTargets << grailsScript("_GrailsSettings")
 includeTargets << grailsScript('_GrailsPackage')
 includeTargets << grailsScript("_GrailsArgParsing")
 includeTargets << grailsScript("_GrailsClasspath")
-includeTargets << grailsScript("Init")
 
 printMessage = { String message -> event('StatusUpdate', [message]) }
 finished = {String message -> event('StatusFinal', [message])}
 errorMessage = { String message -> event('StatusError', [message]) }
 
-target(main: '''generate java class stubs out wsdl files.
+target(wsdl2java: '''generate java class stubs out wsdl files.
 This target needs to be run only upon changes in the upstream API, since it's artefacts are kept under version control in src/java
 ''') {
 
@@ -56,5 +55,4 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     finished "Completed wsdl2java"
 }
 
-setDefaultTarget(main)
-
+setDefaultTarget(wsdl2java)

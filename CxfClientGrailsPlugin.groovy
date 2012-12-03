@@ -1,36 +1,20 @@
+import com.grails.cxf.client.DynamicWebServiceClient
+import com.grails.cxf.client.WebServiceClientFactoryImpl
 import com.grails.cxf.client.exception.CxfClientException
+import com.grails.cxf.client.security.DefaultSecurityOutInterceptor
 
 class CxfClientGrailsPlugin {
 
     private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
-    // the plugin version
     def version = "1.4.7"
-    // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.0 > *"
-    // the other plugins this plugin depends on
-    def dependsOn = [:]
-    // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            'grails-app/conf/hibernate',
-            'grails-app/conf/spring',
-            'grails-app/conf/DataSource.groovy',
-            'grails-app/conf/UrlMappings.groovy',
             'grails-app/conf/codenarc.groovy',
             'grails-app/conf/codenarc.ruleset.all.groovy.txt',
-            'grails-app/controllers/**',
-            'grails-app/domain/**',
-            'grails-app/endpoints/**',
-            'grails-app/i18n/**',
-            'grails-app/services/**',
-            'grails-app/taglib/**',
-            'grails-app/utils/**',
-            'grails-app/views/**',
             'src/groovy/test/**',
             'docs/**',
-            'lib/**',
-            'target/**',
             'web-app/**',
             'codenarc.properties',
             "spock-0.6"
@@ -49,24 +33,19 @@ class CxfClientGrailsPlugin {
     def description = '''\\
 Used for easily calling soap web services.  Provides wsdl2java grails target to easily generate code into src/java from configured cxf clients.  Ability to dynamically update endpoint at runtime.
 '''
-    // URL to the plugin's documentation
     def documentation = "https://github.com/ctoestreich/cxf-client"
     def scm = [url: "https://github.com/ctoestreich/cxf-client"]
 
-    def watchedResources = [
-            "file:${pluginLocation}/grails-app/services/**/*Service.groovy",
-            "file:${pluginLocation}/grails-app/controllers/**/*Controller.groovy",
-            "file:${pluginLocation}/grails-app/taglib/**/*TagLib.groovy",
-            "file:${pluginLocation}/grails-app/taglib/**/*Job.groovy"
-    ]
-
-    def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before 
-    }
+//    def watchedResources = [
+//            "file:${pluginLocation}/grails-app/services/**/*Service.groovy",
+//            "file:${pluginLocation}/grails-app/controllers/**/*Controller.groovy",
+//            "file:${pluginLocation}/grails-app/taglib/**/*TagLib.groovy",
+//            "file:${pluginLocation}/grails-app/taglib/**/*Job.groovy"
+//    ]
 
     def doWithSpring = {
 
-        webServiceClientFactory(com.grails.cxf.client.WebServiceClientFactoryImpl)
+        webServiceClientFactory(WebServiceClientFactoryImpl)
 
         log.info "wiring up cxf-client beans"
 
@@ -98,7 +77,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         }
 
         if(client?.secured && !client?.securityInterceptor) {
-            "securityInterceptor${cxfClientName}"(com.grails.cxf.client.security.DefaultSecurityOutInterceptor) {
+            "securityInterceptor${cxfClientName}"(DefaultSecurityOutInterceptor) {
                 username = client?.username ?: ""
                 password = client?.password ?: ""
             }
@@ -117,7 +96,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         validateTimeouts(cxfClientName, 'connectionTimeout', connectionTimeout)
         validateTimeouts(cxfClientName, 'receiveTimeout', receiveTimeout)
 
-        "${cxfClientName}"(com.grails.cxf.client.DynamicWebServiceClient) {
+        "${cxfClientName}"(DynamicWebServiceClient) {
             webServiceClientFactory = ref("webServiceClientFactory")
             if(client?.secured || client?.securityInterceptor) {
                 if(client?.securityInterceptor) {
@@ -171,14 +150,6 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         }
     }
 
-    def doWithDynamicMethods = { ctx ->
-        // TODO Implement registering dynamic methods to classes (optional)
-    }
-
-    def doWithApplicationContext = { applicationContext ->
-        // TODO Implement post initialization spring config (optional)
-    }
-
     //todo: add and test the onchange registration for this
     def onChange = { event ->
 //        if (event.source) {
@@ -195,11 +166,6 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
 //                        beans.getBeanDefinition(serviceName))
 //            }
 //        }
-    }
-
-    def onConfigChange = { event ->
-        // TODO Implement code that is executed when the project configuration changes.
-        // The event is the same as for 'onChange'.
     }
 
     ConfigObject getBuildConfig() {

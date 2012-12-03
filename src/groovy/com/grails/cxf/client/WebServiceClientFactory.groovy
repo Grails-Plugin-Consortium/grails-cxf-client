@@ -1,10 +1,11 @@
 package com.grails.cxf.client
 
-import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
+import com.grails.cxf.client.exception.UpdateServiceEndpointException
+
 /**
- * Factory used to obtain web service clients as well as dynamically changing their WSDL document URLs.
+ * Obtains web service clients and dynamically changes their WSDL document URLs.
  */
 interface WebServiceClientFactory {
 
@@ -40,7 +41,7 @@ interface WebServiceClientFactory {
                                String secureSocketProtocol)
 
     /**
-     * Method to allow updating endpoint and refreshing proxy reference
+     * Allows updating endpoint and refreshing proxy reference
      * @param serviceName The name of the service to update
      * @param serviceEndpointAddress The new address to use
      * @throws com.grails.cxf.client.exception.UpdateServiceEndpointException If endpoint can not be updated

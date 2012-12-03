@@ -5,7 +5,7 @@ import org.springframework.beans.factory.FactoryBeanNotInitializedException
 import org.springframework.context.MessageSource
 
 /**
- * Class used to provide web service clients.  Supports dynamically changing the wsdl document url
+ * Provides web service clients.  Supports dynamically changing the wsdl document url
  * at runtime, as well as initializing the url from system settings.
  */
 class DynamicWebServiceClient implements FactoryBean<Object> {
@@ -31,7 +31,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
         if(!clientInterface || !serviceEndpointAddress) {
             throw new FactoryBeanNotInitializedException("""Web service client cannot be created
-before setting the clientInterface=${clientInterface} and 
+before setting the clientInterface=${clientInterface} and
 serviceEndpointAddress=${serviceEndpointAddress} properties""")
         }
         webServiceClientFactory.getWebServiceClient(wsdlURL,

@@ -2,10 +2,9 @@ package com.grails.cxf.client
 
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
+
 import spock.lang.Specification
 
-/**
- */
 class DynamicWebServiceClientSpec extends Specification {
 
     def "get a web service client"() {
@@ -61,8 +60,6 @@ class DynamicWebServiceClientSpec extends Specification {
         !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
-
-
     }
 
     def "get a web service client with invalid endpoint address"() {

@@ -1,26 +1,18 @@
 grails.project.work.dir = "target"
-grails.project.class.dir = "target/classes"
-grails.project.test.class.dir = "target/test-classes"
-grails.project.test.reports.dir = "target/test-reports"
+grails.project.source.level = 1.6
 
 grails.project.dependency.resolution = {
 
-    def cxfGroup = 'org.apache.cxf'
-    def cxfVersion = '2.6.2'
+    String cxfGroup = 'org.apache.cxf'
+    String cxfVersion = '2.6.2'
+//    String gebVersion = '0.7.2'
 
-//    def gebVersion = '0.7.2'
-
-    def pluginsGroup = 'org.grails.plugins'
-    def grailsVersion = '2.1.0'
-
-    inherits("global") {}
-
+    inherits "global"
     log "warn"
 
     repositories {
-        grailsPlugins()
-        grailsHome()
         grailsCentral()
+        mavenLocal()
         mavenCentral()
     }
 
@@ -85,37 +77,28 @@ grails.project.dependency.resolution = {
         //remove this before committing.  Only used to release...not test.
         // This still an issue?!?
         // http://grails.1312388.n4.nabble.com/Geb-and-Release-plugin-httpclient-conflicts-td4295238.html
-        build("${pluginsGroup}:release:2.0.4") {
-            export = false
-        }
-
-        /* Grails required plugins ********************************************/
-        runtime("${pluginsGroup}:hibernate:${grailsVersion}") {
-            export = false
-        }
-
-        runtime("${pluginsGroup}:tomcat:${grailsVersion}") {
+        build(":release:2.0.4", ':rest-client-builder:1.0.2') {
             export = false
         }
 
         /* Spock and Geb for Testing ******************************************/
-        test("${pluginsGroup}:spock:0.6") {
+        test(":spock:0.6") {
             export = false
         }
 
-//        runtime("${pluginsGroup}:geb:${gebVersion}") {
+//        runtime(":geb:${gebVersion}") {
 //            export = false
 //        }
 
-        test("${pluginsGroup}:code-coverage:1.2.5") {
+        test(":code-coverage:1.2.5") {
             export = false
         }
 
-        test("${pluginsGroup}:codenarc:0.17") {
+        test(":codenarc:0.17") {
             export = false
         }
 
-//        runtime("${pluginsGroup}:wslite:0.7.1.0") {
+//        runtime(":wslite:0.7.1.0") {
 //            export = false
 //        }
     }

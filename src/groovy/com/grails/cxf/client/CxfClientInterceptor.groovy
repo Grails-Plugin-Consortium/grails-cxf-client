@@ -1,9 +1,9 @@
 package com.grails.cxf.client
 
-/**
- */
+import org.apache.cxf.interceptor.Interceptor
+import org.apache.cxf.message.Message
+
 interface CxfClientInterceptor {
 
-    org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message> create()
-
+    Interceptor<? extends Message> create()
 }
