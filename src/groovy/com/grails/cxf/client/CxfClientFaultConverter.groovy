@@ -1,8 +1,5 @@
 package com.grails.cxf.client
 
-/**
- */
-
 import org.apache.cxf.interceptor.ClientFaultConverter
 import org.apache.cxf.interceptor.Fault
 import org.apache.cxf.message.Message
@@ -16,7 +13,7 @@ class CxfClientFaultConverter extends ClientFaultConverter {
     @Override
     void handleMessage(Message message) {
 
-        Fault fault = (Fault) message.getContent(Exception)
+        Fault fault = message.getContent(Exception)
 
         if(fault?.detail) {
             processFaultDetail(fault, message)

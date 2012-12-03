@@ -1,8 +1,14 @@
 package com.grails.cxf.client
 
-import com.grails.cxf.client.exception.CxfClientException
-import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import groovy.transform.Synchronized
+
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
+import java.lang.reflect.UndeclaredThrowableException
+
+import javax.xml.namespace.QName
+
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.apache.cxf.BusFactory
@@ -17,8 +23,8 @@ import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
-import javax.xml.namespace.QName
-import java.lang.reflect.*
+import com.grails.cxf.client.exception.CxfClientException
+import com.grails.cxf.client.exception.UpdateServiceEndpointException
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -26,7 +32,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private static final int RECEIVE_TIMEOUT = 60000
     private static final int CONNECTION_TIMEOUT = 30000
     def interfaceMap = [:]
-    private static final Log log = LogFactory.getLog(WebServiceClientFactoryImpl)
+    private static final Log log = LogFactory.getLog(this)
 
     /**
      * create and cache the reference to the web service client proxy object

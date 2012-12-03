@@ -1,8 +1,6 @@
 package com.grails.cxf.client.exception
 
-/**
- */
-class CxfClientException extends Throwable implements Serializable {
+class CxfClientException extends Throwable {
 
     /**
      * Serialization Version ID compatibility - indication of what version may be restored.
@@ -23,7 +21,6 @@ class CxfClientException extends Throwable implements Serializable {
     CxfClientException(Throwable cause) {
         super(cause)
     }
-
 
     CxfClientException(String msg) {
         super(msg)

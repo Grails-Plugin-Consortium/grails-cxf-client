@@ -1,10 +1,9 @@
 package com.grails.cxf.client
 
-import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import spock.lang.Specification
 
-/**
- */
+import com.grails.cxf.client.exception.UpdateServiceEndpointException
+
 class UpdateServiceEndpointExceptionSpec extends Specification {
 
     def "normal exception behavior test"() {

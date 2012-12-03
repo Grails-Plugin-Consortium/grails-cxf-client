@@ -7,8 +7,6 @@ import javax.jws.WebService
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
 
-/**
- */
 @WebService(targetNamespace = 'http://mock.client.cxf/', name = 'SimpleServicePortType')
 interface SimpleServicePortType {
 
@@ -21,8 +19,6 @@ interface SimpleServicePortType {
             SimpleRequest request
     )
 
-
-
     @WebResult(name = 'return', targetNamespace = '')
     @RequestWrapper(localName = 'simpleMethod1', targetNamespace = 'http://mock.client.cxf/', className = 'test.mock.SimpleMethod1')
     @WebMethod
@@ -31,6 +27,4 @@ interface SimpleServicePortType {
             @WebParam(name = 'request', targetNamespace = '')
             SimpleRequest request
     )
-
-
 }
