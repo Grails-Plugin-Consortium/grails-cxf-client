@@ -691,7 +691,7 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 BUILD SERVER
 -----------------
 
-When making changes, builds will be run on trunk and branches at <http://www.tricharts.com/jenkins/job/cxf-client/>.
+When making changes the builds, tests, coverage and codenarc will be run on trunk and branches at <http://www.tricharts.com/jenkins/job/cxf-client/>.
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Change"></a>
