@@ -1,14 +1,8 @@
 package com.grails.cxf.client
 
+import com.grails.cxf.client.exception.CxfClientException
+import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import groovy.transform.Synchronized
-
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
-import java.lang.reflect.UndeclaredThrowableException
-
-import javax.xml.namespace.QName
-
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.apache.cxf.BusFactory
@@ -23,8 +17,12 @@ import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
-import com.grails.cxf.client.exception.CxfClientException
-import com.grails.cxf.client.exception.UpdateServiceEndpointException
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy
+import java.lang.reflect.UndeclaredThrowableException
+import javax.xml.namespace.QName
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 

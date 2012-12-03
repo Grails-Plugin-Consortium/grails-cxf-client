@@ -690,6 +690,9 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v1.4.8
+    * No logical code changes, code cleanup and removal of unused items - burtbeckwith
+
 * v1.4.7
     * Fixing issue with scope for some testing plugins
     * Adding excludes for slf4j to a few dependencies
