@@ -20,6 +20,7 @@ CXF CLIENT
 * <a href="#Endpoints">Retrieving and Updating Endpoints</a>
 * <a href="#Demo">Demo Project</a>
 * <a href="#Issues">Issues</a>
+* <a href="#Build">Build Server</a>
 * <a href="#Change">Change Log</a>
 * <a href="#Future">Future Revisions</a>
 * <a href="#License">License</a>
@@ -687,7 +688,7 @@ You may need to put a cert into your [jdkhome]\jre\lib\security directory.  I wi
 Another solution is to get the wsdl from the web and copy into a local file.wsdl and change the config to point to a local file instead of the https endpoint for generation.
 
 <p align="right"><a href="#Top">Top</a></p>
-<a name="Change"></a>
+<a name="Build"></a>
 BUILD SERVER
 -----------------
 
