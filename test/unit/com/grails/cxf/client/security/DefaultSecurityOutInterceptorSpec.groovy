@@ -1,13 +1,14 @@
 package com.grails.cxf.client.security
 
-import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
-import org.apache.ws.security.handler.WSHandlerConstants
-import spock.lang.Specification
-import com.grails.cxf.client.exception.CxfClientException
 import javax.security.auth.callback.CallbackHandler
 
-/**
- */
+import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
+import org.apache.ws.security.handler.WSHandlerConstants
+
+import spock.lang.Specification
+
+import com.grails.cxf.client.exception.CxfClientException
+
 class DefaultSecurityOutInterceptorSpec extends Specification {
 
     def "construct default security out interceptor"() {

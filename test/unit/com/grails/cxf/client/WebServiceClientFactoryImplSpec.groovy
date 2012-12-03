@@ -1,13 +1,13 @@
 package com.grails.cxf.client
 
-import com.grails.cxf.client.exception.UpdateServiceEndpointException
 import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.interceptor.LoggingOutInterceptor
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
+
 import spock.lang.Specification
 
-/**
- */
+import com.grails.cxf.client.exception.UpdateServiceEndpointException
+
 class WebServiceClientFactoryImplSpec extends Specification {
 
     def "create web service client using factory method"() {
@@ -296,5 +296,3 @@ class WebServiceClientFactoryImplSpec extends Specification {
         webServiceClientFactory.getServiceEndpointAddress(serviceName) == serviceEndpointAddress
     }
 }
-
-
