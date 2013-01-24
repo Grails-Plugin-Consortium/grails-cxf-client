@@ -26,6 +26,6 @@ class StockQuoteClientSpec extends IntegrationSpec {
         Double.parseDouble(xml.Stock.Last.text()) > 0.0d //dear lord!
 
         where:
-        symbol << ["GOOG","AAPL","T"]
+        symbol << ["GOOG","AAPL","BBY"]
     }
 }
