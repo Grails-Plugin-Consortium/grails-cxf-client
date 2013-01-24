@@ -48,8 +48,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                              HTTPClientPolicy httpClientPolicy,
                                              String proxyFactoryBindingId,
                                              String secureSocketProtocol,
-                                             Map<java.lang.String, java.lang.Object> requestContext,
-                                             Map<java.lang.String, java.lang.Object> responseContext) {
+                                             Map<java.lang.String, java.lang.Object> requestContext) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
 
@@ -59,7 +58,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol,
-                               requestContext, responseContext)
+                               requestContext)
             } catch(Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
                         "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
@@ -88,8 +87,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 httpClientPolicy: httpClientPolicy,
                 proxyFactoryBindingId: proxyFactoryBindingId,
                 secureSocketProtocol: secureSocketProtocol,
-                requestContext: requestContext,
-                responseContext: responseContext]
+                requestContext: requestContext]
         interfaceMap.put(serviceName, serviceMap)
 
         clientProxy
@@ -184,8 +182,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                 HTTPClientPolicy httpClientPolicy,
                                 String proxyFactoryBindingId,
                                 String secureSocketProtocol,
-                                Map<java.lang.String, java.lang.Object> requestContext,
-                                Map<java.lang.String, java.lang.Object> responseContext) {
+                                Map<java.lang.String, java.lang.Object> requestContext) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
@@ -201,18 +198,15 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             setSsl(cxfProxy, secureSocketProtocol)
         }
 
-        assignContexts(cxfProxy, requestContext, responseContext)
+        assignContexts(cxfProxy, requestContext)
 
         handler.cxfProxy = cxfProxy
 
     }
 
-    private void assignContexts(Object cxfProxy, Map<java.lang.String, java.lang.Object> requestContext, Map<java.lang.String, java.lang.Object> responseContext) {
+    private void assignContexts(Object cxfProxy, Map<java.lang.String, java.lang.Object> requestContext) {
         if(requestContext?.size() > 0) {
             cxfProxy.requestContext.putAll(requestContext)
-        }
-        if(responseContext?.size() > 0) {
-            cxfProxy.responseContext.putAll(responseContext)
         }
     }
 

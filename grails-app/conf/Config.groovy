@@ -29,7 +29,6 @@ cxf {
             receiveTimeout = 120000 //2min
             connectionTimeout = 120000 //2min
             requestContext = ["requestKey": "requestValue"]
-            responseContext = ["responseKey": "responseValue"]
         }
     }
 }

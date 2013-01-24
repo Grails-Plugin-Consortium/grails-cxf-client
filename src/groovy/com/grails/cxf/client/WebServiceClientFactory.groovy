@@ -38,8 +38,7 @@ interface WebServiceClientFactory {
                                HTTPClientPolicy httpClientPolicy,
                                String proxyFactoryBindingId,
                                String secureSocketProtocol,
-                               Map<java.lang.String, java.lang.Object> requestContext,
-                               Map<java.lang.String, java.lang.Object> responseContext)
+                               Map<java.lang.String, java.lang.Object> requestContext)
 
     /**
      * Allows updating endpoint and refreshing proxy reference

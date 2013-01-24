@@ -162,6 +162,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 secureSocketProtocol = [socket protocol to use for secure service] //optional - defaults to null
                 wsdlServiceName = [set to enable mime type mapping] //optional - defaults to null
                 wsdlEndpointName = [may be needed for correct wsdl initialization] //optional - defaults to null
+                requestContext = [Setting a Request Context Property on the Client Side] //optional - defaults to [:]
 
                 //wsdl config
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
@@ -699,7 +700,8 @@ BUILD SERVER
 CHANGE LOG
 ---------------
 * v 1.5.0
-    * Adding requestContext and responseContext params to inject onto the client port object. See: [Setting Connection Properties with Contexts](http://cxf.apache.org/docs/developing-a-consumer.html)
+    * Adding requestContext param to inject onto the client port object. See: [Setting Connection Properties with Contexts](http://cxf.apache.org/docs/developing-a-consumer.html)
+
 
 * v1.4.8
     * No logical code changes, code cleanup and removal of unused items - burtbeckwith
