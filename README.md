@@ -694,7 +694,7 @@ Another solution is to get the wsdl from the web and copy into a local file.wsdl
 BUILD SERVER
 -----------------
 
-[![build status](http://build.christianoestreich.com:8080/jenkins/job/cxf-client/badge/icon)](http://build.christianoestreich.com:8080/jenkins/job/cxf-client)
+[![build status](http://build.christianoestreich.com/jenkins/job/cxf-client/badge/icon)](http://build.christianoestreich.com/jenkins/job/cxf-client)
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Change"></a>
