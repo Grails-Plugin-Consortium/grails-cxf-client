@@ -698,30 +698,40 @@ BUILD SERVER
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 1.5.0
+    * Adding requestContext and responseContext params to inject onto the client port object. See: [Setting Connection Properties with Contexts](http://cxf.apache.org/docs/developing-a-consumer.html)
+
 * v1.4.8
     * No logical code changes, code cleanup and removal of unused items - burtbeckwith
+
 
 * v1.4.7
     * Fixing issue with scope for some testing plugins
     * Adding excludes for slf4j to a few dependencies
 
+
 * v1.4.6
     * Removing some jar deps from plugin causing issue with other plugins
+
 
 * v1.4.5
     * Reverted the use of @Commons to make app compatible with 1.3.0+
     * Added parameter for secureSocketProtocol to specify protocol.  Constants were added for this in CxfClientConstants class.
 
+
 * v1.4.4
     * Adding inFaultInterceptor support
+
 
 * v1.4.0
     * Updating the wsdl2java script to not require the installPath any longer
     * Updating cxf to version 2.6.1 to match the cxf plugin
 
+
 * v1.3.0
     * Adding ability to update endpoint during runtime if needed - Thanks to Laura Helde for finalizing this work.
     * Adding reponse mime attachement support - Thanks to Kyle Dickerson for helping with this issue.
+
 
 * v1.2.9
     * Adding better exception handling
@@ -729,15 +739,19 @@ CHANGE LOG
     * SOAPFault Exceptions will also bubble correctly
     * Fixed bug from config reader from 1.2.8
 
+
 * v1.2.8
     * Ability to set proxyFactoryBindingId if you require different binding such as soap12
+
 
 * v1.2.7
     * Ability to set allowChunking
     * Ability to specify custom HTTPClientPolicy bean to use for the client (see [demo project][https://github.com/ctoestreich/cxf-client-demo/blob/master/grails-app/conf/spring/resources.groovy] for more details)
 
+
 * v1.2.6
     * Ability to set connectionTimeout and recieveTimeout for the client proxy
+
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Future"></a>
