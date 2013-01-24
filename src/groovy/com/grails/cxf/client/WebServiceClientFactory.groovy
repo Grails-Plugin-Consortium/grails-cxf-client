@@ -1,8 +1,7 @@
 package com.grails.cxf.client
 
-import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
-
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
 /**
  * Obtains web service clients and dynamically changes their WSDL document URLs.
@@ -38,7 +37,9 @@ interface WebServiceClientFactory {
                                List outFaultInterceptors,
                                HTTPClientPolicy httpClientPolicy,
                                String proxyFactoryBindingId,
-                               String secureSocketProtocol)
+                               String secureSocketProtocol,
+                               Map<java.lang.String, java.lang.Object> requestContext,
+                               Map<java.lang.String, java.lang.Object> responseContext)
 
     /**
      * Allows updating endpoint and refreshing proxy reference
