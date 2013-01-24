@@ -201,6 +201,7 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>wsdl</td><td>Location of the wsdl either locally or a url (must be available at runtime).  Will be passed into JaxWsProxyFactoryBean.  WSDL will be loaded to handle things that cannot be captured in Java classes via wsdl2java (like MIME attachments). Requires defining _wsdlServiceName_. (default: null)</td><td>No</td></tr>
 <tr><td>wsdlServiceName</td><td>The QName of the service you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  Only needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLServicePorts') (default: null)</td><td>No</td></tr>
 <tr><td>wsdlEndpointName</td><td>The QName of the endpoint/port in the WSDL you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  May be needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLServicePort') (default: null)</td><td>No</td></tr>
+<tr><td>requestContext</td><td>Setting a Request Context Property on the Client Side. (default: [:])</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
