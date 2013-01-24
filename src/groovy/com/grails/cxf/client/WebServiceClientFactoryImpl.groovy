@@ -12,7 +12,6 @@ import org.apache.cxf.frontend.ClientProxy
 import org.apache.cxf.interceptor.Interceptor
 import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.interceptor.LoggingOutInterceptor
-import org.apache.cxf.jaxws.JaxWsClientProxy
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean
 import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
@@ -135,11 +134,12 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         String proxyFactoryBindingId = interfaceMap.get(serviceName).proxyFactoryBindingId
         Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
         String secureSocketProtocol = interfaceMap.get(serviceName).secureSocketProtocol
+        Map requestContext = interfaceMap.get(serviceName).requestContext
         try {
             assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
-                           handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol)
+                           handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol, requestContext)
             log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
         } catch(Exception exception) {
             handler.cxfProxy = null
