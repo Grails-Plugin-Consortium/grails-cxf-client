@@ -18,6 +18,7 @@ CXF CLIENT
 * <a href="#Ssl">Setting Secure Socket Protocol</a>
 * <a href="#Beans">User Client Beans Anywhere</a>
 * <a href="#Endpoints">Retrieving and Updating Endpoints</a>
+* <a href="#console">Enabling Logging of SOAP Messages</a>
 * <a href="#Demo">Demo Project</a>
 * <a href="#Issues">Issues</a>
 * <a href="#Build">Build Server</a>
@@ -664,6 +665,26 @@ webserviceClientFactory.updateServiceEndpointAddress('simpleServiceClient', 'htt
 ```
 
 If no service endpoint is found matching the `serviceName` or if an empty name is passed, an UpdateServiceEndpointException will be thrown.  This was done to give concrete feedback of an endpoint update failure.
+
+<p align="right"><a href="#Top">Top</a></p>
+<a name="console"></a>
+
+ENABLING LOGGING OF SOAP MESSAGES
+---------------
+If you would like to view the raw soap in the console/log files add the follow:
+
+JVM startup params:
+```
+-Dorg.apache.cxf.Logger=org.apache.cxf.common.logging.Log4jLogger
+```
+
+Logging config:
+```groovy
+log4j {
+    ...
+  info 'org.apache.cxf' //debug, etc
+}
+```
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Demo"></a>
