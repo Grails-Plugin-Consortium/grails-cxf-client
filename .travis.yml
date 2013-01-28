@@ -1,7 +1,7 @@
 language: groovy
 
 jdk:
-- oraclejdk7
+- oraclejdk6
 
 before_install:
 - sudo add-apt-repository -y ppa:groovy-dev/grails
