@@ -158,6 +158,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 connectionTimeout = [Number of milliseconds to wait for connection] //optional - Defaults to 60000 (use 0 to wait infinitely)
                 receiveTimeout = [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
                 allowChunking = [true or false] //optional - defaults to false
+                contentType = [String value of http content type] - defaults to 'text/xml; charset=UTF8'
                 httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
                 proxyFactoryBindingId = [binding id uri if required] //optional - defaults to null
                 secureSocketProtocol = [socket protocol to use for secure service] //optional - defaults to null
@@ -196,6 +197,7 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>receiveTimeout</td><td>Specifies the amount of time, in milliseconds, that the client will wait for a response before it times out. The default is 60000. 0 specifies that the client will wait indefinitely. (default: 60000)</td><td>No</td></tr>
 <tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
+<tr><td>contentType</td><td>Allows user to override the content type of the http policy default of 'text/xml; charset=UTF8'.  Might want to set to "application/soap+xml; charset=UTF-8" for example.</td><td>No</td></tr>
 <tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
 <tr><td>secureSocketProtocol</td><td>The Secure socket protocol to use for secure services.  This will be set on the cxf http object that is created for communication to the service.  If you don't specify, I believe that cxf will default to "TLSv1" when invoking https services endpoints.  You can change to "SSLv3" or other if needed. (default: "")</td><td>No</td></tr>
@@ -721,7 +723,7 @@ BUILD SERVER
 <a name="Change"></a>
 CHANGE LOG
 ---------------
-* v 1.5.0
+* v 1.5.1
     * Adding contentType param to allow different http client policy content types. See: [The Client Element](http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html#ClientHTTPTransport%28includingSSLsupport%29-The{{client}}element)
 
 
