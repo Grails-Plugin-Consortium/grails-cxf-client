@@ -54,4 +54,6 @@ interface WebServiceClientFactory {
      * @return the service's current endpoint address (or null if not found)
      */
     String getServiceEndpointAddress(String serviceName)
+
+    Map getServiceMap(String serviceName)
 }

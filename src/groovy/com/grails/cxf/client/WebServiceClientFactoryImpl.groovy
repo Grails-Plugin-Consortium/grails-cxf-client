@@ -115,6 +115,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
     }
 
+    Map getServiceMap(String serviceName){
+        interfaceMap[serviceName]
+    }
+
     String getServiceEndpointAddress(String serviceName) {
         def cxfProxy = interfaceMap[serviceName]?.handler?.cxfProxy
         cxfProxy ? ClientProxy.getClient(cxfProxy)?.conduit?.target?.address?.value : null
@@ -138,7 +142,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         try {
             assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                            enableDefaultLoggingInterceptors,
-                           clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true],
+                           clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true, contentType: 'text/xml; charset=UTF8'],
                            handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol, requestContext)
             log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
         } catch(Exception exception) {
@@ -325,7 +329,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         httpClientPolicy ?: new HTTPClientPolicy(
                 receiveTimeout: clientPolicyMap.receiveTimeout,
                 connectionTimeout: clientPolicyMap.connectionTimeout,
-                allowChunking: clientPolicyMap.allowChunking
+                allowChunking: clientPolicyMap.allowChunking,
+                contentType: clientPolicyMap.contentType
         )
     }
 

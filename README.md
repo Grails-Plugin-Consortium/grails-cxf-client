@@ -722,6 +722,10 @@ BUILD SERVER
 CHANGE LOG
 ---------------
 * v 1.5.0
+    * Adding contentType param to allow different http client policy content types. See: [The Client Element](http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html#ClientHTTPTransport%28includingSSLsupport%29-The{{client}}element)
+
+
+* v 1.5.0
     * Adding requestContext param to inject onto the client port object. See: [Setting Connection Properties with Contexts](http://cxf.apache.org/docs/developing-a-consumer.html)
 
 

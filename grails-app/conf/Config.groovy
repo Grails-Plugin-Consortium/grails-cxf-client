@@ -30,5 +30,15 @@ cxf {
             connectionTimeout = 120000 //2min
             requestContext = ["requestKey": "requestValue"]
         }
+
+        stockQuoteClient2 {
+            wsdl = "http://www.webservicex.net/stockquote.asmx?WSDL"
+            clientInterface = net.webservicex.StockQuoteSoap
+            serviceEndpointAddress = "http://www.webservicex.net/stockquote.asmx"
+            receiveTimeout = 2000
+            connectionTimeout = 2000
+            requestContext = ["requestKey2": "requestValue2"]
+            contentType = 'application/soap+xml; charset=UTF-8'
+        }
     }
 }
