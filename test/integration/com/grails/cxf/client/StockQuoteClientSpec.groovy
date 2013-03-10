@@ -45,7 +45,7 @@ class StockQuoteClientSpec extends IntegrationSpec {
         println map
 
         then:
-        map.clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        map.clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         map.clientPolicyMap.connectionTimeout == 120000
         map.clientPolicyMap.receiveTimeout == 120000
         map.clientPolicyMap.allowChunking == false
