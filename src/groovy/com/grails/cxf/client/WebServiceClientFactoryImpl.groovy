@@ -142,7 +142,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         try {
             assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                            enableDefaultLoggingInterceptors,
-                           clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true, contentType: 'text/xml; charset=UTF8'],
+                           clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true, contentType: 'text/xml; charset=UTF-8'],
                            handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol, requestContext)
             log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
         } catch(Exception exception) {

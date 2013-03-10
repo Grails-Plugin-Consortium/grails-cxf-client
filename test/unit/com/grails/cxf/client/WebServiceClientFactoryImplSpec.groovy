@@ -15,7 +15,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         when:
         Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType,
                                                               "testService", "http://localhost:8080/cxf-client", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF8'],
+                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
                                                               [new LoggingOutInterceptor()], [new LoggingInInterceptor()],
                                                               [new CxfClientFaultConverter()],
                                                               [new CxfClientFaultConverter()],
@@ -37,7 +37,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         factory.interfaceMap.get("testService").handler != null
         !factory.interfaceMap.get("testService").httpClientPolicy
@@ -50,7 +50,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20), "", "", [:])
+        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20), "", "", [:])
 
         then:
         webServiceClient != null
@@ -71,7 +71,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").httpClientPolicy.connectionTimeout == 10
         factory.interfaceMap.get("testService").httpClientPolicy.receiveTimeout == 20
         factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").proxyFactoryBindingId
         !factory.interfaceMap.get("testService").secureSocketProtocol
         !factory.interfaceMap.get("testService").requestContext
@@ -82,7 +82,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20, allowChunking: false), null, null, null)
+        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20, allowChunking: false), null, null, null)
 
         then:
         webServiceClient != null
@@ -101,7 +101,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").httpClientPolicy != null
         factory.interfaceMap.get("testService").httpClientPolicy.connectionTimeout == 10
         factory.interfaceMap.get("testService").httpClientPolicy.receiveTimeout == 20
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
         !factory.interfaceMap.get("testService").proxyFactoryBindingId
         !factory.interfaceMap.get("testService").secureSocketProtocol
@@ -113,7 +113,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when:
-        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false, contentType: 'text/xml; charset=UTF8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "", "", [:])
+        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "", "", [:])
 
         then:
         webServiceClient != null
@@ -129,7 +129,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 2
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 1
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         factory.interfaceMap.get("testService").handler != null
         !factory.interfaceMap.get("testService").httpClientPolicy
@@ -173,7 +173,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "", "", ["one": "one"])
+        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "", "", ["one": "one"])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -188,7 +188,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("one") == "one"
@@ -209,7 +209,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").proxyFactoryBindingId
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/new"
@@ -220,7 +220,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:])
+        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -235,7 +235,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
@@ -262,7 +262,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
@@ -276,7 +276,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
         when: "we create an initial service"
-        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:])
+        Object webServiceClient = factory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, "testService", "http://localhost:8080/cxf-client/old", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -291,7 +291,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
@@ -318,7 +318,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").outFaultInterceptors.size() > 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
-        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF8'
+        factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
@@ -334,7 +334,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         String serviceEndpointAddress = 'http://localhost:8080/cxf-client'
 
         when: "create an initial service"
-        webServiceClientFactory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, serviceName, serviceEndpointAddress, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:])
+        webServiceClientFactory.getWebServiceClient(null, null, null, test.mock.SimpleServicePortType, serviceName, serviceEndpointAddress, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:])
 
         then: "can retrieve the service endpoint address"
         webServiceClientFactory.getServiceEndpointAddress(serviceName) == serviceEndpointAddress
