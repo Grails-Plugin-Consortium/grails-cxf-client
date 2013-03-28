@@ -712,6 +712,14 @@ You may need to put a cert into your [jdkhome]\jre\lib\security directory.  I wi
 
 Another solution is to get the wsdl from the web and copy into a local file.wsdl and change the config to point to a local file instead of the https endpoint for generation.
 
+If your compile fails on the Client classes you may need to add 
+
+```
+wsdlArgs = ['-autoNameResolution','-frontend','jaxws21']
+```
+
+to your service args.  The autoNameResolution to resolve duplicate or recursive entries in the wsdl and the frontend set to jaxws21 to force the generated classes to conform with 2.1 standards.
+
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Build"></a>
 BUILD SERVER
