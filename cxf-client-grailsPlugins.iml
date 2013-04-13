@@ -33,7 +33,7 @@
     <content url="file://$MODULE_DIR$/target/plugins/tomcat-2.1.3" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="grails-2.1.0" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="grails-2.1.3" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="grails-2.1.3" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (cxf-client-grailsPlugins)">
@@ -76,9 +76,7 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-tools-wsdlto-core/jars/cxf-tools-wsdlto-core-2.6.2.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://C:/apps/Maven/cxf-rt-transports-http-2.6.2-sources.jar!/" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
   </component>

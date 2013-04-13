@@ -10,7 +10,10 @@
     </facet>
     <facet type="web" name="GrailsWeb">
       <configuration>
-        <webroots />
+        <webroots>
+          <root url="file://$MODULE_DIR$/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
+        </webroots>
         <sourceRoots />
       </configuration>
     </facet>
@@ -29,6 +32,12 @@
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/domain" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/taglib" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
       <excludeFolder url="file://$MODULE_DIR$/web-app/plugins" />
@@ -75,6 +84,7 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.velocity/velocity/jars/velocity-1.7.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-tools-common/jars/cxf-tools-common-2.6.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.cxf/cxf-tools-wsdlto-core/jars/cxf-tools-wsdlto-core-2.6.2.jar!/" />
+          <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -83,11 +93,13 @@
           <root url="jar://C:/apps/apache-cxf-2.4.2/src/cxf-rt-ws-security-2.3.0-sources.jar!/" />
           <root url="jar://C:/apps/Maven/cxf-rt-transports-http-2.6.2-sources.jar!/" />
         </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="library" name="grails-2.0.3" level="application" />
     <orderEntry type="library" name="grails-2.1.3" level="application" />
     <orderEntry type="library" name="grails-2.1.3" level="application" />
+    <orderEntry type="module" module-name="cxf-client-grailsPlugins" />
   </component>
 </module>
 
