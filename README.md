@@ -333,7 +333,7 @@ class CustomSecurityInterceptor implements CxfClientInterceptor {
 ```
 
 You have to make sure your create method returns an object that already inherits from the appropriate classes such as an WSS4JOutInterceptor as I used here.  It is technically possible for your interceptor to extend something like SoapHeaderInterceptor, you will just be responsible for overriding all the appropriate methods yourself.  You can see the <a href="http://www.technipelago.se/content/technipelago/blog/basic-authentication-grails-cxf">following example</a> on how to define a basic auth interceptor on the server side.
-More specifically refer to <a href="http://chrisdail.com/download/BasicAuthAuthorizationInterceptor.java">this file</a> for sample code on create your own interceptor or to the <a href="https://github.com/ctoestreich/cxf-client-demo/blob/master/grails-app/conf/BootStrap.groovy">demo project file</a> that injects a server side interceptor. Perhaps the <B>best documentation</b> on writing a complex interceptor can be found at the <a href="http://cxf.apache.org/docs/interceptors.html">Apache CXF</a> site.
+More specifically refer to <a href="http://chrisdail.com/download/BasicAuthAuthorizationInterceptor.java">this file</a> for sample code on create your own interceptor or to the <a href="https://github.com/Grails-Plugin-Consortium/grails-cxf-client-demo/blob/master/grails-app/conf/BootStrap.groovy">demo project file</a> that injects a server side interceptor. Perhaps the <B>best documentation</b> on writing a complex interceptor can be found at the <a href="http://cxf.apache.org/docs/interceptors.html">Apache CXF</a> site.
 
 In the case of the above CustomSecurityInterceptor, you would then place the following in your projects resources.groovy.
 
@@ -693,7 +693,7 @@ log4j {
 DEMO PROJECT
 ---------------
 
-A demo project that includes both a sample service and usage of the cxf-client plugin can be found at <https://www.github.com/ctoestreich/cxf-client-demo>
+A demo project that includes both a sample service and usage of the cxf-client plugin can be found at <https://github.com/Grails-Plugin-Consortium/grails-cxf-client-demo>
 
 I have also included the full code on how to inject a custom security interceptor in the demo project.
 
@@ -702,7 +702,7 @@ I have also included the full code on how to inject a custom security intercepto
 ISSUES
 ---------------
 
-To submit an issue please use <https://github.com/ctoestreich/cxf-client/issues>.
+To submit an issue please use <https://github.com/Grails-Plugin-Consortium/grails-cxf-client/issues>.
 
 Currently there is an issue with pointing to a secure endpoint and running the wsdl2java script.  If you get an error message like
 
@@ -725,7 +725,7 @@ to your service args.  The autoNameResolution to resolve duplicate or recursive 
 BUILD SERVER
 -----------------
 
-[![build status](http://build.christianoestreich.com/jenkins/job/cxf-client/badge/icon)](http://build.christianoestreich.com/jenkins/job/cxf-client)
+[![Build Status](https://travis-ci.org/Grails-Plugin-Consortium/grails-cxf-client.png?branch=master)](https://travis-ci.org/Grails-Plugin-Consortium/grails-cxf-client)
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Change"></a>
@@ -784,7 +784,7 @@ CHANGE LOG
 
 * v1.2.7
     * Ability to set allowChunking
-    * Ability to specify custom HTTPClientPolicy bean to use for the client (see [demo project][https://github.com/ctoestreich/cxf-client-demo/blob/master/grails-app/conf/spring/resources.groovy] for more details)
+    * Ability to specify custom HTTPClientPolicy bean to use for the client (see [demo project][https://github.com/Grails-Plugin-Consortium/grails-cxf-client-demo/blob/master/grails-app/conf/spring/resources.groovy] for more details)
 
 
 * v1.2.6
