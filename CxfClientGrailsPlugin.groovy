@@ -25,7 +25,7 @@ class CxfClientGrailsPlugin {
     ]
 
     def license = "APACHE"
-    def author = "Christian Oestreich"
+    def author = "Grails Plugin Consortium"
     def authorEmail = "acetrike@gmail.com"
     def developers = [
             [name: "Christian Oestreich", email: "acetrike@gmail.com"],
@@ -37,8 +37,8 @@ class CxfClientGrailsPlugin {
     def description = '''\\
 Used for easily calling soap web services.  Provides wsdl2java grails target to easily generate code into src/java from configured cxf clients.  Ability to dynamically update endpoint at runtime.
 '''
-    def documentation = "https://github.com/ctoestreich/cxf-client"
-    def scm = [url: "https://github.com/ctoestreich/cxf-client"]
+    def documentation = "https://github.com/Grails-Plugin-Consortium/grails-cxf-client"
+    def scm = [url: "https://github.com/Grails-Plugin-Consortium/grails-cxf-client"]
 
 //    def watchedResources = [
 //            "file:${pluginLocation}/grails-app/services/**/*Service.groovy",
