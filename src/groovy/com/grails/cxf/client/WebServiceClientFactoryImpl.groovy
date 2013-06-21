@@ -257,11 +257,29 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 parameters = new TLSClientParameters();
             }
 
+            //todo: still need to vet out how to do keymanager/trustmanagers
+
+            if(tlsClientParameters?.useHttpsURLConnectionDefaultSslSocketFactory != null) {
+                parameters.useHttpsURLConnectionDefaultSslSocketFactory = tlsClientParameters.useHttpsURLConnectionDefaultSslSocketFactory
+            }
+
+            if(tlsClientParameters?.cipherSuitesFilter?.exclude) {
+                parameters.cipherSuitesFilter.exclude.addAll(tlsClientParameters.cipherSuitesFilter.exclude)
+            }
+
+            if(tlsClientParameters?.cipherSuitesFilter?.include) {
+                parameters.cipherSuitesFilter.include.addAll(tlsClientParameters.cipherSuitesFilter.include)
+            }
+
+            if(tlsClientParameters?.useHttpsURLConnectionDefaultHostnameVerifier != null) {
+                parameters.useHttpsURLConnectionDefaultHostnameVerifier = tlsClientParameters.useHttpsURLConnectionDefaultHostnameVerifier
+            }
+
             if(tlsClientParameters?.disableCNCheck != null) {
-                parameters.disableCNCheck = tlsClientParameters?.disableCNCheck
+                parameters.disableCNCheck = tlsClientParameters.disableCNCheck
             }
             if(tlsClientParameters?.sslCacheTimeout != null) {
-                parameters.sslCacheTimeout = tlsClientParameters?.sslCacheTimeout
+                parameters.sslCacheTimeout = tlsClientParameters.sslCacheTimeout
             }
 
             parameters.setSecureSocketProtocol(secureSocketProtocol ?: tlsClientParameters.secureSocketProtocol);

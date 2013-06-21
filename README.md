@@ -25,7 +25,6 @@ CXF CLIENT
 * <a href="#console">Enabling Logging of SOAP Messages</a>
 * <a href="#Demo">Demo Project</a>
 * <a href="#Issues">Issues</a>
-* <a href="#Build">Build Server</a>
 * <a href="#Change">Change Log</a>
 * <a href="#Future">Future Revisions</a>
 * <a href="#License">License</a>
@@ -169,6 +168,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 wsdlServiceName = [set to enable mime type mapping] //optional - defaults to null
                 wsdlEndpointName = [may be needed for correct wsdl initialization] //optional - defaults to null
                 requestContext = [Setting a Request Context Property on the Client Side] //optional - defaults to [:]
+                tlsClientParameters = [conduit settings for secure services] //optional - defaults to [:]
 
                 //wsdl config
                 wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
@@ -204,11 +204,12 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>contentType</td><td>Allows user to override the content type of the http policy default of 'text/xml; charset=UTF8'.  Might want to set to "application/soap+xml; charset=UTF-8" for example.</td><td>No</td></tr>
 <tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
-<tr><td>secureSocketProtocol</td><td>The Secure socket protocol to use for secure services.  This will be set on the cxf http object that is created for communication to the service.  If you don't specify, I believe that cxf will default to "TLSv1" when invoking https services endpoints.  You can change to "SSLv3" or other if needed. (default: "")</td><td>No</td></tr>
+<tr><td>secureSocketProtocol</td><td>The Secure socket protocol to use for secure services.  This will be set on the cxf http object that is created for communication to the service.  If you don't specify, I believe that cxf will default to "TLS" when invoking https services endpoints.  Most common example are "SSL", "TLS" or "TLSv1".  (default: "")</td><td>No</td></tr>
 <tr><td>wsdl</td><td>Location of the wsdl either locally or a url (must be available at runtime).  Will be passed into JaxWsProxyFactoryBean.  WSDL will be loaded to handle things that cannot be captured in Java classes via wsdl2java (like MIME attachments). Requires defining _wsdlServiceName_. (default: null)</td><td>No</td></tr>
 <tr><td>wsdlServiceName</td><td>The QName of the service you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  Only needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLServicePorts') (default: null)</td><td>No</td></tr>
 <tr><td>wsdlEndpointName</td><td>The QName of the endpoint/port in the WSDL you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  May be needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLServicePort') (default: null)</td><td>No</td></tr>
 <tr><td>requestContext</td><td>Setting a Request Context Property on the Client Side. (default: [:])</td><td>No</td></tr>
+<tr><td>tlsClientParameters</td><td>Configuration parameters for the secure conduit.  (default: [:])</td><td>No</td></tr>
 </table>
 
 Config items used by wsdl2java.
@@ -632,9 +633,13 @@ cxf {
 
 You may also provide configuration for via the tlsClientParameters for the client.  Using this you can set any of the following:
 
-```groovy
-[disableCNCheck: true, sslCacheTimeout: 100, secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3]
-```
+disableCNCheck: [boolean]
+sslCacheTimeout: [integer]
+secureSocketProtocol: [CxfClientConstants.SSL_PROTOCOL_SSLV3]
+useHttpsURLConnectionDefaultSslSocketFactory: [boolean]
+useHttpsURLConnectionDefaultHostnameVerifier: [boolean]
+cipherSuitesFilter.exclude: [List<String>]
+cipherSuitesFilter.include: [List<String>]
 
 This is done via the configuration block such as:
 
@@ -645,7 +650,12 @@ cxf {
     client {
         simpleServiceClient {
             ...
-            tlsClientParameters = [disableCNCheck: true, sslCacheTimeout: 100, secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3]
+            tlsClientParameters = [
+                disableCNCheck: true,
+                sslCacheTimeout: 100,
+                secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3
+                cipherSuitesFilter.include = ['.*_EXPORT_.*','.*_EXPORT1024_.*']
+            ]
         }
 }
 ```
@@ -757,16 +767,12 @@ wsdlArgs = ['-autoNameResolution','-frontend','jaxws21']
 to your service args.  The autoNameResolution to resolve duplicate or recursive entries in the wsdl and the frontend set to jaxws21 to force the generated classes to conform with 2.1 standards.
 
 <p align="right"><a href="#Top">Top</a></p>
-<a name="Build"></a>
-BUILD SERVER
------------------
-
-[![Build Status](https://travis-ci.org/Grails-Plugin-Consortium/grails-cxf-client.png?branch=master)](https://travis-ci.org/Grails-Plugin-Consortium/grails-cxf-client)
-
-<p align="right"><a href="#Top">Top</a></p>
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 1.5.4
+    * Adding tlsClientParameters to set disableCNCheck, sslCacheTimeout and secureSocketProtocol.
+
 * v 1.5.1
     * Adding contentType param to allow different http client policy content types. See: [The Client Element](http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html#ClientHTTPTransport%28includingSSLsupport%29-The{{client}}element)
 
