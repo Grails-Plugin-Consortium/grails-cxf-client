@@ -1,3 +1,7 @@
+BUILD STATUS
+==========
+[![Build Status](https://travis-ci.org/Grails-Plugin-Consortium/grails-cxf-client.png?branch=master)](https://travis-ci.org/Grails-Plugin-Consortium/grails-cxf-client)
+
 <a name="Top"></a>
 
 CXF CLIENT
