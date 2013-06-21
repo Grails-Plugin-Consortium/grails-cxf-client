@@ -662,6 +662,8 @@ cxf {
 
 Either may be used, but the secureSocketProtocol takes precedent for setting the protocol.  Both `secureSocketProtocol` and `tlsClientParameters` may be used in conjunction, but it is preferred if you want to set more than just the protocol to use the tlsClientParameters map.
 
+Not all features for http conduit are supported.  You can read more about conduit settings at <http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html#ClientHTTPTransport%28includingSSLsupport%29-The{{tlsClientParameters}}element>.
+
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Beans"></a>
 USING CLIENT BEANS ANYWHERE
