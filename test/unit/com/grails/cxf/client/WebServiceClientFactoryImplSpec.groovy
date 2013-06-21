@@ -57,7 +57,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         when:
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
                                                               "testService", "http://localhost:8080/cxf-client", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0,          allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
                                                               [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
                                                               [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20), "", "",
                                                               [:],
@@ -201,7 +201,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
                                                               [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
                                                               [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
                                                               [new CxfClientFaultConverter()], null, "", "",
-                                                              ["one": "one"],[:])
+                                                              ["one": "one"], [:])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -317,7 +317,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
                                                               "testService", "http://localhost:8080/cxf-client/old", false,
                                                               [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
                                                               [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:],[:])
+                                                              [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:], [:])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -377,13 +377,13 @@ class WebServiceClientFactoryImplSpec extends Specification {
         String serviceEndpointAddress = 'http://localhost:8080/cxf-client'
 
         when: "create an initial service"
-        webServiceClientFactory.getWebServiceClient(null, null, null, SimpleServicePortType, serviceName, serviceEndpointAddress, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:],[:])
+        webServiceClientFactory.getWebServiceClient(null, null, null, SimpleServicePortType, serviceName, serviceEndpointAddress, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:], [:])
 
         then: "can retrieve the service endpoint address"
         webServiceClientFactory.getServiceEndpointAddress(serviceName) == serviceEndpointAddress
     }
 
-    def "test the settings map when speificying the protocol via tlsClientParameters"(){
+    def "test the settings map when speificying the protocol via tlsClientParameters"() {
         given:
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
 
@@ -393,7 +393,11 @@ class WebServiceClientFactoryImplSpec extends Specification {
                                                               [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
                                                               [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
                                                               [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", null, [:],
-                                                              [disableCNCheck: true, sslCacheTimeout: 100, secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3])
+                                                              [disableCNCheck: true,
+                                                                      sslCacheTimeout: 100,
+                                                                      secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3,
+                                                                      cipherSuitesFilter: [include: ['.*_EXPORT_.*', '.*_EXPORT1024_.*'], exclude: ['.*_DH_anon_.*']]
+                                                              ])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -416,6 +420,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").tlsClientParameters.disableCNCheck == true
         factory.interfaceMap.get("testService").tlsClientParameters.sslCacheTimeout == 100
         factory.interfaceMap.get("testService").tlsClientParameters.secureSocketProtocol == CxfClientConstants.SSL_PROTOCOL_SSLV3
+        factory.interfaceMap.get("testService").tlsClientParameters.cipherSuitesFilter.include == ['.*_EXPORT_.*', '.*_EXPORT1024_.*']
+        factory.interfaceMap.get("testService").tlsClientParameters.cipherSuitesFilter.exclude == ['.*_DH_anon_.*']
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/old"
     }

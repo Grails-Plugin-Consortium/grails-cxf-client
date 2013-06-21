@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.apache.cxf.BusFactory
 import org.apache.cxf.configuration.jsse.TLSClientParameters
+import org.apache.cxf.configuration.security.FiltersType
 import org.apache.cxf.endpoint.Client
 import org.apache.cxf.frontend.ClientProxy
 import org.apache.cxf.interceptor.Interceptor
@@ -263,12 +264,15 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 parameters.useHttpsURLConnectionDefaultSslSocketFactory = tlsClientParameters.useHttpsURLConnectionDefaultSslSocketFactory
             }
 
-            if(tlsClientParameters?.cipherSuitesFilter?.exclude) {
-                parameters.cipherSuitesFilter.exclude.addAll(tlsClientParameters.cipherSuitesFilter.exclude)
-            }
+            if(tlsClientParameters?.cipherSuitesFilter != null) {
+                parameters.cipherSuitesFilter = new FiltersType()
+                if(tlsClientParameters?.cipherSuitesFilter?.exclude) {
+                    parameters.cipherSuitesFilter.exclude.addAll(tlsClientParameters.cipherSuitesFilter.exclude.collect())
+                }
 
-            if(tlsClientParameters?.cipherSuitesFilter?.include) {
-                parameters.cipherSuitesFilter.include.addAll(tlsClientParameters.cipherSuitesFilter.include)
+                if(tlsClientParameters?.cipherSuitesFilter?.include) {
+                    parameters.cipherSuitesFilter.include.addAll(tlsClientParameters.cipherSuitesFilter.include.collect())
+                }
             }
 
             if(tlsClientParameters?.useHttpsURLConnectionDefaultHostnameVerifier != null) {
