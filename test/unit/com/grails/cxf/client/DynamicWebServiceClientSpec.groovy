@@ -4,6 +4,7 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
 
 import spock.lang.Specification
+import test.mock.SimpleServicePortType
 
 class DynamicWebServiceClientSpec extends Specification {
 
@@ -11,7 +12,7 @@ class DynamicWebServiceClientSpec extends Specification {
         given:
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
         DynamicWebServiceClient client = new DynamicWebServiceClient(
-                clientInterface: test.mock.SimpleServicePortType,
+                clientInterface: SimpleServicePortType,
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 clientPolicyMap: [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false],
@@ -25,7 +26,7 @@ class DynamicWebServiceClientSpec extends Specification {
         then:
         object != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == SimpleServicePortType
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.connectionTimeout == 0
@@ -41,7 +42,7 @@ class DynamicWebServiceClientSpec extends Specification {
         given:
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
         DynamicWebServiceClient client = new DynamicWebServiceClient(
-                clientInterface: test.mock.SimpleServicePortType,
+                clientInterface: SimpleServicePortType,
                 serviceName: "testService",
                 serviceEndpointAddress: "http://localhost:8080/cxf-client",
                 clientPolicyMap: [receiveTimeout: 0, connectionTimeout: 0, allowChunking: true],
@@ -54,7 +55,7 @@ class DynamicWebServiceClientSpec extends Specification {
         then:
         object != null
         factory.interfaceMap.containsKey("testService")
-        factory.interfaceMap.get("testService").clientInterface == test.mock.SimpleServicePortType
+        factory.interfaceMap.get("testService").clientInterface == SimpleServicePortType
         factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         factory.interfaceMap.get("testService").handler != null
         !factory.interfaceMap.get("testService").httpClientPolicy
@@ -66,7 +67,7 @@ class DynamicWebServiceClientSpec extends Specification {
         given:
         WebServiceClientFactoryImpl factory = new WebServiceClientFactoryImpl()
         DynamicWebServiceClient client = new DynamicWebServiceClient(
-                clientInterface: test.mock.SimpleServicePortType,
+                clientInterface: SimpleServicePortType,
                 serviceName: "testService",
                 serviceEndpointAddress: "",
                 clientPolicyMap: [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false],

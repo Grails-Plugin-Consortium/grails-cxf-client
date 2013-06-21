@@ -29,10 +29,24 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
     private static final Log log = LogFactory.getLog(this)
 
     /**
-     * create and cache the reference to the web service client proxy object
-     * @param serviceInterface cxf generated port interface to use for service contract
+     * Create and cache the reference to the web service client proxy object
+     * @param wsdlURL
+     * @param wsdlServiceName
+     * @param wsdlEndpointName
+     * @param clientInterface cxf generated port interface to use for service contract
      * @param serviceName the name of the service for using in cache key
      * @param serviceEndpointAddress url to use when invoking service
+     * @param enableDefaultLoggingInterceptors
+     * @param clientPolicyMap
+     * @param outInterceptors
+     * @param inInterceptors
+     * @param inFaultInterceptors
+     * @param outFaultInterceptors
+     * @param httpClientPolicy
+     * @param proxyFactoryBindingId
+     * @param secureSocketProtocol
+     * @param requestContext
+     * @param tlsClientParameters
      * @return
      */
     @Synchronized Object getWebServiceClient(String wsdlURL, String wsdlServiceName, String wsdlEndpointName,
@@ -47,7 +61,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                              HTTPClientPolicy httpClientPolicy,
                                              String proxyFactoryBindingId,
                                              String secureSocketProtocol,
-                                             Map<java.lang.String, java.lang.Object> requestContext) {
+                                             Map<String, Object> requestContext,
+                                             Map tlsClientParameters) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
 
@@ -57,7 +72,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                                enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
                                inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol,
-                               requestContext)
+                               requestContext, tlsClientParameters)
             } catch(Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
                         "Could not create web service client for interface $clientInterface with Service Endpoint Address at $serviceEndpointAddress. Make sure Endpoint URL exists and is accessible.", exception)
@@ -86,7 +101,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 httpClientPolicy: httpClientPolicy,
                 proxyFactoryBindingId: proxyFactoryBindingId,
                 secureSocketProtocol: secureSocketProtocol,
-                requestContext: requestContext]
+                requestContext: requestContext,
+                tlsClientParameters: tlsClientParameters]
         interfaceMap.put(serviceName, serviceMap)
 
         clientProxy
@@ -115,7 +131,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         }
     }
 
-    Map getServiceMap(String serviceName){
+    Map getServiceMap(String serviceName) {
         interfaceMap[serviceName]
     }
 
@@ -139,11 +155,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
         String secureSocketProtocol = interfaceMap.get(serviceName).secureSocketProtocol
         Map requestContext = interfaceMap.get(serviceName).requestContext
+        Map tlsClientParameters = interfaceMap.get(serviceName).tlsClientParameters
         try {
             assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                            enableDefaultLoggingInterceptors,
                            clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true, contentType: 'text/xml; charset=UTF-8'],
-                           handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId, secureSocketProtocol, requestContext)
+                           handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, proxyFactoryBindingId,
+                           secureSocketProtocol, requestContext, tlsClientParameters)
             log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
         } catch(Exception exception) {
             handler.cxfProxy = null
@@ -186,20 +204,29 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                 HTTPClientPolicy httpClientPolicy,
                                 String proxyFactoryBindingId,
                                 String secureSocketProtocol,
-                                Map<java.lang.String, java.lang.Object> requestContext) {
+                                Map<String, Object> requestContext,
+                                Map tlsClientParameters) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                                                                              address: serviceEndpointAddress,
                                                                              bus: BusFactory.defaultBus)
-        if(wsdlURL) {clientProxyFactory.wsdlURL = wsdlURL}
-        if(wsdlServiceName) {clientProxyFactory.serviceName = QName.valueOf(wsdlServiceName)}
-        if(wsdlEndpointName) {clientProxyFactory.endpointName = QName.valueOf(wsdlEndpointName)}
-        if(proxyFactoryBindingId) {clientProxyFactory.bindingId = proxyFactoryBindingId}
+        if(wsdlURL) {
+            clientProxyFactory.wsdlURL = wsdlURL
+        }
+        if(wsdlServiceName) {
+            clientProxyFactory.serviceName = QName.valueOf(wsdlServiceName)
+        }
+        if(wsdlEndpointName) {
+            clientProxyFactory.endpointName = QName.valueOf(wsdlEndpointName)
+        }
+        if(proxyFactoryBindingId) {
+            clientProxyFactory.bindingId = proxyFactoryBindingId
+        }
 
         Object cxfProxy = clientProxyFactory.create()
         addInterceptors(cxfProxy, enableDefaultLoggingInterceptors, clientPolicyMap,
                         outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy)
-        if(secureSocketProtocol) {
-            setSsl(cxfProxy, secureSocketProtocol)
+        if(secureSocketProtocol || tlsClientParameters?.secureSocketProtocol != null) {
+            setSsl(cxfProxy, secureSocketProtocol, tlsClientParameters)
         }
 
         assignContexts(cxfProxy, requestContext)
@@ -208,13 +235,14 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
     }
 
-    private void assignContexts(Object cxfProxy, Map<java.lang.String, java.lang.Object> requestContext) {
+    private static void assignContexts(Object cxfProxy, Map<String, Object> requestContext) {
         if(requestContext?.size() > 0) {
             cxfProxy.requestContext.putAll(requestContext)
         }
     }
 
-    private void setSsl(Object cxfProxy, String secureSocketProtocol) {
+
+    private static void setSsl(Object cxfProxy, String secureSocketProtocol, Map tlsClientParameters) {
         //secureSocketProtocol should be one in Constants file, but let them set it to whatever
         if(![CxfClientConstants.SSL_PROTOCOL_SSLV3, CxfClientConstants.SSL_PROTOCOL_TLSV1].contains(secureSocketProtocol)) {
             log.info "The provided secureSocketProtocol of $secureSocketProtocol might not be recognized"
@@ -224,12 +252,20 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         Conduit c = client.getConduit();
         if(c instanceof HTTPConduit) {
             HTTPConduit conduit = (HTTPConduit) c;
-            TLSClientParameters tlsParameters = conduit.getTlsClientParameters();
-            if(tlsParameters == null) {
-                tlsParameters = new TLSClientParameters();
+            TLSClientParameters parameters = conduit.tlsClientParameters;
+            if(parameters == null) {
+                parameters = new TLSClientParameters();
             }
-            tlsParameters.setSecureSocketProtocol(secureSocketProtocol);
-            conduit.setTlsClientParameters(tlsParameters);
+
+            if(tlsClientParameters?.disableCNCheck != null) {
+                parameters.disableCNCheck = tlsClientParameters?.disableCNCheck
+            }
+            if(tlsClientParameters?.sslCacheTimeout != null) {
+                parameters.sslCacheTimeout = tlsClientParameters?.sslCacheTimeout
+            }
+
+            parameters.setSecureSocketProtocol(secureSocketProtocol ?: tlsClientParameters.secureSocketProtocol);
+            conduit.tlsClientParameters = parameters
         }
     }
 
@@ -237,14 +273,14 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * Add default interceptors to the client proxy
      * @param cxfProxy proxy class you wish to intercept
      */
-    private void addInterceptors(Object cxfProxy,
-                                 Boolean enableDefaultLoggingInterceptors,
-                                 Map clientPolicyMap,
-                                 List outInterceptors,
-                                 List inInterceptors,
-                                 List inFaultInterceptors,
-                                 List outFaultInterceptors,
-                                 HTTPClientPolicy httpClientPolicy) {
+    private static void addInterceptors(Object cxfProxy,
+                                        Boolean enableDefaultLoggingInterceptors,
+                                        Map clientPolicyMap,
+                                        List outInterceptors,
+                                        List inInterceptors,
+                                        List inFaultInterceptors,
+                                        List outFaultInterceptors,
+                                        HTTPClientPolicy httpClientPolicy) {
         Client client = ClientProxy.getClient(cxfProxy)
 
         configureReceiveTimeout(client, clientPolicyMap, httpClientPolicy)
@@ -269,7 +305,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param inFaultInterceptors In Fault Interceptors
      * @param enableDefaultLoggingInterceptors Enable the default logging interceptors in addition to any custom ones
      */
-    private void wireDefaultInterceptors(Client client, List outFaultInterceptors, List inFaultInterceptors, Boolean enableDefaultLoggingInterceptors) {
+    private static void wireDefaultInterceptors(Client client, List outFaultInterceptors, List inFaultInterceptors, Boolean enableDefaultLoggingInterceptors) {
 //Only provide the default interceptors when no others are defined
         if((outFaultInterceptors?.size() ?: ZERO) == ZERO) {
             client.outFaultInterceptors.add(new CxfClientFaultConverter())
@@ -290,7 +326,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param clientInterceptors interceptors attached to a Client object (in/out/etc)
      * @param cxfInterceptors interceptors that are configured to be used
      */
-    private void addInterceptors(List clientInterceptors, List cxfInterceptors) {
+    private static void addInterceptors(List clientInterceptors, List cxfInterceptors) {
         cxfInterceptors.each {
             if(it instanceof Interceptor || it instanceof CxfClientInterceptor) {
                 clientInterceptors.add((it instanceof CxfClientInterceptor) ? it.create() : it)
@@ -311,7 +347,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param client the client object
      * @param clientPolicyMap map of receive and connection timeout/chunking params
      */
-    private void configureReceiveTimeout(Client client, Map clientPolicyMap, HTTPClientPolicy httpClientPolicy = null) {
+    private static void configureReceiveTimeout(Client client, Map clientPolicyMap, HTTPClientPolicy httpClientPolicy = null) {
         Conduit c = client.conduit
         if(c instanceof HTTPConduit) {
             HTTPConduit conduit = (HTTPConduit) c
@@ -325,7 +361,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      * @param clientPolicyMap timeout/chunking map for receive and connection
      * @return HTTPClientPolicy
      */
-    private HTTPClientPolicy getHttpClientPolicy(HTTPClientPolicy httpClientPolicy, Map clientPolicyMap) {
+    private static HTTPClientPolicy getHttpClientPolicy(HTTPClientPolicy httpClientPolicy, Map clientPolicyMap) {
         httpClientPolicy ?: new HTTPClientPolicy(
                 receiveTimeout: clientPolicyMap.receiveTimeout,
                 connectionTimeout: clientPolicyMap.connectionTimeout,

@@ -2,7 +2,6 @@ package com.grails.cxf.client
 
 import org.springframework.beans.factory.FactoryBean
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
-import org.springframework.context.MessageSource
 
 /**
  * Provides web service clients.  Supports dynamically changing the wsdl document url
@@ -19,7 +18,6 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     String serviceEndpointAddress
     String serviceName
     WebServiceClientFactory webServiceClientFactory
-    MessageSource messageSource
     def outInterceptors = []
     def inInterceptors = []
     def inFaultInterceptors = []
@@ -28,6 +26,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     String proxyFactoryBindingId
     String secureSocketProtocol
     Map requestContext
+    Map tlsClientParameters = [:]
 
     Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
         if(!clientInterface || !serviceEndpointAddress) {
@@ -50,7 +49,8 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                                                     httpClientPolicy,
                                                     proxyFactoryBindingId,
                                                     secureSocketProtocol,
-                                                    requestContext)
+                                                    requestContext,
+                                                    tlsClientParameters)
     }
 
     Class<?> getObjectType() {

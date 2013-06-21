@@ -38,13 +38,14 @@ interface WebServiceClientFactory {
                                HTTPClientPolicy httpClientPolicy,
                                String proxyFactoryBindingId,
                                String secureSocketProtocol,
-                               Map<java.lang.String, java.lang.Object> requestContext)
+                               Map<String, Object> requestContext,
+                               Map tlsClientParameters)
 
     /**
      * Allows updating endpoint and refreshing proxy reference
      * @param serviceName The name of the service to update
      * @param serviceEndpointAddress The new address to use
-     * @throws com.grails.cxf.client.exception.UpdateServiceEndpointException If endpoint can not be updated
+     * @throws UpdateServiceEndpointException If endpoint can not be updated
      */
     void updateServiceEndpointAddress(String serviceName, String serviceEndpointAddress) throws UpdateServiceEndpointException
 

@@ -615,6 +615,38 @@ public static final String SSL_PROTOCOL_TLSV1 = 'TLSv1'
 public static final String SSL_PROTOCOL_SSLV3 = 'SSLv3'
 ```
 
+Config.groovy
+
+```groovy
+cxf {
+    client {
+        simpleServiceClient {
+            secureSocketProtocol = CxfClientConstants.SSL_PROTOCOL_SSLV3
+        }
+}
+```
+
+You may also provide configuration for via the tlsClientParameters for the client.  Using this you can set any of the following:
+
+```groovy
+[disableCNCheck: true, sslCacheTimeout: 100, secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3]
+```
+
+This is done via the configuration block such as:
+
+Config.groovy
+
+```groovy
+cxf {
+    client {
+        simpleServiceClient {
+            ...
+            tlsClientParameters = [disableCNCheck: true, sslCacheTimeout: 100, secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3]
+        }
+}
+```
+
+Either may be used, but the secureSocketProtocol takes precedent for setting the protocol.  Both `secureSocketProtocol` and `tlsClientParameters` may be used in conjunction, but it is preferred if you want to set more than just the protocol to use the tlsClientParameters map.
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Beans"></a>
