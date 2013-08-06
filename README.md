@@ -570,8 +570,8 @@ cxf {
 
 Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
 
-<p align="right"><a href="#Exceptions">Top</a></p>
-<a name="Beans"></a>
+<p align="right"><a href="#Top">Top</a></p>
+<a name="Exceptions"></a>
 DEALING WITH EXCEPTIONS
 ---------------
 As of version 1.2.9 of the plugin, I have fixed the issue so your services with checked exceptions defined will not throw them as designed.  Given some service that throws an exception (ComplexContrivedException_Exception in our case) as follows:
@@ -773,8 +773,13 @@ to your service args.  The autoNameResolution to resolve duplicate or recursive 
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 1.5.5
+    * Removing compile from the wsdl2java script as a dependency.
+
+
 * v 1.5.4
     * Adding tlsClientParameters to set disableCNCheck, sslCacheTimeout and secureSocketProtocol.
+
 
 * v 1.5.1
     * Adding contentType param to allow different http client policy content types. See: [The Client Element](http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html#ClientHTTPTransport%28includingSSLsupport%29-The{{client}}element)

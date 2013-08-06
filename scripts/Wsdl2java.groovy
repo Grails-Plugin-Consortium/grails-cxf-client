@@ -12,7 +12,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
 ''') {
 
     //depends(compile, createConfig, parseArguments)
-    depends(compile, createConfig, parseArguments, classpath)
+    depends(createConfig, parseArguments, classpath)
 
     printMessage "Starting wsdl2java"
     def wsdls = [[:]]
