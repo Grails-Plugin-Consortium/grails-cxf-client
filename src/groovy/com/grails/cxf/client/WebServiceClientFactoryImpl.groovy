@@ -19,6 +19,7 @@ import org.apache.cxf.transport.http.HTTPConduit
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
 import javax.xml.namespace.QName
+import javax.xml.ws.BindingProvider
 import java.lang.reflect.*
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
@@ -65,7 +66,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                              Map<String, Object> requestContext,
                                              Map tlsClientParameters) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
-        Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface] as Class[], handler)
+        Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface, BindingProvider.class] as Class[], handler)
 
         if(serviceEndpointAddress) {
             try {
