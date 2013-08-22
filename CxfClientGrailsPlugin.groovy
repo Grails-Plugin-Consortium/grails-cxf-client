@@ -8,7 +8,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
-    def version = "1.5.5"
+    def version = "1.5.6"
     def grailsVersion = "1.3.0 > *"
     def pluginExcludes = [
             'grails-app/conf/codenarc.groovy',
