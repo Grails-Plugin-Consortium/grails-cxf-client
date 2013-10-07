@@ -1,3 +1,5 @@
+import org.codehaus.gant.GantState
+
 includeTargets << grailsScript("_GrailsSettings")
 includeTargets << grailsScript('_GrailsPackage')
 includeTargets << grailsScript("_GrailsArgParsing")
@@ -23,7 +25,7 @@ This target needs to be run only upon changes in the upstream API, since it's ar
     wsdls.each { config ->
         if(config?.wsdl) {
             printMessage "Generating java stubs from ${config?.wsdl}"
-            ant.logger.setMessageOutputLevel(org.codehaus.gant.GantState.NORMAL)
+            ant.logger.setMessageOutputLevel(GantState.NORMAL)
             ant.java(classname: 'org.apache.cxf.tools.wsdlto.WSDLToJava') {
                 arg(value: "-verbose")
                 if(config?.client) arg(value: "-client")
