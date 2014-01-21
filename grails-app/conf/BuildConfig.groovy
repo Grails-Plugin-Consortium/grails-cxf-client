@@ -20,15 +20,15 @@ grails.project.dependency.resolution = {
 
         compile('commons-cli:commons-cli:1.2')
 
-        compile("${cxfGroup}:cxf-tools-wsdlto-core:${cxfVersion}") {
+        build("${cxfGroup}:cxf-tools-wsdlto-core:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile("${cxfGroup}:cxf-tools-wsdlto-frontend-jaxws:${cxfVersion}") {
+        build("${cxfGroup}:cxf-tools-wsdlto-frontend-jaxws:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
+        build("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
