@@ -2,6 +2,7 @@ package com.grails.cxf.client
 
 import grails.plugin.spock.IntegrationSpec
 import net.webservicex.StockQuoteSoap
+import spock.lang.Ignore
 
 import javax.xml.ws.WebServiceException
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
@@ -14,6 +15,7 @@ class StockQuoteClientSpec extends IntegrationSpec {
     StockQuoteSoap stockQuoteClient2
     WebServiceClientFactory webServiceClientFactory
 
+    @Ignore('Service provider having issues out of disk space 2014-01-21')
     def "test the normal invocation of a client"() {
         when:
         def response = stockQuoteClient.getQuote(symbol)
@@ -64,6 +66,7 @@ class StockQuoteClientSpec extends IntegrationSpec {
         map.requestContext == ['requestKey2': 'requestValue2']
     }
 
+    @Ignore('Service provider having issues out of disk space 2014-01-21')
     def "test changing the url of the service"(){
         when:
         def response = stockQuoteClient.getQuote('GOOG')

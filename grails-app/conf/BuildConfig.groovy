@@ -52,6 +52,11 @@ grails.project.dependency.resolution = {
                      'log4j', 'slf4j', 'slf4j-log4j12','slf4j-api', 'slf4j-jdk14'
         }
 
+        test("org.spockframework:spock-grails-support:0.7-groovy-2.0"){
+            export = false
+        }
+
+
         /* Some Testing Help **************************************************/
 //        test("org.codehaus.geb:geb-spock:${gebVersion}") {
 //            export = false
@@ -82,7 +87,8 @@ grails.project.dependency.resolution = {
         }
 
         /* Spock and Geb for Testing ******************************************/
-        test(":spock:0.6") {
+        test(":spock:0.7") {
+            exclude "spock-grails-support"
             export = false
         }
 
