@@ -20,7 +20,7 @@ CXF CLIENT
 * <a href="#Custom">Custom Http Client Policy</a>
 * <a href="#Exceptions">Dealing With Exceptions</a>
 * <a href="#Ssl">Setting Secure Socket Protocol</a>
-* <a href="#Beans">User Client Beans Anywhere</a>
+* <a href="#Beans">Using Client Beans Anywhere</a>
 * <a href="#Endpoints">Retrieving and Updating Endpoints</a>
 * <a href="#console">Enabling Logging of SOAP Messages</a>
 * <a href="#Demo">Demo Project</a>
