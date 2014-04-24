@@ -8,7 +8,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
-    def version = "1.6.0"
+    def version = "1.6.1"
     def grailsVersion = "1.3.0 > *"
     def pluginExcludes = [
             'grails-app/conf/codenarc.groovy',
@@ -39,14 +39,6 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
 '''
     def documentation = "https://github.com/Grails-Plugin-Consortium/grails-cxf-client"
     def scm = [url: "https://github.com/Grails-Plugin-Consortium/grails-cxf-client"]
-
-//    def watchedResources = [
-//            "file:${pluginLocation}/grails-app/services/**/*Service.groovy",
-//            "file:${pluginLocation}/grails-app/controllers/**/*Controller.groovy",
-//            "file:${pluginLocation}/grails-app/taglib/**/*TagLib.groovy",
-//            "file:${pluginLocation}/grails-app/taglib/**/*Job.groovy"
-//    ]
-
     def doWithSpring = {
 
         webServiceClientFactory(WebServiceClientFactoryImpl)

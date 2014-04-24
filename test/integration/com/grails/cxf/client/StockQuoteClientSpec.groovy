@@ -1,6 +1,6 @@
 package com.grails.cxf.client
 
-import grails.plugin.spock.IntegrationSpec
+import grails.test.spock.IntegrationSpec
 import net.webservicex.StockQuoteSoap
 import spock.lang.Ignore
 
