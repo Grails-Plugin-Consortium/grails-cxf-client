@@ -769,10 +769,31 @@ wsdlArgs = ['-autoNameResolution','-frontend','jaxws21']
 
 to your service args.  The autoNameResolution to resolve duplicate or recursive entries in the wsdl and the frontend set to jaxws21 to force the generated classes to conform with 2.1 standards.
 
+WSDL2JAVA
+
+It appears there was a change that caused classpath issues with the ant wsdl2java tools.  If this fails to run you can upgrade to version 1.6.1+ of the plugin or add the following into your dependencies block of your project.
+
+```
+compile("${cxfGroup}:cxf-tools-wsdlto-core:${cxfVersion}") {
+    excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
+}
+
+compile("${cxfGroup}:cxf-tools-wsdlto-frontend-jaxws:${cxfVersion}") {
+    excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
+}
+
+compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
+    excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
+}
+```
+
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 1.6.1
+	* Fixing wsdl2java script which appears broken in 2.3+
+
 * v 1.5.5
     * Removing compile from the wsdl2java script as a dependency.
 
