@@ -34,19 +34,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetQuoteResponse }
-     * 
-     */
-    public GetQuoteResponse createGetQuoteResponse() {
-        return new GetQuoteResponse();
-    }
-
-    /**
      * Create an instance of {@link GetQuote }
      * 
      */
     public GetQuote createGetQuote() {
         return new GetQuote();
+    }
+
+    /**
+     * Create an instance of {@link GetQuoteResponse }
+     * 
+     */
+    public GetQuoteResponse createGetQuoteResponse() {
+        return new GetQuoteResponse();
     }
 
     /**

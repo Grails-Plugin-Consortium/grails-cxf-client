@@ -15,7 +15,7 @@ target(wsdl2java: '''generate java class stubs out wsdl files.
 This target needs to be run only upon changes in the upstream API, since it's artefacts are kept under version control in src/java
 ''') {
 
-    depends(createConfig, parseArguments, classpath)
+    depends(classpath, parseArguments, compile, createConfig)
 
     printMessage "Starting wsdl2java"
     def wsdls = [[:]]
