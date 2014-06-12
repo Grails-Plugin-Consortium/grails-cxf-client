@@ -8,7 +8,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
-    def version = "1.6.1"
+    def version = "1.6.2"
     def grailsVersion = "1.3.0 > *"
     def pluginExcludes = [
             'grails-app/conf/codenarc.groovy',
@@ -124,6 +124,9 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
             ]
             if(client?.httpClientPolicy){
                 httpClientPolicy = ref("${client.httpClientPolicy}")
+            }
+            if(client?.authorizationPolicy){
+                authorizationPolicy = ref("${client.authorizationPolicy}")
             }
             proxyFactoryBindingId = client?.proxyFactoryBindingId ?: ""
             secureSocketProtocol = client?.secureSocketProtocol ?: "" //should be one of the constants in CxfClientConstants, but doesn't have to be

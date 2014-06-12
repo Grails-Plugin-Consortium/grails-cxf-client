@@ -1,6 +1,7 @@
 package com.grails.cxf.client
 
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
+import org.apache.cxf.configuration.security.AuthorizationPolicy
 import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.interceptor.LoggingOutInterceptor
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
@@ -15,16 +16,17 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when:
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
-                                                              "testService", "http://localhost:8080/cxf-client", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()],
-                                                              [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()],
-                                                              null,
-                                                              "http://schemas.xmlsoap.org/wsdl/soap12/",
-                                                              CxfClientConstants.SSL_PROTOCOL_SSLV3,
-                                                              null,
-                                                              [disableCNCheck: false, sslCacheTimeout: 60])
+                "testService", "http://localhost:8080/cxf-client", false,
+                [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()],
+                [new CxfClientFaultConverter()],
+                [new CxfClientFaultConverter()],
+                null,
+                null,
+                "http://schemas.xmlsoap.org/wsdl/soap12/",
+                CxfClientConstants.SSL_PROTOCOL_SSLV3,
+                null,
+                [disableCNCheck: false, sslCacheTimeout: 60])
 
         then:
         webServiceClient != null
@@ -56,12 +58,12 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when:
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
-                                                              "testService", "http://localhost:8080/cxf-client", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20), "", "",
-                                                              [:],
-                                                              [:])
+                "testService", "http://localhost:8080/cxf-client", false,
+                [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
+                [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20), new AuthorizationPolicy(userName: 'user', password: 'pass'),"", "",
+                [:],
+                [:])
 
         then:
         webServiceClient != null
@@ -82,6 +84,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").httpClientPolicy.connectionTimeout == 10
         factory.interfaceMap.get("testService").httpClientPolicy.receiveTimeout == 20
         factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
+        factory.interfaceMap.get("testService").authorizationPolicy.userName == 'user'
+        factory.interfaceMap.get("testService").authorizationPolicy.password == 'pass'
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").proxyFactoryBindingId
         !factory.interfaceMap.get("testService").secureSocketProtocol
@@ -95,7 +99,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when:
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType, "testService", "http://localhost:8080/cxf-client", false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], new HTTPClientPolicy(connectionTimeout: 10, receiveTimeout: 20, allowChunking: false),
-                                                              null, null, null, null)
+                new AuthorizationPolicy(userName: 'user', password: 'pass'),
+                null, null, null, null)
 
         then:
         webServiceClient != null
@@ -114,6 +119,8 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").httpClientPolicy != null
         factory.interfaceMap.get("testService").httpClientPolicy.connectionTimeout == 10
         factory.interfaceMap.get("testService").httpClientPolicy.receiveTimeout == 20
+        factory.interfaceMap.get("testService").authorizationPolicy.userName == 'user'
+        factory.interfaceMap.get("testService").authorizationPolicy.password == 'pass'
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").httpClientPolicy.allowChunking
         !factory.interfaceMap.get("testService").proxyFactoryBindingId
@@ -128,10 +135,10 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when:
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
-                                                              "testService", "http://localhost:8080/cxf-client", false,
-                                                              [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()],
-                                                              [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "", "", [:], [:])
+                "testService", "http://localhost:8080/cxf-client", false,
+                [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()],
+                [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null,null, "", "", [:], [:])
 
         then:
         webServiceClient != null
@@ -151,6 +158,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         factory.interfaceMap.get("testService").handler != null
         !factory.interfaceMap.get("testService").httpClientPolicy
+        !factory.interfaceMap.get("testService").authorizationPolicy
         !factory.interfaceMap.get("testService").proxyFactoryBindingId
         !factory.interfaceMap.get("testService").secureSocketProtocol
         !factory.interfaceMap.get("testService").requestContext
@@ -163,9 +171,9 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when:
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType, "testService", "http://localhost:8080/cxf-client",
-                                                              false, [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false, contentType: 'application/soap+xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()], null, "", "", [:], [:])
+                false, [receiveTimeout: 1, connectionTimeout: 2, allowChunking: false, contentType: 'application/soap+xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
+                [new CxfClientFaultConverter()], null, null, "", "", [:], [:])
 
         then:
         webServiceClient != null
@@ -184,6 +192,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'application/soap+xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         factory.interfaceMap.get("testService").handler != null
+        !factory.interfaceMap.get("testService").authorizationPolicy
         !factory.interfaceMap.get("testService").httpClientPolicy
         !factory.interfaceMap.get("testService").proxyFactoryBindingId
         !factory.interfaceMap.get("testService").secureSocketProtocol
@@ -197,11 +206,11 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when: "we create an initial service"
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
-                                                              "testService", "http://localhost:8080/cxf-client/old", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()], null, "", "",
-                                                              ["one": "one"], [:])
+                "testService", "http://localhost:8080/cxf-client/old", false,
+                [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
+                [new CxfClientFaultConverter()], null, null, "", "",
+                ["one": "one"], [:])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -222,6 +231,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("one") == "one"
         factory.interfaceMap.get("testService").requestContext.get("one") == "one"
         !factory.interfaceMap.get("testService").tlsClientParameters
+        !factory.interfaceMap.get("testService").authorizationPolicy
 
         when: "change the url to something new"
         factory.updateServiceEndpointAddress("testService", "http://localhost:8080/cxf-client/new")
@@ -243,6 +253,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").handler != null
         factory.interfaceMap.get("testService").handler.cxfProxy.h.client.currentRequestContext.get("org.apache.cxf.message.Message.ENDPOINT_ADDRESS") == "http://localhost:8080/cxf-client/new"
         !factory.interfaceMap.get("testService").tlsClientParameters
+        !factory.interfaceMap.get("testService").authorizationPolicy
     }
 
     def "create web service client using factory method and change url on invalid name"() {
@@ -251,11 +262,11 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when: "we create an initial service"
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
-                                                              "testService", "http://localhost:8080/cxf-client/old", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "",
-                                                              [:], [:])
+                "testService", "http://localhost:8080/cxf-client/old", false,
+                [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
+                [new CxfClientFaultConverter()],null, null, "http://schemas.xmlsoap.org/wsdl/soap12/", "",
+                [:], [:])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -272,6 +283,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientPolicyMap.receiveTimeout == 0
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
+        !factory.interfaceMap.get("testService").authorizationPolicy
         !factory.interfaceMap.get("testService").httpClientPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
         !factory.interfaceMap.get("testService").secureSocketProtocol
@@ -301,6 +313,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
+        !factory.interfaceMap.get("testService").authorizationPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
         !factory.interfaceMap.get("testService").secureSocketProtocol
         !factory.interfaceMap.get("testService").tlsClientParameters
@@ -314,10 +327,10 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when: "we create an initial service"
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
-                                                              "testService", "http://localhost:8080/cxf-client/old", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:], [:])
+                "testService", "http://localhost:8080/cxf-client/old", false,
+                [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
+                [new CxfClientFaultConverter()], null, null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:], [:])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -335,6 +348,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
+        !factory.interfaceMap.get("testService").authorizationPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
         !factory.interfaceMap.get("testService").secureSocketProtocol
         !factory.interfaceMap.get("testService").tlsClientParameters
@@ -363,6 +377,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
+        !factory.interfaceMap.get("testService").authorizationPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
         !factory.interfaceMap.get("testService").secureSocketProtocol
         !factory.interfaceMap.get("testService").tlsClientParameters
@@ -377,7 +392,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         String serviceEndpointAddress = 'http://localhost:8080/cxf-client'
 
         when: "create an initial service"
-        webServiceClientFactory.getWebServiceClient(null, null, null, SimpleServicePortType, serviceName, serviceEndpointAddress, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:], [:])
+        webServiceClientFactory.getWebServiceClient(null, null, null, SimpleServicePortType, serviceName, serviceEndpointAddress, false, [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'], [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()], [new CxfClientFaultConverter()], null, null, "http://schemas.xmlsoap.org/wsdl/soap12/", "", [:], [:])
 
         then: "can retrieve the service endpoint address"
         webServiceClientFactory.getServiceEndpointAddress(serviceName) == serviceEndpointAddress
@@ -389,15 +404,15 @@ class WebServiceClientFactoryImplSpec extends Specification {
 
         when: "we create an initial service"
         Object webServiceClient = factory.getWebServiceClient(null, null, null, SimpleServicePortType,
-                                                              "testService", "http://localhost:8080/cxf-client/old", false,
-                                                              [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
-                                                              [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
-                                                              [new CxfClientFaultConverter()], null, "http://schemas.xmlsoap.org/wsdl/soap12/", null, [:],
-                                                              [disableCNCheck: true,
-                                                                      sslCacheTimeout: 100,
-                                                                      secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3,
-                                                                      cipherSuitesFilter: [include: ['.*_EXPORT_.*', '.*_EXPORT1024_.*'], exclude: ['.*_DH_anon_.*']]
-                                                              ])
+                "testService", "http://localhost:8080/cxf-client/old", false,
+                [receiveTimeout: 0, connectionTimeout: 0, allowChunking: false, contentType: 'text/xml; charset=UTF-8'],
+                [new LoggingOutInterceptor()], [new LoggingInInterceptor()], [new CxfClientFaultConverter()],
+                [new CxfClientFaultConverter()], null, null, "http://schemas.xmlsoap.org/wsdl/soap12/", null, [:],
+                [disableCNCheck      : true,
+                 sslCacheTimeout     : 100,
+                 secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3,
+                 cipherSuitesFilter  : [include: ['.*_EXPORT_.*', '.*_EXPORT1024_.*'], exclude: ['.*_DH_anon_.*']]
+                ])
 
         then: "we should have some stuff hooked up here"
         webServiceClient != null
@@ -415,6 +430,7 @@ class WebServiceClientFactoryImplSpec extends Specification {
         factory.interfaceMap.get("testService").clientPolicyMap.contentType == 'text/xml; charset=UTF-8'
         !factory.interfaceMap.get("testService").clientPolicyMap.allowChunking
         !factory.interfaceMap.get("testService").httpClientPolicy
+        !factory.interfaceMap.get("testService").authorizationPolicy
         factory.interfaceMap.get("testService").proxyFactoryBindingId == "http://schemas.xmlsoap.org/wsdl/soap12/"
         !factory.interfaceMap.get("testService").secureSocketProtocol
         factory.interfaceMap.get("testService").tlsClientParameters.disableCNCheck == true

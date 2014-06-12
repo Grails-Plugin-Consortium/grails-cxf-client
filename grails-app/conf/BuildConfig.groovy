@@ -24,7 +24,6 @@ grails.project.fork = [
 grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
 
-    String cxfGroup = 'org.apache.cxf'
     String cxfVersion = '2.6.2'
 
     // inherit Grails' default dependencies
@@ -54,23 +53,23 @@ grails.project.dependency.resolution = {
 
         compile('commons-cli:commons-cli:1.2')
 
-        compile("${cxfGroup}:cxf-tools-wsdlto-core:${cxfVersion}") {
+        compile("org.apache.cxf:cxf-tools-wsdlto-core:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile("${cxfGroup}:cxf-tools-wsdlto-frontend-jaxws:${cxfVersion}") {
+        compile("org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
+        compile("org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile("${cxfGroup}:cxf-rt-frontend-jaxws:${cxfVersion}") {
+        compile("org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile("${cxfGroup}:cxf-rt-frontend-jaxrs:${cxfVersion}") {
+        compile("org.apache.cxf:cxf-rt-frontend-jaxrs:${cxfVersion}") {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
@@ -80,7 +79,7 @@ grails.project.dependency.resolution = {
 
         }
 
-        compile("${cxfGroup}:cxf-rt-ws-security:${cxfVersion}"){
+        compile("org.apache.cxf:cxf-rt-ws-security:${cxfVersion}"){
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis',
                      'ehcache', 'easymock', 'ehcache-core',
                      'log4j', 'slf4j', 'slf4j-log4j12','slf4j-api', 'slf4j-jdk14'

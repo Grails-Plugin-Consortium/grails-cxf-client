@@ -18,6 +18,7 @@ CXF CLIENT
 * <a href="#InFault">Custom In Fault Interceptors</a>
 * <a href="#OutFault">Custom Out Fault Interceptors</a>
 * <a href="#Custom">Custom Http Client Policy</a>
+* <a href="#CustomAuth">Custom Authorization Policy</a>
 * <a href="#Exceptions">Dealing With Exceptions</a>
 * <a href="#Ssl">Setting Secure Socket Protocol</a>
 * <a href="#Beans">Using Client Beans Anywhere</a>
@@ -163,6 +164,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 allowChunking = [true or false] //optional - defaults to false
                 contentType = [String value of http content type] - defaults to 'text/xml; charset=UTF8'
                 httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
+                authorizationPolicy = [text name of custom bean to use] //optional - defaults to null
                 proxyFactoryBindingId = [binding id uri if required] //optional - defaults to null
                 secureSocketProtocol = [socket protocol to use for secure service] //optional - defaults to null
                 wsdlServiceName = [set to enable mime type mapping] //optional - defaults to null
@@ -202,7 +204,8 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
 <tr><td>contentType</td><td>Allows user to override the content type of the http policy default of 'text/xml; charset=UTF8'.  Might want to set to "application/soap+xml; charset=UTF-8" for example.</td><td>No</td></tr>
-<tr><td>httpClientPolicy</td><td>Instead of using the seperate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
+<tr><td>httpClientPolicy</td><td>Instead of using the separate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
+<tr><td>authorizationPolicy</td><td>Name of a bean in resources.groovy of type AuthorizationPolicy that will be used in the httpConduit.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
 <tr><td>secureSocketProtocol</td><td>The Secure socket protocol to use for secure services.  This will be set on the cxf http object that is created for communication to the service.  If you don't specify, I believe that cxf will default to "TLS" when invoking https services endpoints.  Most common example are "SSL", "TLS" or "TLSv1".  (default: "")</td><td>No</td></tr>
 <tr><td>wsdl</td><td>Location of the wsdl either locally or a url (must be available at runtime).  Will be passed into JaxWsProxyFactoryBean.  WSDL will be loaded to handle things that cannot be captured in Java classes via wsdl2java (like MIME attachments). Requires defining _wsdlServiceName_. (default: null)</td><td>No</td></tr>
@@ -571,6 +574,38 @@ cxf {
 Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
 
 <p align="right"><a href="#Top">Top</a></p>
+<a name="CustomAuth"></a>
+CUSTOM AUTHORIZATION POLICY
+---------------
+
+If you simply need to set Authorization Policy you can create a custom bean in the resources.groovy and tell your cxf client to use it via the code below.
+resources.groovy
+
+```groovy
+beans = {
+    customAuthorizationPolicy(AuthorizationPolicy){
+        userName = 'user'
+        password = 'password'
+    }
+}
+```
+
+Config.groovy
+
+```groovy
+cxf {
+    client {
+        simpleServiceClient {
+            clientInterface = cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress = "${service.simple.url}"
+            authorizationPolicy = 'customAuthorizationPolicy'
+        }
+}
+```
+
+Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
+
+<p align="right"><a href="#Top">Top</a></p>
 <a name="Exceptions"></a>
 DEALING WITH EXCEPTIONS
 ---------------
@@ -791,8 +826,13 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 1.6.2
+	* Adding AuthorizationPolicy support for clients
+	
+
 * v 1.6.1
 	* Fixing wsdl2java script which appears broken in 2.3+
+	
 
 * v 1.5.5
     * Removing compile from the wsdl2java script as a dependency.

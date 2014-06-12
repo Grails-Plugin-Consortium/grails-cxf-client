@@ -1,6 +1,7 @@
 package com.grails.cxf.client
 
 import com.grails.cxf.client.exception.UpdateServiceEndpointException
+import org.apache.cxf.configuration.security.AuthorizationPolicy
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
 /**
@@ -36,6 +37,7 @@ interface WebServiceClientFactory {
                                List inFaultInterceptors,
                                List outFaultInterceptors,
                                HTTPClientPolicy httpClientPolicy,
+                               AuthorizationPolicy authorizationPolicy,
                                String proxyFactoryBindingId,
                                String secureSocketProtocol,
                                Map<String, Object> requestContext,

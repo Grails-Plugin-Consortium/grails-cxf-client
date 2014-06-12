@@ -23,34 +23,36 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     def inFaultInterceptors = []
     def outFaultInterceptors = []
     def httpClientPolicy
+    def authorizationPolicy
     String proxyFactoryBindingId
     String secureSocketProtocol
     Map requestContext
     Map tlsClientParameters = [:]
 
     Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
-        if(!clientInterface || !serviceEndpointAddress) {
+        if (!clientInterface || !serviceEndpointAddress) {
             throw new FactoryBeanNotInitializedException("""Web service client cannot be created
 before setting the clientInterface=${clientInterface} and
 serviceEndpointAddress=${serviceEndpointAddress} properties""")
         }
         webServiceClientFactory.getWebServiceClient(wsdlURL,
-                                                    wsdlServiceName,
-                                                    wsdlEndpointName,
-                                                    clientInterface,
-                                                    serviceName,
-                                                    serviceEndpointAddress,
-                                                    enableDefaultLoggingInterceptors,
-                                                    clientPolicyMap,
-                                                    outInterceptors,
-                                                    inInterceptors,
-                                                    inFaultInterceptors,
-                                                    outFaultInterceptors,
-                                                    httpClientPolicy,
-                                                    proxyFactoryBindingId,
-                                                    secureSocketProtocol,
-                                                    requestContext,
-                                                    tlsClientParameters)
+                wsdlServiceName,
+                wsdlEndpointName,
+                clientInterface,
+                serviceName,
+                serviceEndpointAddress,
+                enableDefaultLoggingInterceptors,
+                clientPolicyMap,
+                outInterceptors,
+                inInterceptors,
+                inFaultInterceptors,
+                outFaultInterceptors,
+                httpClientPolicy,
+                authorizationPolicy,
+                proxyFactoryBindingId,
+                secureSocketProtocol,
+                requestContext,
+                tlsClientParameters)
     }
 
     Class<?> getObjectType() {
