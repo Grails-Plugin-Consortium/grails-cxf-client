@@ -12,7 +12,6 @@
       <configuration>
         <webroots>
           <root url="file://$MODULE_DIR$/web-app" relative="/" />
-          <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -34,12 +33,6 @@
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/grails-app/utils" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/grails-app/controllers" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/grails-app/domain" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/grails-app/services" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/grails-app/taglib" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/work/plugin-build-classes" />
@@ -54,46 +47,44 @@
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (cxf-client)">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/lib" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/opensaml/xmltooling/1.3.2-1/xmltooling-1.3.2-1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/opensaml/openws/1.4.2-1/openws-1.4.2-1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/opensaml/opensaml/2.5.1-1/opensaml-2.5.1-1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/santuario/xmlsec/1.5.2/xmlsec-1.5.2.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/ws/security/wss4j/1.6.7/wss4j-1.6.7.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-transports-http/2.6.2/cxf-rt-transports-http-2.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-transports-http/2.6.6/cxf-rt-transports-http-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-frontend-jaxrs/2.6.2/cxf-rt-frontend-jaxrs-2.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-frontend-jaxrs/2.6.6/cxf-rt-frontend-jaxrs-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/neethi/neethi/3.0.2/neethi-3.0.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-policy/2.6.2/cxf-rt-ws-policy-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-addr/2.6.2/cxf-rt-ws-addr-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-frontend-simple/2.6.2/cxf-rt-frontend-simple-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-bindings-xml/2.6.2/cxf-rt-bindings-xml-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-databinding-jaxb/2.6.2/cxf-rt-databinding-jaxb-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-bindings-soap/2.6.2/cxf-rt-bindings-soap-2.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-security/2.6.6/cxf-rt-ws-security-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/joda-time/joda-time/1.6.2/joda-time-1.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-policy/2.6.6/cxf-rt-ws-policy-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-addr/2.6.6/cxf-rt-ws-addr-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-frontend-simple/2.6.6/cxf-rt-frontend-simple-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-bindings-xml/2.6.6/cxf-rt-bindings-xml-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-databinding-jaxb/2.6.6/cxf-rt-databinding-jaxb-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-bindings-soap/2.6.6/cxf-rt-bindings-soap-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/asm/asm/3.3.1/asm-3.3.1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-frontend-jaxws/2.6.2/cxf-rt-frontend-jaxws-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-wsdlto-databinding-jaxb/2.6.2/cxf-tools-wsdlto-databinding-jaxb-2.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-frontend-jaxws/2.6.6/cxf-rt-frontend-jaxws-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-wsdlto-databinding-jaxb/2.6.6/cxf-tools-wsdlto-databinding-jaxb-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/xml-resolver/xml-resolver/1.2/xml-resolver-1.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-wsdlto-frontend-jaxws/2.6.2/cxf-tools-wsdlto-frontend-jaxws-2.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-wsdlto-frontend-jaxws/2.6.6/cxf-tools-wsdlto-frontend-jaxws-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/sun/xml/bind/jaxb-impl/2.1.13/jaxb-impl-2.1.13.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/sun/xml/bind/jaxb-xjc/2.1.13/jaxb-xjc-2.1.13.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/wsdl4j/wsdl4j/1.6.2/wsdl4j-1.6.2.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/velocity/velocity/1.7/velocity-1.7.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-api/2.6.2/cxf-api-2.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-api/2.6.6/cxf-api-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-javamail_1.4_spec/1.7.1/geronimo-javamail_1.4_spec-1.7.1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-core/2.6.2/cxf-rt-core-2.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-core/2.6.6/cxf-rt-core-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/ws/xmlschema/xmlschema-core/2.0.3/xmlschema-core-2.0.3.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-validator/2.6.2/cxf-tools-validator-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-common/2.6.2/cxf-tools-common-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-wsdlto-core/2.6.2/cxf-tools-wsdlto-core-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-security/2.6.2/cxf-rt-ws-security-2.6.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/joda-time/joda-time/1.6.2/joda-time-1.6.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-validator/2.6.6/cxf-tools-validator-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-common/2.6.6/cxf-tools-common-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-tools-wsdlto-core/2.6.6/cxf-tools-wsdlto-core-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/opensaml/xmltooling/1.3.2-1/xmltooling-1.3.2-1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/opensaml/openws/1.4.2-1/openws-1.4.2-1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/woodstox/stax2-api/3.1.1/stax2-api-3.1.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/woodstox/woodstox-core-asl/4.1.4/woodstox-core-asl-4.1.4.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/spockframework/spock-core/0.7-groovy-2.0/spock-core-0.7-groovy-2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/spockframework/spock-grails-support/0.7-groovy-2.0/spock-grails-support-0.7-groovy-2.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/gmetrics/GMetrics/0.5/GMetrics-0.5.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/codenarc/CodeNarc/0.21/CodeNarc-0.21.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.5/commons-codec-1.5.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-rest-client/1.0.0.RELEASE/grails-datastore-rest-client-1.0.0.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/wagon/wagon-provider-api/1.0-beta-6/wagon-provider-api-1.0-beta-6.jar!/" />
@@ -126,7 +117,6 @@
           <root url="jar://C:/apps/Maven/cxf-rt-transports-http-2.6.2-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/cxf-rt-bindings-soap-2.6.2-sources.jar!/" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="library" name="grails-2.0.3" level="application" />
@@ -135,6 +125,7 @@
     <orderEntry type="library" name="grails-2.1.3" level="application" />
     <orderEntry type="module" module-name="cxf-client-grailsPlugins" />
     <orderEntry type="library" name="grails-2.3.6" level="application" />
+    <orderEntry type="library" name="grails-2.4.1" level="application" />
   </component>
 </module>
 

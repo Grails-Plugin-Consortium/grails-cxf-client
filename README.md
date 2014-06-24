@@ -826,6 +826,9 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 2.0
+	* Moving to cxf 2.6.6
+
 * v 1.6.2
 	* Adding AuthorizationPolicy support for clients
 	
