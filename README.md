@@ -828,6 +828,10 @@ CHANGE LOG
 ---------------
 * v 2.0
 	* Moving to cxf 2.6.6
+	* Rabasing support for grails 2.2+
+	* Update grails version
+    * Removed spock plugin (now bundled with grails)
+
 
 * v 1.6.2
 	* Adding AuthorizationPolicy support for clients
