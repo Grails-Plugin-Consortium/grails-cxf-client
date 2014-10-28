@@ -98,6 +98,12 @@ cxf {
 }
 ```
 
+You may need to use the interface rather than the port type to make your client work:
+
+    ...
+    clientInterface = cxf.client.demo.simple.SimpleServiceInterface
+    ...
+
 Note: The [wsdl] node is only used by the wsdl2java target and are not used in wiring the beans at runtime.
 
 After adding the [wsdl] node I can now run the following grails command to generate the cxf/jaxb classes into the src/java directory of the project:
