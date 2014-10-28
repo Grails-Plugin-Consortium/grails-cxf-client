@@ -101,7 +101,7 @@ cxf {
 You may need to use the interface rather than the port type to make your client work:
 
     ...
-    clientInterface = cxf.client.demo.simple.SimpleServiceInterface
+    clientInterface = cxf.client.demo.simple.SimpleInterface
     ...
 
 Note: The [wsdl] node is only used by the wsdl2java target and are not used in wiring the beans at runtime.
