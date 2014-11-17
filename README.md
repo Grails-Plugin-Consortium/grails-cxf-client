@@ -98,6 +98,12 @@ cxf {
 }
 ```
 
+You may need to use the interface rather than the port type to make your client work:
+
+    ...
+    clientInterface = cxf.client.demo.simple.SimpleInterface
+    ...
+
 Note: The [wsdl] node is only used by the wsdl2java target and are not used in wiring the beans at runtime.
 
 After adding the [wsdl] node I can now run the following grails command to generate the cxf/jaxb classes into the src/java directory of the project:
@@ -826,10 +832,16 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
-* v 1.6.3
+* v 2.0.1
 	* Adding Fix for external properties timeout number format exception casting int->string
-	
-	
+
+* v 2.0
+	* Moving to cxf 2.6.6
+	* Rabasing support for grails 2.2+
+	* Update grails version
+    * Removed spock plugin (now bundled with grails)
+
+
 * v 1.6.2
 	* Adding AuthorizationPolicy support for clients
 	

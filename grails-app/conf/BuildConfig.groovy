@@ -24,7 +24,7 @@ grails.project.fork = [
 grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
 
-    String cxfVersion = '2.6.2'
+    String cxfVersion = '2.6.6'
 
     // inherit Grails' default dependencies
     inherits("global") {
@@ -85,10 +85,6 @@ grails.project.dependency.resolution = {
                      'log4j', 'slf4j', 'slf4j-log4j12','slf4j-api', 'slf4j-jdk14'
         }
 
-        test("org.spockframework:spock-grails-support:0.7-groovy-2.0"){
-            export = false
-        }
-
 
         /* Some Testing Help **************************************************/
 //        test("org.codehaus.geb:geb-spock:${gebVersion}") {
@@ -119,12 +115,6 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        /* Spock and Geb for Testing ******************************************/
-        test(":spock:0.7") {
-            exclude "spock-grails-support"
-            export = false
-        }
-
 //        runtime(":geb:${gebVersion}") {
 //            export = false
 //        }
@@ -133,7 +123,7 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        test(":codenarc:0.17") {
+        test(":codenarc:0.21") {
             export = false
         }
 
