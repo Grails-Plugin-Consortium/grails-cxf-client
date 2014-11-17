@@ -826,6 +826,10 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 1.6.3
+	* Adding Fix for external properties timeout number format exception casting int->string
+	
+	
 * v 1.6.2
 	* Adding AuthorizationPolicy support for clients
 	

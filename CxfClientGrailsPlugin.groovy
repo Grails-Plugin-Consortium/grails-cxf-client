@@ -8,7 +8,7 @@ class CxfClientGrailsPlugin {
     private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
 
-    def version = "1.6.2"
+    def version = "1.6.3"
     def grailsVersion = "1.3.0 > *"
     def pluginExcludes = [
             'grails-app/conf/codenarc.groovy',
@@ -136,8 +136,12 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
     }
 
     def validateTimeouts = {cxfClientName, timeoutName, timeoutValue ->
-        if(timeoutValue && timeoutValue < 0) {
-            throw new CxfClientException("Configured value for ${cxfClientName} ${timeoutName} must be >= 0 if provided. Value provided was(${timeoutValue})")
+        try {
+            if(Integer.parseInt((timeoutValue ?: 0)) < 0) {
+                throw new CxfClientException("Configured value for ${cxfClientName} ${timeoutName} must be >= 0 if provided. Value provided was(${timeoutValue})")
+            }
+        } catch (Exception e) {
+            throw new CxfClientException("Configured value for ${cxfClientName} ${timeoutName} (${timeoutValue}) caused the exception ${e.message}.")
         }
     }
 
