@@ -835,6 +835,7 @@ CHANGE LOG
 * v 2.0.1
 	* Adding Fix for external properties timeout number format exception casting int->string
 
+
 * v 2.0
 	* Moving to cxf 2.6.6
 	* Rabasing support for grails 2.2+

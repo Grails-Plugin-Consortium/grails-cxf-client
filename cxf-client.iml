@@ -12,6 +12,7 @@
       <configuration>
         <webroots>
           <root url="file://$MODULE_DIR$/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -33,6 +34,12 @@
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/domain" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/taglib" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/work/plugin-build-classes" />
@@ -55,7 +62,6 @@
           <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-frontend-jaxrs/2.6.6/cxf-rt-frontend-jaxrs-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/neethi/neethi/3.0.2/neethi-3.0.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-security/2.6.6/cxf-rt-ws-security-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/joda-time/joda-time/1.6.2/joda-time-1.6.2.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-policy/2.6.6/cxf-rt-ws-policy-2.6.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-addr/2.6.6/cxf-rt-ws-addr-2.6.6.jar!/" />
@@ -84,7 +90,6 @@
           <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/woodstox/stax2-api/3.1.1/stax2-api-3.1.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/woodstox/woodstox-core-asl/4.1.4/woodstox-core-asl-4.1.4.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/gmetrics/GMetrics/0.5/GMetrics-0.5.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/codenarc/CodeNarc/0.21/CodeNarc-0.21.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.5/commons-codec-1.5.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-rest-client/1.0.0.RELEASE/grails-datastore-rest-client-1.0.0.RELEASE.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/wagon/wagon-provider-api/1.0-beta-6/wagon-provider-api-1.0-beta-6.jar!/" />
@@ -108,6 +113,9 @@
           <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-container-default/1.0-alpha-9-stable-1/plexus-container-default-1.0-alpha-9-stable-1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-ant-tasks/2.1.3/maven-ant-tasks-2.1.3.jar!/" />
+          <root url="file://$MODULE_DIR$/lib" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/cxf/cxf-rt-ws-security/2.6.6/cxf-rt-ws-security-2.6.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/codenarc/CodeNarc/0.21/CodeNarc-0.21.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -117,6 +125,7 @@
           <root url="jar://C:/apps/Maven/cxf-rt-transports-http-2.6.2-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/cxf-rt-bindings-soap-2.6.2-sources.jar!/" />
         </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="library" name="grails-2.0.3" level="application" />
@@ -128,4 +137,3 @@
     <orderEntry type="library" name="grails-2.4.1" level="application" />
   </component>
 </module>
-
