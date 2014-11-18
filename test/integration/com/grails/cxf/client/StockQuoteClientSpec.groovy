@@ -60,8 +60,8 @@ class StockQuoteClientSpec extends IntegrationSpec {
 
         then:
         map.clientPolicyMap.contentType == 'application/soap+xml; charset=UTF-8'
-        map.clientPolicyMap.connectionTimeout == 2000
-        map.clientPolicyMap.receiveTimeout == 2000
+        map.clientPolicyMap.connectionTimeout == 2000 as String
+        map.clientPolicyMap.receiveTimeout == 2000 as String
         map.clientPolicyMap.allowChunking == false
         map.requestContext == ['requestKey2': 'requestValue2']
     }
