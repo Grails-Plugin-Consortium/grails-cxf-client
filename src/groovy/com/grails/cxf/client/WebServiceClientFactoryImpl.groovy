@@ -401,8 +401,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      */
     private static HTTPClientPolicy getHttpClientPolicy(HTTPClientPolicy httpClientPolicy, Map clientPolicyMap) {
         httpClientPolicy ?: new HTTPClientPolicy(
-                receiveTimeout: clientPolicyMap.receiveTimeout,
-                connectionTimeout: clientPolicyMap.connectionTimeout,
+                receiveTimeout: Long.parseLong((clientPolicyMap?.receiveTimeout ?: 0) as String),
+                connectionTimeout: Long.parseLong((clientPolicyMap?.connectionTimeout ?: 0) as String),
                 allowChunking: clientPolicyMap.allowChunking,
                 contentType: clientPolicyMap.contentType
         )
