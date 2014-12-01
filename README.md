@@ -172,6 +172,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
                 authorizationPolicy = [text name of custom bean to use] //optional - defaults to null
                 proxyFactoryBindingId = [binding id uri if required] //optional - defaults to null
+                mtomEnabled = [flag to enable mtom] //optional - defaults to false
                 secureSocketProtocol = [socket protocol to use for secure service] //optional - defaults to null
                 wsdlServiceName = [set to enable mime type mapping] //optional - defaults to null
                 wsdlEndpointName = [may be needed for correct wsdl initialization] //optional - defaults to null
@@ -213,6 +214,7 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>httpClientPolicy</td><td>Instead of using the separate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>authorizationPolicy</td><td>Name of a bean in resources.groovy of type AuthorizationPolicy that will be used in the httpConduit.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
+<tr><td>mtomEnabled</td><td>SOAP Message Transmission Optimization Mechanism (MTOM) specifies an optimized method for sending binary data as part of a SOAP message. Unlike SOAP with Attachments, MTOM requires the use of XML-binary Optimized Packaging (XOP) packages for transmitting binary data. Using MTOM to send binary data does not require you to fully define the MIME Multipart/Related message as part of the SOAP binding. (default: false)</td><td>No</td></tr>
 <tr><td>secureSocketProtocol</td><td>The Secure socket protocol to use for secure services.  This will be set on the cxf http object that is created for communication to the service.  If you don't specify, I believe that cxf will default to "TLS" when invoking https services endpoints.  Most common example are "SSL", "TLS" or "TLSv1".  (default: "")</td><td>No</td></tr>
 <tr><td>wsdl</td><td>Location of the wsdl either locally or a url (must be available at runtime).  Will be passed into JaxWsProxyFactoryBean.  WSDL will be loaded to handle things that cannot be captured in Java classes via wsdl2java (like MIME attachments). Requires defining _wsdlServiceName_. (default: null)</td><td>No</td></tr>
 <tr><td>wsdlServiceName</td><td>The QName of the service you will be accessing.  Will be passed into JaxWsProxyFactoryBean.  Only needed when using WSDL at run-time to handle things that cannot be captured in Java classes via wsdl2java. (example: '{http://my.xml.namespace/}TheNameOfMyWSDLServicePorts') (default: null)</td><td>No</td></tr>
@@ -832,6 +834,11 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 2.0.3
+    * Fixing soap12 support
+    * Adding mtomEnabled configuration flag
+    
+
 * v 2.0.2
 	* Adding Fix for external properties timeout number format exception casting int->string
 

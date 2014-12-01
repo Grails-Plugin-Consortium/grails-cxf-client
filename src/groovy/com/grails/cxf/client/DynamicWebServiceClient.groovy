@@ -25,6 +25,7 @@ class DynamicWebServiceClient implements FactoryBean<Object> {
     def httpClientPolicy
     def authorizationPolicy
     String proxyFactoryBindingId
+    Boolean mtomEnabled = false
     String secureSocketProtocol
     Map requestContext
     Map tlsClientParameters = [:]
@@ -50,6 +51,7 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                 httpClientPolicy,
                 authorizationPolicy,
                 proxyFactoryBindingId,
+                mtomEnabled,
                 secureSocketProtocol,
                 requestContext,
                 tlsClientParameters)

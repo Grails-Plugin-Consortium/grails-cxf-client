@@ -6,6 +6,8 @@ import groovy.transform.Synchronized
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.apache.cxf.BusFactory
+import org.apache.cxf.binding.soap.Soap12
+import org.apache.cxf.binding.soap.SoapBindingConfiguration
 import org.apache.cxf.configuration.jsse.TLSClientParameters
 import org.apache.cxf.configuration.security.AuthorizationPolicy
 import org.apache.cxf.configuration.security.FiltersType
@@ -66,6 +68,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                HTTPClientPolicy httpClientPolicy,
                                AuthorizationPolicy authorizationPolicy,
                                String proxyFactoryBindingId,
+                               Boolean mtomEnabled,
                                String secureSocketProtocol,
                                Map<String, Object> requestContext,
                                Map tlsClientParameters) {
@@ -77,7 +80,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress")
                 assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                         enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors,
-                        inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy, proxyFactoryBindingId, secureSocketProtocol,
+                        inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy, proxyFactoryBindingId, mtomEnabled, secureSocketProtocol,
                         requestContext, tlsClientParameters)
             } catch (Exception exception) {
                 CxfClientException cxfClientException = new CxfClientException(
@@ -107,6 +110,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                           httpClientPolicy                : httpClientPolicy,
                           authorizationPolicy             : authorizationPolicy,
                           proxyFactoryBindingId           : proxyFactoryBindingId,
+                          mtomEnabled                     : mtomEnabled,
                           secureSocketProtocol            : secureSocketProtocol,
                           requestContext                  : requestContext,
                           tlsClientParameters             : tlsClientParameters]
@@ -161,6 +165,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         HTTPClientPolicy httpClientPolicy = interfaceMap.get(serviceName).httpClientPolicy
         AuthorizationPolicy authorizationPolicy = interfaceMap.get(serviceName).authorizationPolicy
         String proxyFactoryBindingId = interfaceMap.get(serviceName).proxyFactoryBindingId
+        Boolean mtomEnabled = interfaceMap.get(serviceName).mtomEnabled
         Map clientPolicyMap = interfaceMap.get(serviceName).clientPolicyMap
         String secureSocketProtocol = interfaceMap.get(serviceName).secureSocketProtocol
         Map requestContext = interfaceMap.get(serviceName).requestContext
@@ -169,7 +174,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                     enableDefaultLoggingInterceptors,
                     clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true, contentType: 'text/xml; charset=UTF-8'],
-                    handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy, proxyFactoryBindingId,
+                    handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy, proxyFactoryBindingId, mtomEnabled,
                     secureSocketProtocol, requestContext, tlsClientParameters)
             log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
         } catch (Exception exception) {
@@ -214,12 +219,16 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                 HTTPClientPolicy httpClientPolicy,
                                 AuthorizationPolicy authorizationPolicy,
                                 String proxyFactoryBindingId,
+                                Boolean mtomEnabled,
                                 String secureSocketProtocol,
                                 Map<String, Object> requestContext,
                                 Map tlsClientParameters) {
         JaxWsProxyFactoryBean clientProxyFactory = new JaxWsProxyFactoryBean(serviceClass: serviceInterface,
                 address: serviceEndpointAddress,
                 bus: BusFactory.defaultBus)
+
+
+
         if (wsdlURL) {
             clientProxyFactory.wsdlURL = wsdlURL
         }
@@ -233,7 +242,10 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             clientProxyFactory.bindingId = proxyFactoryBindingId
         }
 
+        assignBindingConfig(proxyFactoryBindingId, mtomEnabled, clientProxyFactory)
+
         Object cxfProxy = clientProxyFactory.create()
+
         addInterceptors(cxfProxy, enableDefaultLoggingInterceptors, clientPolicyMap,
                 outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy)
         if (secureSocketProtocol || tlsClientParameters?.secureSocketProtocol != null) {
@@ -243,7 +255,20 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         assignContexts(cxfProxy, requestContext)
 
         handler.cxfProxy = cxfProxy
+    }
 
+    private static void assignBindingConfig(String proxyFactoryBindingId, Boolean mtomEnabled, JaxWsProxyFactoryBean clientProxyFactory) {
+        SoapBindingConfiguration sbc = new SoapBindingConfiguration()
+
+        if (proxyFactoryBindingId?.toLowerCase()?.contains(/soap12/)) {
+            sbc.version = Soap12.instance
+        }
+
+        if (mtomEnabled) {
+            sbc.mtomEnabled = true
+        }
+
+        clientProxyFactory.bindingConfig = sbc
     }
 
     private static void assignContexts(Object cxfProxy, Map<String, Object> requestContext) {
