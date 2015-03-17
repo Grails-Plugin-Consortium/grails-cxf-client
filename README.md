@@ -834,6 +834,10 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 2.1
+    * Moving to CXF 3.0.4 in preperation for grails 3 move
+
+
 * v 2.0.3
     * Fixing soap12 support
     * Adding mtomEnabled configuration flag

@@ -24,7 +24,7 @@ grails.project.fork = [
 grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
 
-    String cxfVersion = '2.6.6'
+    String cxfVersion = '3.0.4'
 
     // inherit Grails' default dependencies
     inherits("global") {
@@ -73,7 +73,7 @@ grails.project.dependency.resolution = {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile('org.apache.ws.security:wss4j:1.6.7'){
+        compile('org.apache.ws.security:wss4j:1.6.18'){
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis',
                      'junit', 'log4j', 'slf4j', 'slf4j-log4j12','slf4j-api', 'slf4j-jdk14'
 
@@ -111,7 +111,7 @@ grails.project.dependency.resolution = {
         //remove this before committing.  Only used to release...not test.
         // This still an issue?!?
         // http://grails.1312388.n4.nabble.com/Geb-and-Release-plugin-httpclient-conflicts-td4295238.html
-        build(':release:3.0.1', ':rest-client-builder:2.0.1') {
+        build(':release:3.0.1', ':rest-client-builder:2.0.3') {
             export = false
         }
 
