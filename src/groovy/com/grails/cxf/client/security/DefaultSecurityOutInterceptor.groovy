@@ -1,13 +1,15 @@
 package com.grails.cxf.client.security
 
+import org.apache.wss4j.common.ext.WSPasswordCallback
+import org.apache.wss4j.dom.WSConstants
+import org.apache.wss4j.dom.handler.WSHandlerConstants
+
 import javax.security.auth.callback.Callback
 import javax.security.auth.callback.CallbackHandler
 import javax.security.auth.callback.UnsupportedCallbackException
 
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
-import org.apache.ws.security.WSConstants
-import org.apache.ws.security.WSPasswordCallback
-import org.apache.ws.security.handler.WSHandlerConstants
+
 
 import com.grails.cxf.client.CxfClientInterceptor
 import com.grails.cxf.client.exception.CxfClientException

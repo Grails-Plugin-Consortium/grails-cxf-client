@@ -73,7 +73,7 @@ grails.project.dependency.resolution = {
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis'
         }
 
-        compile('org.apache.ws.security:wss4j:1.6.18'){
+        compile('org.apache.wss4j:wss4j-ws-security-common:2.0.3'){
             excludes 'xmlbeans', 'spring-web', 'spring-core', 'xml-apis',
                      'junit', 'log4j', 'slf4j', 'slf4j-log4j12','slf4j-api', 'slf4j-jdk14'
 
