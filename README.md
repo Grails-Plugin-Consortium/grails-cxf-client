@@ -834,6 +834,10 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 2.1.1
+    * Moving to WSS4j 2.0.3 as this is required (2+) for use with CXF 3+.
+    
+
 * v 2.1
     * Moving to CXF 3.0.4 in preperation for grails 3 move
 
