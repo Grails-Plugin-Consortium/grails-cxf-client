@@ -4,8 +4,10 @@ import com.grails.cxf.client.DynamicWebServiceClient
 import com.grails.cxf.client.WebServiceClientFactoryImpl
 import com.grails.cxf.client.exception.CxfClientException
 import com.grails.cxf.client.security.DefaultSecurityOutInterceptor
-import grails.plugins.*
+import grails.plugins.Plugin
+import groovy.util.logging.Slf4j
 
+@Slf4j
 class GrailsCxfClientG3GrailsPlugin extends Plugin {
 
     private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
@@ -50,7 +52,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
 
         log.info "wiring up cxf-client beans"
 
-        def cxfClientConfigMap = application.config?.cxf?.client ?: [:]
+        def cxfClientConfigMap = grailsApplication.config?.cxf?.client ?: [:]
 
         cxfClientConfigMap.each { cxfClient ->
             configureCxfClientBeans.delegate = delegate
@@ -86,7 +88,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
 
     def configureCxfClientBeans = {cxfClient ->
         def cxfClientName = cxfClient.key
-        def client = application.config?.cxf?.client[cxfClientName]
+        def client = grailsApplication.config?.cxf?.client[cxfClientName]
         def inList = []
         def outList = []
         def outFaultList = []
