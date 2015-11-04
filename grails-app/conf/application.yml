@@ -1,0 +1,25 @@
+grails:
+    profile: plugin
+    codegen:
+        defaultPackage: grails.cxf.client.g3
+info:
+    app:
+        name: '@info.app.name@'
+        version: '@info.app.version@'
+        grailsVersion: '@info.app.grailsVersion@'
+spring:
+    groovy:
+        template:
+            check-template-location: false
+
+cxf:
+  client:
+    stockQuoteClient:
+      wsdl: http://www.webservicex.net/stockquote.asmx?WSDL
+      clientInterface: net.webservicex.StockQuoteSoap
+      serviceEndpointAddress: http://www.webservicex.net/stockquote.asmx
+      receiveTimeout: 120000
+      connectionTimeout: 120000
+      requestContext:
+        - requestKey
+        - requestValue
