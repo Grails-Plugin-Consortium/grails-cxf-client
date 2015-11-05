@@ -1,62 +1,79 @@
-import org.codehaus.gant.GantState
+import org.apache.cxf.tools.wsdlto.WSDLToJava
 
-includeTargets << grailsScript("_GrailsSettings")
-includeTargets << grailsScript('_GrailsPackage')
-includeTargets << grailsScript("_GrailsArgParsing")
-includeTargets << grailsScript("_GrailsClasspath")
-includeTargets << grailsScript("Init")
-includeTargets << grailsScript("_GrailsClasspath")
+//import com.grails.cxf.client.command.WsdlToJavaCommand
 
-printMessage = { String message -> event('StatusUpdate', [message]) }
-finished = {String message -> event('StatusFinal', [message])}
-errorMessage = { String message -> event('StatusError', [message]) }
+description "WSDL2JAVA Grails Script", "grails wsdl2java"
 
-target(wsdl2java: '''generate java class stubs out wsdl files.
-This target needs to be run only upon changes in the upstream API, since it's artefacts are kept under version control in src/main/java
-''') {
-
-    depends(classpath, parseArguments, compile, createConfig)
-
-    printMessage "Starting wsdl2java"
-    def wsdls = [[:]]
-    config.cxf.client.each {
-        wsdls << [wsdl: it?.value?.wsdl, wsdlArgs: it?.value?.wsdlArgs, namespace: it?.value?.namespace, client: it?.value?.client ?: false, bindingFile: it?.value?.bindingFile, outputDir: it?.value?.outputDir ?: "src/main/java"]
-    }
-
-    wsdls.each { config ->
-        if(config?.wsdl) {
-            printMessage "Generating java stubs from ${config?.wsdl}"
-            ant.logger.setMessageOutputLevel(GantState.NORMAL)
-            ant.java(classname: 'org.apache.cxf.tools.wsdlto.WSDLToJava') {
-                arg(value: "-verbose")
-                if(config?.client) arg(value: "-client")
-                if(config?.namespace) {
-                    arg(value: "-p")
-                    arg(value: "${config.namespace}")
-                }
-                if(config?.bindingFile) {
-                    arg(value: "-b")
-                    arg(value: "${config.bindingFile}")
-                }
-                arg(value: "-d")
-                arg(value: "${config?.outputDir}")
-                //can handle a list of a string of single items
-                if(config?.wsdlArgs) {
-                    if(config.wsdlArgs instanceof List) {
-                        config?.wsdlArgs?.each {
-                            arg(value: "${it}")
-                        }
-                    } else {
-                        arg(value: "${config.wsdlArgs}")
-                    }
-                }
-                //arg(value: "src/java/META-INF/jax-ws-catalog.xml")
-                arg(value: config.wsdl)
-            }
-        }
-    }
-
-    finished "Completed wsdl2java"
+addStatus "Starting wsdl2java"
+def wsdls = [[:]]
+config.cxf.client.each {
+	wsdls << [wsdl: it?.value?.wsdl, wsdlArgs: it?.value?.wsdlArgs, namespace: it?.value?.namespace, client: it?.value?.client ?: false, bindingFile: it?.value?.bindingFile, outputDir: it?.value?.outputDir ?: "src/main/java"]
 }
 
-setDefaultTarget(wsdl2java)
+wsdls.each { endpoint ->
+	if (endpoint?.wsdl) {
+		addStatus "Generating java stubs from ${endpoint?.wsdl}"
+//		ant.project.getBuildListeners().firstElement().setMessageOutputLevel(3)
+
+		List<String> args = []
+		args << "-verbose"
+		args << "-bareMethods=GetQuote"
+		args << "-autoNameResolution"
+		args << "-allowElementReferences"
+		if (endpoint?.client) args << "-client"
+		if (endpoint?.namespace) {
+			args << "-p"
+			args << "${endpoint.namespace}"
+		}
+		if (config?.bindingFile) {
+			args << "-b"
+			args << "${endpoint.bindingFile}"
+		}
+		//can handle a list of a string of single items
+		if (config?.wsdlArgs) {
+			if (endpoint.wsdlArgs instanceof List) {
+				config?.wsdlArgs?.each {
+					args << "${it}"
+				}
+			} else {
+				args << "${endpoint.wsdlArgs}"
+			}
+		}
+		args << "-d"
+		args << "${endpoint?.outputDir}"
+
+		args << endpoint.wsdl
+
+		WSDLToJava.main(args.toArray() as String[]);
+
+//		new com.grails.cxf.client.command.WsdlToJavaCommand().handle(args)
+
+//		ant.java(classpath: '.', classname: 'org.apache.cxf.tools.wsdlto.WSDLToJava') {
+//			arg(value: "-verbose")
+//			if (endpoint?.client) arg(value: "-client")
+//			if (endpoint?.namespace) {
+//				arg(value: "-p")
+//				arg(value: "${endpoint.namespace}")
+//			}
+//			if (config?.bindingFile) {
+//				arg(value: "-b")
+//				arg(value: "${endpoint.bindingFile}")
+//			}
+//			arg(value: "-d")
+//			arg(value: "${config?.outputDir}")
+//			//can handle a list of a string of single items
+//			if (config?.wsdlArgs) {
+//				if (endpoint.wsdlArgs instanceof List) {
+//					config?.wsdlArgs?.each {
+//						arg(value: "${it}")
+//					}
+//				} else {
+//					arg(value: "${endpoint.wsdlArgs}")
+//				}
+//			}
+//			arg(value: endpoint.wsdl)
+//		}
+	}
+}
+
+addStatus "Completed wsdl2java"
