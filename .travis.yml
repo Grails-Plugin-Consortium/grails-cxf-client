@@ -1,0 +1,15 @@
+sudo: false
+cache:
+  directories:
+    - $HOME/.gradle
+language: groovy
+jdk:
+- oraclejdk7
+before_script:
+- rm -rf target
+script: ./travis-build.sh
+env:
+  global:
+  - GIT_NAME="Soeren Berg Glasius"
+  - GIT_EMAIL="soeren@glasius.dk"
+
