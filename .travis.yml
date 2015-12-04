@@ -3,5 +3,4 @@ sudo: false
 jdk:
   - openjdk7
 
-script: rm -rf *.zip
-        ./gradlew clean check assemble
+script: rm -rf *.zip && ./gradlew clean && ./gradlew check && ./gradlew assemble
