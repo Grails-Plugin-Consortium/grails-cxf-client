@@ -9,6 +9,7 @@ import spock.lang.Specification
 import javax.xml.ws.WebServiceException
 
 @Integration
+@Ignore('The config is being merged... so removed it')
 class StockQuoteClientSpec extends Specification {
 
     StockQuoteSoap stockQuoteClient
