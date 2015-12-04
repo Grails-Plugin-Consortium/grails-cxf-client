@@ -187,7 +187,7 @@ import com.cxf.demo.logging.CustomLoggingInInterceptor
 import com.cxf.demo.logging.CustomLoggingOutInterceptor
 import com.cxf.demo.logging.VerboseCustomLoggingInInterceptor
 import com.cxf.demo.security.CustomSecurityInterceptor
-import com.grails.cxf.client.security.DefaultSecurityOutInterceptor
+import org.grails.cxf.client.security.DefaultSecurityOutInterceptor
 import org.apache.cxf.configuration.security.AuthorizationPolicy
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
 
@@ -292,44 +292,41 @@ or from the source code you could also package and install from a zip.
 
 Once the plugin is installed and you have your jaxb objects and cxf client port interface in your path (lib or src), you need to add the following to the Config.groovy of your project:
 
-    cxf {
-        client {
-            [beanName] {
-                clientInterface = [package and name of wsdl2java -client generated port interface class]
-                serviceEndpointAddress = [url for the service]
-                username = [username] //optional - used when secured is true - currently wss4j interceptor
-                password = [password] //optional - used when secured is true - currently wss4j interceptor
-                securityInterceptor = [text name of custom bean to use] //optional - defaults to wss4j interceptor
-                inInterceptors = [list of cxf in interceptors to add to the client] //optional - defaults to []
-                outInterceptors = [list of cxf out interceptors to add to the client] //optional - defaults to []
-                inFaultInterceptors = [list of cxf in fault interceptors to add to the client] //optional - defaults to []
-                outFaultInterceptors = [list of cxf out fault interceptors to add to the client] //optional - defaults to []
-                enableDefaultLoggingInterceptors = [turn on or off default in/out logging] //optional - defaults to true
-                secured = [true or false] //optional - defaults to false
-                connectionTimeout = [Number of milliseconds to wait for connection] //optional - Defaults to 60000 (use 0 to wait infinitely)
-                receiveTimeout = [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
-                allowChunking = [true or false] //optional - defaults to false
-                contentType = [String value of http content type] - defaults to 'text/xml; charset=UTF8'
-                httpClientPolicy = [text name of custom bean to use] //optional - defaults to null
-                authorizationPolicy = [text name of custom bean to use] //optional - defaults to null
-                proxyFactoryBindingId = [binding id uri if required] //optional - defaults to null
-                mtomEnabled = [flag to enable mtom] //optional - defaults to false
-                secureSocketProtocol = [socket protocol to use for secure service] //optional - defaults to null
-                wsdlServiceName = [set to enable mime type mapping] //optional - defaults to null
-                wsdlEndpointName = [may be needed for correct wsdl initialization] //optional - defaults to null
-                requestContext = [Setting a Request Context Property on the Client Side] //optional - defaults to [:]
-                tlsClientParameters = [conduit settings for secure services] //optional - defaults to [:]
+    cxf:
+        client:
+            [beanName]:
+                clientInterface: [package and name of wsdl2java -client generated port interface class]
+                serviceEndpointAddress: [url for the service]
+                username: [username] //optional - used when secured is true - currently wss4j interceptor
+                password: [password] //optional - used when secured is true - currently wss4j interceptor
+                securityInterceptor: [text name of custom bean to use] //optional - defaults to wss4j interceptor
+                inInterceptors: [list of cxf in interceptors to add to the client] //optional - defaults to []
+                outInterceptors: [list of cxf out interceptors to add to the client] //optional - defaults to []
+                inFaultInterceptors: [list of cxf in fault interceptors to add to the client] //optional - defaults to []
+                outFaultInterceptors: [list of cxf out fault interceptors to add to the client] //optional - defaults to []
+                enableDefaultLoggingInterceptors: [turn on or off default in/out logging] //optional - defaults to true
+                secured: [true or false] //optional - defaults to false
+                connectionTimeout: [Number of milliseconds to wait for connection] //optional - Defaults to 60000 (use 0 to wait infinitely)
+                receiveTimeout: [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
+                allowChunking: [true or false] //optional - defaults to false
+                contentType: [String value of http content type] - defaults to 'text/xml; charset=UTF8'
+                httpClientPolicy: [text name of custom bean to use] //optional - defaults to null
+                authorizationPolicy: [text name of custom bean to use] //optional - defaults to null
+                proxyFactoryBindingId: [binding id uri if required] //optional - defaults to null
+                mtomEnabled: [flag to enable mtom] //optional - defaults to false
+                secureSocketProtocol: [socket protocol to use for secure service] //optional - defaults to null
+                wsdlServiceName: [set to enable mime type mapping] //optional - defaults to null
+                wsdlEndpointName: [may be needed for correct wsdl initialization] //optional - defaults to null
+                requestContext: [Setting a Request Context Property on the Client Side] //optional - defaults to [:]
+                tlsClientParameters: [conduit settings for secure services] //optional - defaults to [:]
 
                 //wsdl config
-                wsdl = [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
-                wsdlArgs = [custom list of args to pass in seperated by space such as ["-autoNameResolution", "-validate"]] //optional - only used by wsdl2java script
-                namespace = [package name to use for generated classes] //optional - uses packages from wsdl if not provided
-                client = [true or false] //optional - used to tell wsdl2java to output sample clients, usually not needed - defaults to false
-                bindingFile = [Specifies JAXWS or JAXB binding file or XMLBeans context file] //optional
-                outputDir = [location to output generated files] //optional - defaults to src/java
-            }
-        }
-    }
+                wsdl: [location of the wsdl either locally relative to project home dir or a url] //optional - only used by wsdl2java script
+                wsdlArgs: [custom list of args to pass in seperated by space such as ["-autoNameResolution", "-validate"]] //optional - only used by wsdl2java script
+                namespace: [package name to use for generated classes] //optional - uses packages from wsdl if not provided
+                client: [true or false] //optional - used to tell wsdl2java to output sample clients, usually not needed - defaults to false
+                bindingFile: [Specifies JAXWS or JAXB binding file or XMLBeans context file] //optional
+                outputDir: [location to output generated files] //optional - defaults to src/java
 
 Config used at runtime to invoke service.
 
@@ -376,52 +373,9 @@ Config items used by wsdl2java.
 <tr><td>outputDir</td><td>Password to pass along with request in wss4j interceptor when secured is true. (default: "src/java")</td><td>No</td></tr>
 </table>
 
-This is an example of a config file
 
-```groovy
-//**********************************************************************************************
-// IMPORTANT - these must be set externally to env if you want to refer to them later for use
-// via cxf.  You can also simply hard code the url in the cxf section and NOT refer to a variable
-// as well.
-service.simple.url = ""
-service.complex.url = ""
 
-// set per-environment service url
-environments {
-    production {
-        grails.serverURL = "http://www.changeme.com"
-        service.simple.url = "${grails.serverURL}/services/simple"
-        service.complex.url = "${grails.serverURL}/services/complex"
-    }
-    development {
-        grails.serverURL = "http://localhost:8080/${appName}"
-        service.simple.url = "${grails.serverURL}/services/simple"
-        service.complex.url = "${grails.serverURL}/services/complex"
-    }
-    test {
-        grails.serverURL = "http://localhost:8080/${appName}"
-        service.simple.url = "${grails.serverURL}/services/simple"
-        service.complex.url = "${grails.serverURL}/services/complex"
-    }
-}
-
-cxf {
-    client {
-        simpleServiceClient {
-            clientInterface = cxf.client.demo.simple.SimpleServicePortType
-            serviceEndpointAddress = "${service.simple.url}"
-        }
-
-        complexServiceClient {
-            clientInterface = cxf.client.demo.complex.ComplexServicePortType
-            serviceEndpointAddress = "${service.complex.url}"
-        }
-    }
-}
-//**********************************************************************************************
-```
-
-You them refer to your services from a controller/service/taglib like the following:
+You simply refer to your client beans from a controller/service/taglib like the following:
 
 ```groovy
 class DemoController {
@@ -451,42 +405,47 @@ Functionality was recently added by Kyle Dickerson to support mime type attachem
 CUSTOM SECURITY INTERCEPTORS
 ---------------
 
-This is rather complex exercise, but one that you can do as of version 1.2 of the plugin.
-
-As a convenience to the user I created an interface to inherit from that allows you to customize the specifics of the interceptor without having to inherit all the contract methods for the cxf interceptors.  You simply have to inherit from CxfClientInterceptor in the com.grails.cxf.client.security package.  Here is the custom interceptor I created for the demo project.
+As a convenience to the user I created an interface to inherit from that allows you to customize the specifics of the interceptor without having to inherit all the contract methods for the cxf interceptors.  You simply have to inherit from CxfClientInterceptor in the org.grails.cxf.client.security package.  Here is the custom interceptor I created for the demo project.
 
 ```groovy
-package com.cxf.demo.security
+package org.grails.cxf.client.security
 
-import com.grails.cxf.client.CxfClientInterceptor
+import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
+import org.apache.wss4j.common.ext.WSPasswordCallback
+import org.apache.wss4j.dom.WSConstants
+import org.apache.wss4j.dom.handler.WSHandlerConstants
+import org.grails.cxf.client.CxfClientInterceptor
+import org.grails.cxf.client.exception.CxfClientException
+
 import javax.security.auth.callback.Callback
 import javax.security.auth.callback.CallbackHandler
 import javax.security.auth.callback.UnsupportedCallbackException
-import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor
-import org.apache.ws.security.WSPasswordCallback
-import org.apache.ws.security.handler.WSHandlerConstants
 
-class CustomSecurityInterceptor implements CxfClientInterceptor {
+class DefaultSecurityOutInterceptor implements CxfClientInterceptor {
 
-    def pass
-    def user
+    String password
+    String username
 
     WSS4JOutInterceptor create() {
+        if(!username?.trim() || !password) {
+            throw new CxfClientException('Username and password are not configured for calling secure web services')
+        }
+
         Map<String, Object> outProps = [:]
-        outProps.put(WSHandlerConstants.ACTION, org.apache.ws.security.handler.WSHandlerConstants.USERNAME_TOKEN)
-        outProps.put(WSHandlerConstants.USER, user)
-        outProps.put(WSHandlerConstants.PASSWORD_TYPE, org.apache.ws.security.WSConstants.PW_TEXT)
+        outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN)
+        outProps.put(WSHandlerConstants.USER, username)
+        outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT)
         outProps.put(WSHandlerConstants.PW_CALLBACK_REF, new CallbackHandler() {
 
             void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-                WSPasswordCallback pc = (WSPasswordCallback) callbacks[0]
-                pc.password = pass
+                WSPasswordCallback pc = callbacks[0]
+                pc.password = password
             }
         })
-
         new WSS4JOutInterceptor(outProps)
     }
 }
+
 ```
 
 You have to make sure your create method returns an object that already inherits from the appropriate classes such as an WSS4JOutInterceptor as I used here.  It is technically possible for your interceptor to extend something like SoapHeaderInterceptor, you will just be responsible for overriding all the appropriate methods yourself.  You can see the <a href="http://www.technipelago.se/content/technipelago/blog/basic-authentication-grails-cxf">following example</a> on how to define a basic auth interceptor on the server side.
@@ -496,28 +455,25 @@ In the case of the above CustomSecurityInterceptor, you would then place the fol
 
 ```groovy
 beans = {
-    myCustomInterceptor(com.cxf.demo.security.CustomSecurityInterceptor){
-        user = "wsuser"
-        pass = "secret"
+	myCustomerSecurityOutInterceptor(DefaultSecurityOutInterceptor){
+        username = 'wsuser'
+        password = 'password'
     }
 }
 ```
 
 The last step to hooking up the custom interceptor is to define the securityInterceptor for the client config block.  The myCustomInterceptor bean can be hooked up by adding the line in the config below.
 
-```groovy
-cxf {
-    client {
-        customSecureServiceClient {
-            wsdl = "docs/SecureService.wsdl" //only used for wsdl2java script target
-            namespace = "cxf.client.demo.secure"
-            clientInterface = cxf.client.demo.secure.SecureServicePortType
-            //secured = true //implied when you define a value for securityInterceptor
-            securityInterceptor = 'myCustomInterceptor'
-            serviceEndpointAddress = "${service.secure.url}"
-        }
-    }
-}
+```yaml
+cxf:
+    client:
+        customSecureServiceClient:
+            wsdl: docs/SecureService.wsdl
+            namespace: cxf.client.demo.secure
+            clientInterface: cxf.client.demo.secure.SecureServicePortType
+            secured: true
+            securityInterceptor: myCustomerSecurityOutInterceptor
+            serviceEndpointAddress: http://localhost:8080/services/secure
 ```
 
 <p align="right"><a href="#Top">Top</a></p>
@@ -545,15 +501,20 @@ verboseLoggingInInterceptor(VerboseCustomLoggingInInterceptor) {
 
 In the Config.groovy cxf { client { ... } } block define a webservice client and provide the interceptor bean name(s).
 
-```groovy
-simpleServiceInterceptorClient {
-    wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
-    clientInterface = cxf.client.demo.simple.SimpleServicePortType
-    serviceEndpointAddress = "${service.simple.url}"
-    inInterceptors = ['customLoggingInInterceptor', 'verboseLoggingInInterceptor'] //can use comma separated list or groovy list
-    enableDefaultLoggingInterceptors = false
-    namespace = "cxf.client.demo.simple"
-}
+```yaml
+cxf:
+  client:
+      simpleServiceInterceptorClient:
+          wsdl: docs/SimpleService.wsdl #only used for wsdl2java script target
+          clientInterface: cxf.client.demo.simple.SimpleServicePortType
+          serviceEndpointAddress: http://localhost:8080/services/simple
+          outInterceptors: customLoggingOutInterceptor #can use single item, comma separated list or groovy list
+          inInterceptors:
+            - customLoggingInInterceptor
+            - verboseLoggingInInterceptor
+          enableDefaultLoggingInterceptors: false
+          namespace: cxf.client.demo.simple
+
 ```
 
 Here is the code for my customLoggingInInterceptor (verboseLoggingInInterceptor is almost identical)
@@ -562,25 +523,40 @@ Here is the code for my customLoggingInInterceptor (verboseLoggingInInterceptor 
 package com.cxf.demo.logging
 
 import org.apache.cxf.common.injection.NoJSR250Annotations
+import org.apache.cxf.common.logging.LogUtils
 import org.apache.cxf.interceptor.AbstractLoggingInterceptor
 import org.apache.cxf.interceptor.Fault
-import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.message.Message
 import org.apache.cxf.phase.Phase
 
+import java.util.logging.Logger
+
+/**
+ *
+ */
 @NoJSR250Annotations
 public class CustomLoggingInInterceptor extends AbstractLoggingInterceptor {
 
-    def name
+	private static final Logger LOG = LogUtils.getLogger(CustomLoggingInInterceptor)
+	def name
+	//SimpleServicePortType simpleServiceClient
 
-    public CustomLoggingInInterceptor() {
-        super(Phase.RECEIVE);
-        log "Creating the custom interceptor bean"
-    }
+	public CustomLoggingInInterceptor() {
+		super(Phase.RECEIVE);
+		log LOG, "Creating the custom interceptor bean"
+	}
 
-    public void handleMessage(Message message) throws Fault {
-        log "$name :: I AM IN CUSTOM IN LOGGER!!!!!!!"
-    }
+	public void handleMessage(Message message) throws Fault {
+		//get another web service bean here by name and call it
+//        SimpleServicePortType simpleServiceClient = ApplicationHolder.application.mainContext.getBean("simpleServiceClient")
+//        log LOG, "status is " + simpleServiceClient.simpleMethod1(new cxf.client.demo.simple.SimpleRequest(age: 30, name: 'Test')).status
+		log LOG, "$name :: I AM IN CUSTOM IN LOGGER!!!!!!!"
+	}
+
+	@Override
+	protected Logger getLogger() {
+		LOG
+	}
 }
 ```
 
@@ -589,7 +565,7 @@ _**NOTE:** In your constructor you will need to be mindful what Phase you set yo
 You will need to set the logging level in the log4j config section to enable the logging
 
 ```groovy
-info 'com.grails.cxf.client'
+info 'org.grails.cxf.client'
 info 'org.apache.cxf.interceptor'
 info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
@@ -601,14 +577,20 @@ CUSTOM OUT INTERCEPTORS
 ---------------
 You can wire in your own custom out interceptors by adding the property outInterceptors to the configured client.  In this example I have chosen to wire in my own out logging interceptors.
 
-```groovy
-simpleServiceInterceptorClient {
-    wsdl = "docs/SimpleService.wsdl" //only used for wsdl2java script target
-    clientInterface = cxf.client.demo.simple.SimpleServicePortType
-    serviceEndpointAddress = "${service.simple.url}"
-    outInterceptors = 'customLoggingOutInterceptor' //can use comma separated list or groovy list
-    namespace = "cxf.client.demo.simple"
-}
+```yaml
+cxf:
+    client:
+        simpleServiceInterceptorClient:
+            wsdl: docs/SimpleService.wsdl #only used for wsdl2java script target
+            clientInterface: cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress: http://localhost:8080/services/simple
+            outInterceptors: customLoggingOutInterceptor #can use single item, comma separated list or groovy list
+            inInterceptors:
+              - customLoggingInInterceptor
+              - verboseLoggingInInterceptor
+            enableDefaultLoggingInterceptors: false
+            namespace: cxf.client.demo.simple
+
 ```
 
 Here is the code for my customLoggingOutInterceptor
@@ -617,25 +599,36 @@ Here is the code for my customLoggingOutInterceptor
 package com.cxf.demo.logging
 
 import org.apache.cxf.common.injection.NoJSR250Annotations
+import org.apache.cxf.common.logging.LogUtils
 import org.apache.cxf.interceptor.AbstractLoggingInterceptor
 import org.apache.cxf.interceptor.Fault
-import org.apache.cxf.interceptor.LoggingInInterceptor
 import org.apache.cxf.message.Message
 import org.apache.cxf.phase.Phase
 
+import java.util.logging.Logger
+
+/**
+ *
+ */
 @NoJSR250Annotations
 public class CustomLoggingOutInterceptor extends AbstractLoggingInterceptor {
 
-    def name
+	private static final Logger LOG = LogUtils.getLogger(CustomLoggingOutInterceptor)
+	def name
 
-    public CustomLoggingOutInterceptor() {
-        super(Phase.WRITE);
-        log "Creating the custom interceptor bean"
-    }
+	public CustomLoggingOutInterceptor() {
+		super(Phase.WRITE);
+		log LOG, "Creating the custom interceptor bean"
+	}
 
-    public void handleMessage(Message message) throws Fault {
-        log "$name :: I AM IN CUSTOM OUT LOGGER!!!!!!!"
-    }
+	public void handleMessage(Message message) throws Fault {
+		log LOG, "$name :: I AM IN CUSTOM OUT LOGGER!!!!!!!"
+	}
+
+	@Override
+	protected Logger getLogger() {
+		LOG
+	}
 }
 ```
 
@@ -646,7 +639,7 @@ public class CustomLoggingOutInterceptor extends AbstractLoggingInterceptor {
 You will need to set the logging level in the log4j config section to enable the logging
 
 ```groovy
-info 'com.grails.cxf.client'
+info 'org.grails.cxf.client'
 info 'org.apache.cxf.interceptor'
 info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
@@ -662,7 +655,7 @@ You can wire in your own custom in fault interceptors by adding the property inF
 You will need to set the logging level in the log4j config section to enable the logging
 
 ```groovy
-info 'com.grails.cxf.client'
+info 'org.grails.cxf.client'
 info 'org.apache.cxf.interceptor'
 info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
@@ -679,7 +672,7 @@ You can wire in your own custom out fault interceptors by adding the property ou
 You will need to set the logging level in the log4j config section to enable the logging
 
 ```groovy
-info 'com.grails.cxf.client'
+info 'org.grails.cxf.client'
 info 'org.apache.cxf.interceptor'
 info 'blah.blah.blah' //whatever package your custom interceptors are in
 //debug 'org.apache.cxf.interceptor' //choose appropriate level
@@ -709,15 +702,17 @@ beans = {
 
 Config.groovy
 
-```groovy
-cxf {
-    client {
-        simpleServiceClient {
-            clientInterface = cxf.client.demo.simple.SimpleServicePortType
-            serviceEndpointAddress = "${service.simple.url}"
-            httpClientPolicy = 'customHttpClientPolicy'
-        }
-}
+```yaml
+cxf:
+    client:
+        simpleServiceClient:
+            wsdl: docs/SimpleService.wsdl
+            wsdlArgs: -autoNameResolution
+            clientInterface: cxf.client.demo.simple.SimpleServicePortType
+            serviceEndpointAddress: http://localhost:8080/services/simple
+            namespace: cxf.client.demo.simple
+            httpClientPolicy: customHttpClientPolicy
+
 ```
 
 Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
@@ -742,14 +737,14 @@ beans = {
 Config.groovy
 
 ```groovy
-cxf {
-    client {
-        simpleServiceClient {
-            clientInterface = cxf.client.demo.simple.SimpleServicePortType
-            serviceEndpointAddress = "${service.simple.url}"
-            authorizationPolicy = 'customAuthorizationPolicy'
-        }
-}
+cxf:
+    client:
+        customSecureAuthorizationServiceClient:
+            wsdl: docs/AuthorizationService.wsdl
+            clientInterface: cxf.client.demo.authorization.AuthorizationServicePortType
+            serviceEndpointAddress: http://localhost:8080/services/authorization
+            namespace: cxf.client.demo.authorization
+            authorizationPolicy: customAuthorizationPolicy
 ```
 
 Note: If you incorrectly refer to your new beans name (spelling, etc) you will get an exception such as `...Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'blahblah' is defined` error.
@@ -781,7 +776,7 @@ try {
 }
 ```
 
-In additiona, any general SOAPFaultException thrown can be caught as well.
+In addition, any general SOAPFaultException thrown can be caught as well.
 
 ```groovy
 try {
@@ -797,22 +792,14 @@ try {
 <a name="Ssl"></a>
 SETTING SECURE SOCKET PROTOCOL
 ---------------
+
+**TODO: Not supported in grails 3 yet!**
+
 If you would like to set the secure socket protocol for a secure service you can use the `CxfClientConstants` class to set the bean constructor.  The types provided are:
 
 ```groovy
 public static final String SSL_PROTOCOL_TLSV1 = 'TLSv1'
 public static final String SSL_PROTOCOL_SSLV3 = 'SSLv3'
-```
-
-Config.groovy
-
-```groovy
-cxf {
-    client {
-        simpleServiceClient {
-            secureSocketProtocol = CxfClientConstants.SSL_PROTOCOL_SSLV3
-        }
-}
 ```
 
 You may also provide configuration for via the tlsClientParameters for the client.  Using this you can set any of the following:
@@ -842,6 +829,7 @@ cxf {
                 cipherSuitesFilter.exclude = ['.*_DH_anon_.*']
             ]
         }
+    }
 }
 ```
 
@@ -854,22 +842,6 @@ Not all features for http conduit are supported.  You can read more about condui
 USING CLIENT BEANS ANYWHERE
 ---------------
 If you require useage of the web service clients you can access them anywhere by accessing them by name.  The name of the bean will match the name of the configured client in your Config.groovy.
-
-Here is one example that could be called from a class in src/groovy
-
-```groovy
-cxf {
-    client {
-        simpleServiceClient {
-            ...
-        }
-    }
-}
-```
-
-```groovy
-SimpleServicePortType simpleServiceClient = ApplicationHolder.application.mainContext.getBean("simpleServiceClient")
-```
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Endpoints"></a>
@@ -906,6 +878,9 @@ If no service endpoint is found matching the `serviceName` or if an empty name i
 
 ENABLING LOGGING OF SOAP MESSAGES
 ---------------
+
+**Todo: Update for grails 3**
+
 If you would like to view the raw soap in the console/log files add the follow:
 
 JVM startup params:
@@ -926,7 +901,7 @@ log4j {
 DEMO PROJECT
 ---------------
 
-A demo project that includes both a sample service and usage of the cxf-client plugin can be found at <https://github.com/Grails-Plugin-Consortium/grails-cxf-client-demo>
+A grails 3 demo project that includes both a sample service and usage of the cxf-client plugin can be found at <https://github.com/Grails-Plugin-Consortium/grails-cxf-client-demo>
 
 I have also included the full code on how to inject a custom security interceptor in the demo project.
 
@@ -975,6 +950,10 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 3.0.0
+    * Moving to CXF 3.1.x
+    * Grails 3
+
 * v 2.1.1
     * Moving to WSS4j 2.0.3 as this is required (2+) for use with CXF 3+.
 
