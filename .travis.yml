@@ -1,17 +1,9 @@
-sudo: false
-cache:
-  directories:
-  - $HOME/.gradle
 language: groovy
+sudo: false
 jdk:
-- oraclejdk7
+  - openjdk7
 before_script:
-- rm -rf target
-- chmod +x travis-build.sh
-script: ./travis-build.sh
-env:
-  global:
-  - GIT_NAME="Soeren Berg Glasius"
-  - GIT_EMAIL="soeren@glasius.dk"
-  - secure: ZXTNEHWTVUv6/ze26vZII+u6yHF00Lbt7SeiP+nZMa6Jvm7zdkj/+7Kp3dZjkNy883lszyPE5rQYiZAOJQcd87sVz4kvrNGhqDJeqP4e9ly4hCyfSIKLFsEWeO60qXAIGeaj0Yy+Uffyvdf+vsG7ycLCimLE/H4u9NH29/XV2+CIMivBGoYelKgQnB/LbDPVGv7GF3zv8VR5xTThxz9+FsbXppWbZTN2atORFm+oJlvYiT5UQc2YS9VsiNnmhgAEXMkoUZi+IxaqbWpAM7ayFNJ+dhkhAjXD6W5+s5DpyVT+rQNdkjlfgCSp09ywXO0j9kLwDyh30t53wbf+41Kl9zj67NeAcSQmkKAtx8663puVtKN3OYSMPlzExUznM+80Ei8FFf4QroVQxGhHrdR5BuFJjxzJGZdQsaVvMoD/XruxEsOX/xYky7Oh5nOL0b7+K5GetImgpJ+YCUcNerkIR5VEqQnGELu7VE9aYeEND023xRFcdCd4Lrxxvb/SBM5579B6yAzTg2IzEGyU2Pngbb1CZzVZIqvMMe5nBNy3pjPMu2YgUEPsUXGYZnjxWJMUoBFOQQsHOTzgb29rvfXUE6N84prErqR11zvoMIsC4sobvpUWlbQEO5lIHGwhTQ0NBf9ApbfkL0t9BqCGe8TPuY8t9U7TUDrH6I+xwLZQ35o=
-  - secure: Yn+e09FLk/vJ1E/r/qmanLQNjdk/qeHlibkrylDeU73+E5/p9q5zRdzRR8OYr2o8jnc8bszvfdryc9239UJ3c1ShByXkBoAeqrk7GQtlWwvno3gzqbEFGO9Sb1PBOIoTb5Or79IMtmLlznd/DJs0lPF/1L4OSL1of3Up/4UoGjuNWP2otCERfhTWDwoHa6v4sbhHq8YyONRtSmw+DtvrrJGC6/kBI2wR7gUaQfeaFdPk2QU+muqWFdAJX975D3YSOuONap+cNqrFZjEmZQFJrl0ESH78Gp1z2G49Yco1k4uurr51Ns81PNHggvT6feoYdvD74Qrl2LgWhFpxtpU/4MqeYeikEwX9/cl8F/BgQNWH4boUl7jVrTGmzunMoj3rZvb4Er0XpmqBGUFHy1FOopkeQC86uJo8tzzJYOn3AatuCZnu4zAD33eycGTF+HceaBl6Hbbr1nRIITrfgdvQgRtpJMuBWLpj/QjqATyUlbYsuNaf+JQOrmyp9CLJHVGye05wtyBpRr2KzmEF2lDHfQuRFivVomIvcSdVhrxI3ufMA1q4e1kKvjtP5M3GrOrxJuhzjb6Lt1D4aeBCXTUUjKd9ORyMG7EqXwVnAf/wmLdlekxdGz60YJaYVOwoReBCe8OFMb3Fq66Ks4VXRLHet8xGnogL/if8/2jZ5T38M5Y=
+  - chmod +x grailsw
+
+script: rm -rf *.zip
+        ./gradlew clean test assemble
