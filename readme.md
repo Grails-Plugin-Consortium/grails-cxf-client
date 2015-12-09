@@ -126,7 +126,7 @@ cxf:
             wsdl: docs/SimpleService.wsdl #only used for wsdl2java script target
             clientInterface: cxf.client.demo.simple.SimpleServicePortType
             serviceEndpointAddress: http://localhost:8080/services/simple
-            outInterceptors: customLoggingOutInterceptor #can use single item, comma separated list or groovy list
+            outInterceptors: customLoggingOutInterceptor #can use single item or a yml list
             inInterceptors:
               - customLoggingInInterceptor
               - verboseLoggingInInterceptor
@@ -157,7 +157,7 @@ cxf:
             clientInterface: cxf.client.demo.secure.SecureServicePortType
             secured: true
             securityInterceptor: myCustomerSecurityOutInterceptor
-            outInterceptors: customLoggingOutInterceptor #can use single item, comma separated list or groovy list
+            outInterceptors: customLoggingOutInterceptor #can use single item or a yml list
             inInterceptors:
               - customLoggingInInterceptor
               - verboseLoggingInInterceptor
@@ -508,7 +508,7 @@ cxf:
           wsdl: docs/SimpleService.wsdl #only used for wsdl2java script target
           clientInterface: cxf.client.demo.simple.SimpleServicePortType
           serviceEndpointAddress: http://localhost:8080/services/simple
-          outInterceptors: customLoggingOutInterceptor #can use single item, comma separated list or groovy list
+          outInterceptors: customLoggingOutInterceptor #can use single item or a yml list
           inInterceptors:
             - customLoggingInInterceptor
             - verboseLoggingInInterceptor
@@ -584,7 +584,7 @@ cxf:
             wsdl: docs/SimpleService.wsdl #only used for wsdl2java script target
             clientInterface: cxf.client.demo.simple.SimpleServicePortType
             serviceEndpointAddress: http://localhost:8080/services/simple
-            outInterceptors: customLoggingOutInterceptor #can use single item, comma separated list or groovy list
+            outInterceptors: customLoggingOutInterceptor #can use single item or a yml list
             inInterceptors:
               - customLoggingInInterceptor
               - verboseLoggingInInterceptor
