@@ -386,7 +386,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
      */
     private static void addInterceptors(List clientInterceptors, List cxfInterceptors) {
         cxfInterceptors.each {
-            if (it instanceof Interceptor || it instanceof CxfClientInterceptor) {
+            if (it instanceof org.apache.cxf.interceptor.Interceptor || it instanceof CxfClientInterceptor) {
                 clientInterceptors.add((it instanceof CxfClientInterceptor) ? it.create() : it)
             }
         }
