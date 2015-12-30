@@ -8,7 +8,7 @@ import grails.plugins.Plugin
 import groovy.util.logging.Slf4j
 
 @Slf4j
-class GrailsCxfClientG3GrailsPlugin extends Plugin {
+class GrailsCxfClientGrailsPlugin extends Plugin {
 
     private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
     private final Long DEFAULT_RECEIVE_TIMEOUT = 60000

@@ -1,5 +1,3 @@
-import org.grails.cxf.client.util.WsdlToJavaUtil
-
 description "WSDL2JAVA Grails Script", "grails wsdl2java"
 
 addStatus "Please use the wsdlToJava command via grails or gradle.  This has been deprecated in favor of the new command pattern."
