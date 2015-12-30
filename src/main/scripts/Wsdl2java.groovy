@@ -1,4 +1,3 @@
-import org.grails.cxf.client.util.WsdlToJavaUtil
 
 description "WSDL2JAVA Grails Script", "grails wsdl2java"
 
