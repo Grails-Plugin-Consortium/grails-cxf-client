@@ -8,6 +8,7 @@ import org.grails.cxf.client.security.DefaultSecurityOutInterceptor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
 
 @Slf4j
 class GrailsCxfClientGrailsPlugin extends Plugin {
@@ -57,20 +58,31 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
 			log.info "Wiring up cxf-client beans (async: $useAsync)"
 
 			ExecutorService service = Executors.newFixedThreadPool(10);
+			Map<String, Future> futures = [:]
 
 			cxfClientConfigMap.each { cxfClient ->
 				if (useAsync) {
 					Closure d = getDelegate() as Closure
-					service.submit(new Runnable() {
+					futures.put(cxfClient.key.toString(), service.submit(new Runnable() {
 						@Override
 						void run() {
 							configureCxfClientBeans.delegate = d
 							configureCxfClientBeans(cxfClient, d)
 						}
-					});
+					}));
 				} else {
 					configureCxfClientBeans.delegate = delegate
 					configureCxfClientBeans(cxfClient, delegate)
+				}
+			}
+
+			if (useAsync) {
+				futures.each { future ->
+					try {
+						future.value.get(10000, TimeUnit.MILLISECONDS)
+					} catch (Exception e) {
+						log.error("Can not load the client ${future.key}", e)
+					}
 				}
 			}
 
