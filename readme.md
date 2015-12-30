@@ -964,7 +964,7 @@ CHANGE LOG
 
 
 * v 2.1
-    * Moving to CXF 3.0.4 in preperation for grails 3 move
+    * Moving to CXF 3.0.4 in preparation for grails 3 move
 
 
 * v 2.0.3
