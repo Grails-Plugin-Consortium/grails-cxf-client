@@ -950,6 +950,11 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 3.0.1-3.0.3
+    * Minor bug fixes
+    * Rename plugin to remove the G3 from the name
+    * Grails 3
+
 * v 3.0.0
     * Moving to CXF 3.1.x
     * Grails 3
