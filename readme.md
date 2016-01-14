@@ -8,8 +8,8 @@ CXF CLIENT
 ======
 
 * <a href="#Introduction">Introduction</a>
-* <a href="#Script">Wsdl2java Command</a>
-* <a href="#Manually">Wsdl2java Manually</a>
+* <a href="#Script">WsdlTojava Command</a>
+* <a href="#Manually">WsdlTojava Manually</a>
 * <a href="#Plugin">Plugin Configuration</a>
 * <a href="#Mime">Mime Attachments</a>
 * <a href="#Security">Custom Security Interceptors</a>
@@ -40,10 +40,34 @@ The Cxf Client plugin will allow you to use existing (or new) apache cxf wsdl2ja
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Script"></a>
-WSDL2JAVA SCRIPT
+WsdlToJava Command
 ---------------
 
 This plugin provides a convenient way to run wsdl2java as a grails run target in your project.
+
+You will need to put this plugin as a standard dependency AND a classpath dependency as follows
+
+```groovy
+buildscript {
+    ext {
+        grailsVersion = project.grailsVersion
+    }
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
+        maven { url "https://dl.bintray.com/ctoestreich/grails-plugins" } //Required until grails repo is fixed
+    }
+    dependencies {
+        //other stuff
+        classpath "org.grails.plugins:grails-cxf-client:3.0.3" //This line
+    }
+}
+
+dependencies {
+    //other stuff
+    compile 'org.grails.plugins:grails-cxf-client:3.0.3' //This line
+}
+```
 
 First point the configured clients to a wsdl (either locally or remotely).  This is done by adding the [wsdl] node to the client config as following:
 
@@ -255,7 +279,7 @@ The following will also work
 
 <p align="right"><a href="#Top">Top</a></p>
 <a name="Manually"></a>
-WSDL2JAVA MANUALLY
+WsdlToJava MANUALLY
 ----------------
 
 If you already have a wsdl2java generated object graph and client proxy you can skip this section.
