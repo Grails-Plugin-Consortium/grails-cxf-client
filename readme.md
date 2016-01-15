@@ -214,6 +214,7 @@ import com.cxf.demo.security.CustomSecurityInterceptor
 import org.grails.cxf.client.security.DefaultSecurityOutInterceptor
 import org.apache.cxf.configuration.security.AuthorizationPolicy
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
+import org.apache.cxf.transports.http.configuration.ConnectionType
 
 // Place your Spring DSL code here
 beans = {
@@ -257,6 +258,7 @@ beans = {
 		connectionTimeout = 30000
 		receiveTimeout = 60000
 		allowChunking = false
+		connection = ConnectionType.KEEP_ALIVE
 	}
 
 	customAuthorizationPolicy(AuthorizationPolicy) {
@@ -334,6 +336,7 @@ Once the plugin is installed and you have your jaxb objects and cxf client port 
                 receiveTimeout: [Number of milliseconds to wait to receive a response] //optional - Defaults to 30000 (use 0 to wait infinitely)
                 allowChunking: [true or false] //optional - defaults to false
                 contentType: [String value of http content type] - defaults to 'text/xml; charset=UTF8'
+                connection: [Enum of ConnectionType (ConnectionType.CLOSE, ConectionType.KEEP_ALIVE) for type of connection] - defaults to ConnectionType.CLOSE
                 httpClientPolicy: [text name of custom bean to use] //optional - defaults to null
                 authorizationPolicy: [text name of custom bean to use] //optional - defaults to null
                 proxyFactoryBindingId: [binding id uri if required] //optional - defaults to null
@@ -373,6 +376,7 @@ interceptor in the outInterceptors property as well.  You would still be require
 <tr><td>secured</td><td>If true will set the cxf client params to use username and password values using WSS4J. (default: false)</td><td>No</td></tr>
 <tr><td>allowChunking</td><td>If true will set the HTTPClientPolicy allowChunking for the clients proxy to true. (default: false)</td><td>No</td></tr>
 <tr><td>contentType</td><td>Allows user to override the content type of the http policy default of 'text/xml; charset=UTF8'.  Might want to set to "application/soap+xml; charset=UTF-8" for example.</td><td>No</td></tr>
+<tr><td>conection</td><td>Allows user to override the connection type of the http policy default of 'ConnectionType.CLOSE'.  Can attempt to reuse connections via ConnectionType.KEEP_ALIVE</td><td>No</td></tr>
 <tr><td>httpClientPolicy</td><td>Instead of using the separate timeout, chunking, etc values you can create your own HTTPClientPolicy bean in resources.groovy and pass the name of the bean here. <B>This will override the connectionTimeout, receiveTimeout and allowChunking values.</b> (default: null)</td><td>No</td></tr>
 <tr><td>authorizationPolicy</td><td>Name of a bean in resources.groovy of type AuthorizationPolicy that will be used in the httpConduit.</b> (default: null)</td><td>No</td></tr>
 <tr><td>proxyFactoryBindingId</td><td>The URI, or ID, of the message binding for the endpoint to use. For SOAP the binding URI(ID) is specified by the JAX-WS specification. For other message bindings the URI is the namespace of the WSDL extensions used to specify the binding.  If you would like to change the binding (to use soap12 for example) set this value to "http://schemas.xmlsoap.org/wsdl/soap12/". (default: "")</td><td>No</td></tr>
@@ -709,7 +713,7 @@ CUSTOM HTTP CLIENT POLICY
 
 If you simply need to set the connectionTimeout, receiveTimeout, or allowChunking you may use the three provided params to accomplish this.  If you require more fine grained control of the HTTPClientPolicy you can create a custom bean in the resources.groovy and tell your cxf client to use it via the code below.
 
-_Note: A configured httpClientPolicy will take precedence over the connectionTimeout, receiveTimeout and allowChunking. Setting all four params in the config will cause the httpClientPolicy to be used and the others ignored._
+_Note: A configured httpClientPolicy will take precedence over the connection, connectionTimeout, receiveTimeout and allowChunking. Setting all four params in the config will cause the httpClientPolicy to be used and the others ignored._
 
 resources.groovy
 
@@ -720,6 +724,7 @@ beans = {
         receiveTimeout = 60000
         allowChunking = false
         autoRedirect = false
+        connection = org.apache.cxf.transports.http.configuration.ConnectionType.KEEP_ALIVE
     }
 }
 ```
@@ -974,6 +979,9 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 3.0.4
+	* Adding support for ConnectionType (eg. KEEP_ALIVE and CLOSE) on the http connection
+
 * v 3.0.1-3.0.3
     * Minor bug fixes
     * Rename plugin to remove the G3 from the name

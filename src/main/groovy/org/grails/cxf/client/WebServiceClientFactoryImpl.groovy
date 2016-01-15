@@ -1,5 +1,6 @@
 package org.grails.cxf.client
 
+import org.apache.cxf.transports.http.configuration.ConnectionType
 import org.grails.cxf.client.exception.CxfClientException
 import org.grails.cxf.client.exception.UpdateServiceEndpointException
 import groovy.transform.Synchronized
@@ -172,7 +173,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         try {
             assignCxfProxy(wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, serviceEndpointAddress,
                     enableDefaultLoggingInterceptors,
-                    clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true, contentType: 'text/xml; charset=UTF-8'],
+                    clientPolicyMap ?: [receiveTimeout: RECEIVE_TIMEOUT, connectionTimeout: CONNECTION_TIMEOUT, allowChunking: true, contentType: 'text/xml; charset=UTF-8', connection: ConnectionType.CLOSE],
                     handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy, proxyFactoryBindingId, mtomEnabled,
                     secureSocketProtocol, requestContext, tlsClientParameters)
             log.debug("Successfully changed the service $serviceName endpoint address to $serviceEndpointAddress")
@@ -241,6 +242,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             clientProxyFactory.bindingId = proxyFactoryBindingId
         }
 
+		assignDefaultHttpClientPolicyConnectionType(clientPolicyMap)
+
         assignBindingConfig(proxyFactoryBindingId, mtomEnabled, clientProxyFactory)
 
         Object cxfProxy = clientProxyFactory.create()
@@ -256,7 +259,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         handler.cxfProxy = cxfProxy
     }
 
-    private static void assignBindingConfig(String proxyFactoryBindingId, Boolean mtomEnabled, JaxWsProxyFactoryBean clientProxyFactory) {
+	private static void assignDefaultHttpClientPolicyConnectionType(Map clientPolicyMap) {
+		if (clientPolicyMap && !clientPolicyMap.connection) {
+			clientPolicyMap.connection = ConnectionType.CLOSE
+		}
+	}
+
+	private static void assignBindingConfig(String proxyFactoryBindingId, Boolean mtomEnabled, JaxWsProxyFactoryBean clientProxyFactory) {
         SoapBindingConfiguration sbc = new SoapBindingConfiguration()
 
         if (proxyFactoryBindingId?.toLowerCase()?.contains(/soap12/)) {
@@ -428,7 +437,8 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 receiveTimeout: Long.parseLong((clientPolicyMap?.receiveTimeout ?: 0) as String),
                 connectionTimeout: Long.parseLong((clientPolicyMap?.connectionTimeout ?: 0) as String),
                 allowChunking: clientPolicyMap.allowChunking,
-                contentType: clientPolicyMap.contentType
+                contentType: clientPolicyMap.contentType,
+                connection: clientPolicyMap.connection
         )
     }
 
