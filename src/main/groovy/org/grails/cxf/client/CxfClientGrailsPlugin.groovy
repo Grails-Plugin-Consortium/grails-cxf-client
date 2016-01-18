@@ -7,7 +7,7 @@ import org.grails.cxf.client.exception.CxfClientException
 import org.grails.cxf.client.security.DefaultSecurityOutInterceptor
 
 @Slf4j
-class GrailsCxfClientGrailsPlugin extends Plugin {
+class CxfClientGrailsPlugin extends Plugin {
 
 	private final Long DEFAULT_CONNECTION_TIMEOUT = 30000
 	private final Long DEFAULT_RECEIVE_TIMEOUT = 60000
@@ -30,6 +30,7 @@ class GrailsCxfClientGrailsPlugin extends Plugin {
 			"spock-0.6"
 	]
 
+	def name = "cxf-client"
 	def license = "APACHE"
 	def author = "Grails Plugin Consortium"
 	def authorEmail = "acetrike@gmail.com"
