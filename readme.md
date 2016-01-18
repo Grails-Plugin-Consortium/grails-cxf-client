@@ -979,6 +979,9 @@ compile("${cxfGroup}:cxf-tools-wsdlto-databinding-jaxb:${cxfVersion}") {
 <a name="Change"></a>
 CHANGE LOG
 ---------------
+* v 3.0.6
+	* Name changed to simply `cxf-client` from `grails-cxf-client`
+
 * v 3.0.4
 	* Adding support for ConnectionType (eg. KEEP_ALIVE and CLOSE) on the http connection
 
