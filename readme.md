@@ -128,7 +128,7 @@ You may need to use the interface rather than the port type to make your client 
     clientInterface = cxf.client.demo.simple.SimpleInterface
     ...
 
-In Grails 3 the default config has change dto YAML.  The following is an example of configured clients with interceptors and other features:
+In Grails 3 the default config has changed to YAML.  The following is an example of configured clients with interceptors and other features:
 
 ``` yaml
 cxf:
