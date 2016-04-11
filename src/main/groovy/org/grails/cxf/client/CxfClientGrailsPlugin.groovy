@@ -124,48 +124,58 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
 		validateTimeouts(cxfClientName, 'connectionTimeout', connectionTimeout)
 		validateTimeouts(cxfClientName, 'receiveTimeout', receiveTimeout)
 
-		"${cxfClientName}"(DynamicWebServiceClient) {
-			webServiceClientFactory = ref("webServiceClientFactory")
-			if (client?.secured || client?.securityInterceptor) {
-				if (client?.securityInterceptor) {
-					outList << ref("${client.securityInterceptor}")
-				} else {
-					outList << ref("securityInterceptor${cxfClientName}")
+		Class<?> clazz
+		try {
+			clazz = client?.clientInterface
+		} catch(Exception e){
+			log.error("Could not create class for clientInterface ${client?.clientInterface}, no client will be wired at this time.")
+			clazz = null
+		}
+
+		if(clazz != null) {
+			"${cxfClientName}"(DynamicWebServiceClient) {
+				webServiceClientFactory = ref("webServiceClientFactory")
+				if (client?.secured || client?.securityInterceptor) {
+					if (client?.securityInterceptor) {
+						outList << ref("${client.securityInterceptor}")
+					} else {
+						outList << ref("securityInterceptor${cxfClientName}")
+					}
 				}
+				//both of these are used for mime attachments only atm.
+				if (client?.wsdlServiceName) {
+					wsdlURL = client?.wsdl ?: null
+					wsdlServiceName = client?.wsdlServiceName ?: null
+				}
+				if (client?.wsdlEndpointName) {
+					wsdlEndpointName = client?.wsdlEndpointName ?: null
+				}
+				inInterceptors = inList
+				outInterceptors = outList
+				inFaultInterceptors = inFaultList
+				outFaultInterceptors = outFaultList
+				clientInterface = client.clientInterface ?: ""
+				serviceName = cxfClientName
+				serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
+				enableDefaultLoggingInterceptors = (client?.enableDefaultLoggingInterceptors?.toString() ?: "true") != "false"
+				clientPolicyMap = [connectionTimeout: connectionTimeout,
+								   receiveTimeout   : receiveTimeout,
+								   allowChunking    : (client?.allowChunking) ?: false,
+								   contentType      : (client?.contentType) ?: 'text/xml; charset=UTF-8',
+								   connection       : (client?.connection) ?: ConnectionType.CLOSE
+				]
+				if (client?.httpClientPolicy) {
+					httpClientPolicy = ref("${client.httpClientPolicy}")
+				}
+				if (client?.authorizationPolicy) {
+					authorizationPolicy = ref("${client.authorizationPolicy}")
+				}
+				proxyFactoryBindingId = client?.proxyFactoryBindingId ?: ""
+				secureSocketProtocol = client?.secureSocketProtocol ?: ""
+				//should be one of the constants in CxfClientConstants, but doesn't have to be
+				requestContext = client?.requestContext ?: [:]
+				tlsClientParameters = client?.tlsClientParameters ?: [:]
 			}
-			//both of these are used for mime attachments only atm.
-			if (client?.wsdlServiceName) {
-				wsdlURL = client?.wsdl ?: null
-				wsdlServiceName = client?.wsdlServiceName ?: null
-			}
-			if (client?.wsdlEndpointName) {
-				wsdlEndpointName = client?.wsdlEndpointName ?: null
-			}
-			inInterceptors = inList
-			outInterceptors = outList
-			inFaultInterceptors = inFaultList
-			outFaultInterceptors = outFaultList
-			clientInterface = client.clientInterface ?: ""
-			serviceName = cxfClientName
-			serviceEndpointAddress = client?.serviceEndpointAddress ?: ""
-			enableDefaultLoggingInterceptors = (client?.enableDefaultLoggingInterceptors?.toString() ?: "true") != "false"
-			clientPolicyMap = [connectionTimeout: connectionTimeout,
-							   receiveTimeout   : receiveTimeout,
-							   allowChunking    : (client?.allowChunking) ?: false,
-							   contentType      : (client?.contentType) ?: 'text/xml; charset=UTF-8',
-							   connection       : (client?.connection) ?: ConnectionType.CLOSE
-			]
-			if (client?.httpClientPolicy) {
-				httpClientPolicy = ref("${client.httpClientPolicy}")
-			}
-			if (client?.authorizationPolicy) {
-				authorizationPolicy = ref("${client.authorizationPolicy}")
-			}
-			proxyFactoryBindingId = client?.proxyFactoryBindingId ?: ""
-			secureSocketProtocol = client?.secureSocketProtocol ?: ""
-			//should be one of the constants in CxfClientConstants, but doesn't have to be
-			requestContext = client?.requestContext ?: [:]
-			tlsClientParameters = client?.tlsClientParameters ?: [:]
 		}
 	}
 
