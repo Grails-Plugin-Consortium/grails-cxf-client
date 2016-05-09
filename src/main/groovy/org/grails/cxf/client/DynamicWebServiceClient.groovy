@@ -1,5 +1,6 @@
 package org.grails.cxf.client
 
+import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.beans.factory.FactoryBean
 import org.springframework.beans.factory.FactoryBeanNotInitializedException
 
@@ -7,7 +8,7 @@ import org.springframework.beans.factory.FactoryBeanNotInitializedException
  * Provides web service clients.  Supports dynamically changing the wsdl document url
  * at runtime, as well as initializing the url from system settings.
  */
-class DynamicWebServiceClient implements FactoryBean<Object> {
+class DynamicWebServiceClient extends ProxyFactoryBean implements FactoryBean<Object> {
 
     String wsdlURL
     String wsdlServiceName

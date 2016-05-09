@@ -16,7 +16,7 @@ plugins {
     id "com.jfrog.bintray" version "1.2"
 }
 
-version "3.0.7"
+version "3.0.8.5"
 group "org.grails.plugins"
 
 apply plugin: 'maven-publish'
@@ -51,20 +51,21 @@ dependencyManagement {
 
 dependencies {
     provided "org.grails:grails-core"
+    provided "org.grails:grails-async"
     testCompile "org.grails:grails-plugin-testing"
     console "org.grails:grails-console"
 
-	compile 'org.apache.wss4j:wss4j-ws-security-common:2.1.2'
-	compile 'org.apache.cxf:cxf-core:3.1.3'
-	compile 'org.apache.cxf:cxf-tools-wsdlto-core:3.1.3'
-	compile 'org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:3.1.3'
-	compile 'org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:3.1.3'
-	compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.1.3'
-	compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.1.3'
-	compile 'org.apache.cxf:cxf-rt-frontend-jaxrs:3.1.3'
-	compile 'org.apache.cxf:cxf-rt-frontend-jaxrs:3.1.3'
-	compile 'org.apache.cxf:cxf-rt-transports-http:3.1.3'
-	compile('org.apache.cxf:cxf-rt-ws-security:3.1.3'){
+	compile 'org.apache.wss4j:wss4j-ws-security-common:2.1.5'
+	compile 'org.apache.cxf:cxf-core:3.1.6'
+	compile 'org.apache.cxf:cxf-tools-wsdlto-core:3.1.6'
+	compile 'org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:3.1.6'
+	compile 'org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:3.1.6'
+	compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.1.6'
+	compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.1.6'
+	compile 'org.apache.cxf:cxf-rt-frontend-jaxrs:3.1.6'
+	compile 'org.apache.cxf:cxf-rt-frontend-jaxrs:3.1.6'
+	compile 'org.apache.cxf:cxf-rt-transports-http:3.1.6'
+	compile('org.apache.cxf:cxf-rt-ws-security:3.1.6'){
 		exclude group: 'net.sf.ehcache', module: 'ehcache'
 	}
 }
@@ -72,7 +73,6 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
 }
-
 
 bintray {
     user = System.getenv("BINTRAY_USER") ?: project.hasProperty("bintrayUser") ? project.bintrayUser : ''

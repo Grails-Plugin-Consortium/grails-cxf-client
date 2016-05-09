@@ -227,8 +227,6 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                 address: serviceEndpointAddress,
                 bus: BusFactory.defaultBus)
 
-
-
         if (wsdlURL) {
             clientProxyFactory.wsdlURL = wsdlURL
         }
