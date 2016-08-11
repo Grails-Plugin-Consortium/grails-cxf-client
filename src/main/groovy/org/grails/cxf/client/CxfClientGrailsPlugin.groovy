@@ -1,16 +1,10 @@
 package org.grails.cxf.client
 
-import grails.async.Promise
 import grails.plugins.Plugin
 import groovy.util.logging.Slf4j
 import org.apache.cxf.transports.http.configuration.ConnectionType
 import org.grails.cxf.client.exception.CxfClientException
 import org.grails.cxf.client.security.DefaultSecurityOutInterceptor
-
-import java.util.concurrent.TimeUnit
-
-import static grails.async.Promises.task
-import static grails.async.Promises.waitAll
 
 @Slf4j
 class CxfClientGrailsPlugin extends Plugin {
@@ -56,31 +50,14 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
     Closure doWithSpring() {
         { ->
             webServiceClientFactory(WebServiceClientFactoryImpl)
+
+            log.info "wiring up cxf-client beans"
+
             def cxfClientConfigMap = grailsApplication.config?.cxf?.client ?: [:]
-            boolean useAsync = Boolean.valueOf(grailsApplication.config?.cxf?.async?.toString())
-            log.info "Wiring up cxf-client beans (async: $useAsync)"
 
-            List<Promise> promises = []
-            Object d = getDelegate()
             cxfClientConfigMap.each { cxfClient ->
-                if (useAsync) {
-                    promises << task {
-                        configureCxfClientBeans.delegate = d
-                        configureCxfClientBeans(cxfClient)
-                    }
-                } else {
-                    configureCxfClientBeans.delegate = getDelegate()
-                    configureCxfClientBeans(cxfClient)
-                }
-            }
-
-            if (useAsync) {
-                try {
-                    waitAll(promises, 10000, TimeUnit.MILLISECONDS)
-                } catch (Exception e) {
-                    log.error("Can not load cxf client async.", e)
-                }
-
+                configureCxfClientBeans.delegate = delegate
+                configureCxfClientBeans(cxfClient)
             }
 
             log.info "completed mapping cxf-client beans"
@@ -117,6 +94,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         def outList = []
         def outFaultList = []
         def inFaultList = []
+        boolean async = Boolean.valueOf(grailsApplication.config?.cxf?.async?.toString())
 
         log.info "wiring up client for $cxfClientName [clientInterface=${client?.clientInterface} and serviceEndpointAddress=${client?.serviceEndpointAddress}]"
 
@@ -134,6 +112,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
             }
         }
 
+        addInterceptors.delegate = delegate
         addInterceptors(client?.inInterceptors, inList)
         addInterceptors(client?.outInterceptors, outList)
         addInterceptors(client?.inFaultInterceptors, inFaultList)
@@ -142,18 +121,19 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         def connectionTimeout = client?.connectionTimeout ?: ((client?.connectionTimeout == 0) ? client.connectionTimeout : DEFAULT_CONNECTION_TIMEOUT) //use the cxf defaults instead of 0
         def receiveTimeout = client?.receiveTimeout ?: ((client?.receiveTimeout == 0) ? client.receiveTimeout : DEFAULT_RECEIVE_TIMEOUT) //use the cxf defaults instead of 0
 
+        validateTimeouts.delegate = delegate
         validateTimeouts(cxfClientName, 'connectionTimeout', connectionTimeout)
         validateTimeouts(cxfClientName, 'receiveTimeout', receiveTimeout)
 
         Class<?> clazz
         try {
             clazz = client?.clientInterface
-        } catch (Exception e) {
+        } catch(Exception e){
             log.error("Could not create class for clientInterface ${client?.clientInterface}, no client will be wired at this time.")
             clazz = null
         }
 
-        if (clazz != null) {
+        if(clazz != null) {
             "${cxfClientName}"(DynamicWebServiceClient) {
                 webServiceClientFactory = ref("webServiceClientFactory")
                 if (client?.secured || client?.securityInterceptor) {
@@ -196,11 +176,12 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
                 //should be one of the constants in CxfClientConstants, but doesn't have to be
                 requestContext = client?.requestContext ?: [:]
                 tlsClientParameters = client?.tlsClientParameters ?: [:]
+                wireAsync = async
             }
         }
     }
 
-    private static void validateTimeouts(cxfClientName, timeoutName, timeoutValue) {
+    def validateTimeouts = { cxfClientName, timeoutName, timeoutValue ->
         try {
             if (Integer.parseInt((timeoutValue ?: 0) as String) < 0) {
                 throw new CxfClientException("Configured value for ${cxfClientName} ${timeoutName} must be >= 0 if provided. Value provided was(${timeoutValue})")
@@ -210,7 +191,7 @@ Used for easily calling soap web services.  Provides wsdl2java grails target to 
         }
     }
 
-    private static void addInterceptors(clientInterceptors, interceptorList){
+    def addInterceptors = { clientInterceptors, interceptorList ->
         if (clientInterceptors) {
             if (clientInterceptors instanceof List) {
                 clientInterceptors.each {

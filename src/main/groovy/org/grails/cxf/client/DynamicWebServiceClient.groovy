@@ -30,6 +30,7 @@ class DynamicWebServiceClient extends ProxyFactoryBean implements FactoryBean<Ob
     String secureSocketProtocol
     Map requestContext
     Map tlsClientParameters = [:]
+    boolean wireAsync = false
 
     Object getObject() throws FactoryBeanNotInitializedException, MalformedURLException {
         if (!clientInterface || !serviceEndpointAddress) {
@@ -55,7 +56,9 @@ serviceEndpointAddress=${serviceEndpointAddress} properties""")
                 mtomEnabled,
                 secureSocketProtocol,
                 requestContext,
-                tlsClientParameters)
+                tlsClientParameters,
+                wireAsync
+        )
     }
 
     Class<?> getObjectType() {

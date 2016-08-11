@@ -1,8 +1,5 @@
 package org.grails.cxf.client
 
-import org.apache.cxf.transports.http.configuration.ConnectionType
-import org.grails.cxf.client.exception.CxfClientException
-import org.grails.cxf.client.exception.UpdateServiceEndpointException
 import groovy.transform.Synchronized
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -19,11 +16,16 @@ import org.apache.cxf.interceptor.LoggingOutInterceptor
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean
 import org.apache.cxf.transport.Conduit
 import org.apache.cxf.transport.http.HTTPConduit
+import org.apache.cxf.transports.http.configuration.ConnectionType
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy
+import org.grails.cxf.client.exception.CxfClientException
+import org.grails.cxf.client.exception.UpdateServiceEndpointException
 
 import javax.xml.namespace.QName
 import javax.xml.ws.BindingProvider
 import java.lang.reflect.*
+
+import static grails.async.Promises.task
 
 class WebServiceClientFactoryImpl implements WebServiceClientFactory {
 
@@ -71,10 +73,25 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                                Boolean mtomEnabled,
                                String secureSocketProtocol,
                                Map<String, Object> requestContext,
-                               Map tlsClientParameters) {
+                               Map tlsClientParameters,
+                               boolean wireAsync = false) {
         WSClientInvocationHandler handler = new WSClientInvocationHandler(clientInterface)
         Object clientProxy = Proxy.newProxyInstance(clientInterface.classLoader, [clientInterface, BindingProvider.class] as Class[], handler)
 
+        if(wireAsync) {
+            task {
+                log.info("Wiring " + serviceName + " using async")
+                assignProxyAndInterceptors(serviceEndpointAddress, serviceName, wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy, proxyFactoryBindingId, mtomEnabled, secureSocketProtocol, requestContext, tlsClientParameters)
+            }
+        } else {
+            log.info("Wiring " + serviceName + " using sync")
+            assignProxyAndInterceptors(serviceEndpointAddress, serviceName, wsdlURL, wsdlServiceName, wsdlEndpointName, clientInterface, enableDefaultLoggingInterceptors, clientPolicyMap, handler, outInterceptors, inInterceptors, inFaultInterceptors, outFaultInterceptors, httpClientPolicy, authorizationPolicy, proxyFactoryBindingId, mtomEnabled, secureSocketProtocol, requestContext, tlsClientParameters)
+        }
+
+        clientProxy
+    }
+
+    private void assignProxyAndInterceptors(String serviceEndpointAddress, String serviceName, String wsdlURL, String wsdlServiceName, String wsdlEndpointName, Class<?> clientInterface, boolean enableDefaultLoggingInterceptors, Map clientPolicyMap, WSClientInvocationHandler handler, List outInterceptors, List inInterceptors, List inFaultInterceptors, List outFaultInterceptors, HTTPClientPolicy httpClientPolicy, AuthorizationPolicy authorizationPolicy, String proxyFactoryBindingId, boolean mtomEnabled, String secureSocketProtocol, Map<String, Object> requestContext, Map tlsClientParameters) {
         if (serviceEndpointAddress) {
             try {
                 log.debug("Creating endpoint for service $serviceName using endpoint address $serviceEndpointAddress")
@@ -115,8 +132,6 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
                           requestContext                  : requestContext,
                           tlsClientParameters             : tlsClientParameters]
         interfaceMap.put(serviceName, serviceMap)
-
-        clientProxy
     }
 
     /**
@@ -240,7 +255,7 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
             clientProxyFactory.bindingId = proxyFactoryBindingId
         }
 
-		assignDefaultHttpClientPolicyConnectionType(clientPolicyMap)
+        assignDefaultHttpClientPolicyConnectionType(clientPolicyMap)
 
         assignBindingConfig(proxyFactoryBindingId, mtomEnabled, clientProxyFactory)
 
@@ -257,13 +272,13 @@ class WebServiceClientFactoryImpl implements WebServiceClientFactory {
         handler.cxfProxy = cxfProxy
     }
 
-	private static void assignDefaultHttpClientPolicyConnectionType(Map clientPolicyMap) {
-		if (clientPolicyMap && !clientPolicyMap.connection) {
-			clientPolicyMap.connection = ConnectionType.CLOSE
-		}
-	}
+    private static void assignDefaultHttpClientPolicyConnectionType(Map clientPolicyMap) {
+        if (clientPolicyMap && !clientPolicyMap.connection) {
+            clientPolicyMap.connection = ConnectionType.CLOSE
+        }
+    }
 
-	private static void assignBindingConfig(String proxyFactoryBindingId, Boolean mtomEnabled, JaxWsProxyFactoryBean clientProxyFactory) {
+    private static void assignBindingConfig(String proxyFactoryBindingId, Boolean mtomEnabled, JaxWsProxyFactoryBean clientProxyFactory) {
         SoapBindingConfiguration sbc = new SoapBindingConfiguration()
 
         if (proxyFactoryBindingId?.toLowerCase()?.contains(/soap12/)) {

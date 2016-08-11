@@ -42,7 +42,8 @@ interface WebServiceClientFactory {
                                Boolean mtomEnabled,
                                String secureSocketProtocol,
                                Map<String, Object> requestContext,
-                               Map tlsClientParameters)
+                               Map tlsClientParameters,
+                               boolean wireAsync)
 
     /**
      * Allows updating endpoint and refreshing proxy reference
