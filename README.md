@@ -696,9 +696,14 @@ cxf {
             tlsClientParameters = [
                 disableCNCheck: true,
                 sslCacheTimeout: 100,
-                secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3
-                cipherSuitesFilter.include = ['.*_EXPORT_.*','.*_EXPORT1024_.*']
-                cipherSuitesFilter.exclude = ['.*_DH_anon_.*']
+                secureSocketProtocol: CxfClientConstants.SSL_PROTOCOL_SSLV3,
+                cipherSuitesFilter : [ 
+                    include : ['.*_EXPORT_.*','.*_EXPORT1024_.*'],
+                    exclude : ['.*_DH_anon_.*']
+                ],
+                trustManagerJksPath : '/something.jks',
+                keyManagerJksPath : '/something.jks',
+                trustpass : 'changeit'
             ]
         }
 }
