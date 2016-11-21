@@ -273,7 +273,7 @@ Note: The [wsdl] node is only used by the wsdl2java target and are not used in w
 
 After adding the [wsdl] node I can now run the following grails command to generate the cxf/jaxb classes into the src/main/java directory of the project:
 
-    grails wsdlTojava
+    grails wsdl-to-java
 
 The following will also work
 
