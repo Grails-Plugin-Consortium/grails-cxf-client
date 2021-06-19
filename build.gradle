@@ -93,8 +93,3 @@ bintray {
 }
 
 bintrayUpload.dependsOn sourcesJar, javadocJar
-
-jar {
-    exclude 'org/grails/cxf/test/**',
-            'net/webservicex/**'
-}

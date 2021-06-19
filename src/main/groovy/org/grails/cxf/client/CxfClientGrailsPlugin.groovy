@@ -15,21 +15,7 @@ class CxfClientGrailsPlugin extends Plugin {
 	// the version or versions of Grails the plugin is designed for
 	def grailsVersion = "3.0.0 > *"
 	// resources that are excluded from plugin packaging
-	def pluginExcludes = [
-			'grails-app/conf/codenarc.groovy',
-			'grails-app/conf/config.properties',
-			'grails-app/conf/codenarc.ruleset.all.groovy.txt',
-			'grails-app/conf/DataSource.groovy',
-			'grails-app/conf/UrlMappings.groovy',
-			'src/groovy/test/**',
-			'src/java/test/**',
-			'src/java/net/**',
-			'docs/**',
-			'web-app/**',
-			'codenarc.properties',
-			"spock-0.6"
-	]
-
+	def pluginExcludes = []
 	def name = "cxf-client"
 	def license = "APACHE"
 	def author = "Grails Plugin Consortium"
